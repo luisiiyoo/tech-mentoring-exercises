@@ -1,6 +1,6 @@
+import math
 import numpy as np
 from Card import Card
-import math
 
 
 class Deck:
@@ -14,15 +14,6 @@ class Deck:
             for rank in range(1, self.__num_ranks + 1):
                 card = Card(int(rank), self.__suits.get(suit_key))
                 self.deck.append(card)
-
-    def __getPrettyCard(self, card):
-        suit = card.suitType
-        rank = self.__special_ranks.get(card.rank) if (
-            card.rank in self.__special_ranks) else str(card.rank)
-        return rank + suit
-
-    def getPrettyDeck(self, deck: list):
-        return list(map(self.__getPrettyCard, deck))
 
     def splitRandomly(self):
         num_cards = len(self.deck)
