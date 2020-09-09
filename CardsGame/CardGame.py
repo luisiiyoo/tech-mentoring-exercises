@@ -1,28 +1,12 @@
-import math
 from termcolor import colored, cprint
 from Deck import Deck
-
-SPECIAL_RANKS: dict = {
-    1: 'A',
-    11: 'J',
-    12: 'Q',
-    13: 'K'
-}
-SUITS: dict = {
-    'club': '♣',
-    'diamond': '♦',
-    'heart': '♥',
-    'spade': '♠'
-}
-NUM_CARDS = 52  # 52
-NUM_SUITS = len(SUITS)  # 4
-NUM_RANKS = math.floor(NUM_CARDS / NUM_SUITS)  # 13
+import Constants as cg
 
 
 def getPrettyCard(card):
     suit = card.suitType
-    rank = SPECIAL_RANKS.get(card.rank) if (
-        card.rank in SPECIAL_RANKS) else str(card.rank)
+    rank = cg.SPECIAL_RANKS.get(card.rank) if (
+        card.rank in cg.SPECIAL_RANKS) else str(card.rank)
     return rank + suit
 
 
@@ -31,31 +15,27 @@ def getPrettyDeck(deck: list):
 
 
 class CardGame:
-    def __init__(self, deck_A: list, deck_B: list):
-        self.color_A = 'yellow'
-        self.color_B = 'green'
-        self.color_tie = 'red'
-        self.color_winner = 'blue'
-        self.deck_A = deck_A
-        self.deck_B = deck_B
+    def __init__(self, num_ranks: int, suits: dict, special_ranks: dict):
+        deck = Deck(num_ranks, suits, special_ranks)
+        self.deck_A, self.deck_B = deck.splitRandomly()
         self.num_turns = 0
         self.cards_discarted = []
         self.printDecks()
 
     def printDecks(self):
-        cprint('Deck_A: {}'.format(getPrettyDeck(self.deck_A)), self.color_A)
-        cprint('Deck_B: {}'.format(getPrettyDeck(self.deck_B)), self.color_B)
+        cprint('Deck_A: {}'.format(getPrettyDeck(self.deck_A)), cg.COLOR_A)
+        cprint('Deck_B: {}'.format(getPrettyDeck(self.deck_B)), cg.COLOR_B)
 
     def __getWinner(self):
         colored_attrs = ['bold']
         size_A = len(self.deck_A)
         size_B = len(self.deck_B)
         if(size_A == 0 and size_B == 0):
-            return colored('Tie', self.color_tie, attrs=colored_attrs)
+            return colored('Tie', cg.COLOR_TIE, attrs=colored_attrs)
         elif(size_A <= 0):
-            return colored('Deck_B', self.color_B, attrs=colored_attrs)
+            return colored('Deck_B', cg.COLOR_B, attrs=colored_attrs)
         elif(size_B <= 0):
-            return colored('Deck_A', self.color_A, attrs=colored_attrs)
+            return colored('Deck_A', cg.COLOR_A, attrs=colored_attrs)
         else:
             return None
 
@@ -65,18 +45,18 @@ class CardGame:
 
         turn_msj = 'Turn: ' + str(self.num_turns)
         card_A_msj = colored('Deck_A({}) - {}'.format(
-            len_A, getPrettyCard(card_A)), self.color_A)
+            len_A, getPrettyCard(card_A)), cg.COLOR_A)
         card_B_msj = colored('{} - Deck_B({})'.format(
-            getPrettyCard(card_B), len_B), self.color_B)
+            getPrettyCard(card_B), len_B), cg.COLOR_B)
 
         return '{} => {} ... {} => {}'.format(
             turn_msj, card_A_msj, card_B_msj, best_tag)
 
     def play(self):
-        card_A_tag = colored('Card_A', self.color_A)
-        card_B_tag = colored('Card_B', self.color_B)
-        tie_tag = colored('TIE', self.color_tie)
-        winner_tag = colored('Winner:', self.color_winner, attrs=[
+        card_A_tag = colored('Card_A', cg.COLOR_A)
+        card_B_tag = colored('Card_B', cg.COLOR_B)
+        tie_tag = colored('TIE', cg.COLOR_TIE)
+        winner_tag = colored('Winner:', cg.COLOR_WINNER, attrs=[
                              'reverse', 'blink', 'bold'])
 
         winner = self.__getWinner()
@@ -105,7 +85,5 @@ class CardGame:
 
 
 # %% MAIN
-deck = Deck(NUM_RANKS, SUITS, SPECIAL_RANKS)
-deck_A, deck_B = deck.splitRandomly()
-game = CardGame(deck_A, deck_B)
+game = CardGame(cg.NUM_RANKS, cg.SUITS, cg.SPECIAL_RANKS)
 game.play()
