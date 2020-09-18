@@ -3,7 +3,6 @@ import os
 import pandas as pd
 from typing import List
 
-
 PATH_DATA = './data/'
 FILE_NAME = PATH_DATA+'Copy of April Menu 2019.xlsx'
 OUTPUT_PATH = './data_output/'
