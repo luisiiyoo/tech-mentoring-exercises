@@ -1,83 +1,142 @@
 from termcolor import colored, cprint
+from Card import Card
 from Deck import Deck
-import Constants as cg
-
-
-def getPrettyCard(card):
-    suit = card.suitType
-    rank = cg.SPECIAL_RANKS.get(card.rank) if (
-        card.rank in cg.SPECIAL_RANKS) else str(card.rank)
-    return rank + suit
-
-
-def getPrettyDeck(deck: list):
-    return list(map(getPrettyCard, deck))
+import constants
+from typing import Tuple, Union, Dict
 
 
 class CardGame:
-    def __init__(self, num_ranks: int, suits: dict, special_ranks: dict):
-        deck = Deck(num_ranks, suits, special_ranks)
-        self.deck_A, self.deck_B = deck.splitRandomly()
+    '''
+    CardGame class to control the game
+
+    Args:
+        num_ranks (int): Number of ranks by suit
+        suits (Dict[str, str]): Dictionary containing the suits, e.g. 'club': '♣'
+        special_ranks (Dict[int, str]): Dictionary of special characters that receive a rank or value, e.g. 13: 'K'
+
+    Attributes:
+        deck_A (Deck): Deck object that contains the player A's cards
+        deck_B (Deck): Deck object that cosntains the player B's cards
+        num_turns (int): Counter of turns
+        cards_discarted (Dict[int, Tuple[Card, Card]]): Dictionary that contains the discarted cards by turn (if there were turns)
+    '''
+
+    def __init__(self, num_ranks: int, suits: Dict[str, str], special_ranks: Dict[int, str]):
+        self.deck_A, self.deck_B = self.build(num_ranks, suits, special_ranks)
         self.num_turns = 0
-        self.cards_discarted = []
+        self.cards_discarted: Dict[int, Tuple[Card, Card]] = dict()
         self.printDecks()
 
-    def printDecks(self):
-        cprint('Deck_A: {}'.format(getPrettyDeck(self.deck_A)), cg.COLOR_A)
-        cprint('Deck_B: {}'.format(getPrettyDeck(self.deck_B)), cg.COLOR_B)
+    def build(self, num_ranks, suits, special_ranks) -> Tuple[Deck, Deck]:
+        '''
+        Generates the shuffled decks for the player A and B
 
-    def __getWinner(self):
+        Args:
+            num_ranks (int): Number of ranks by suit
+            suits (Dict[str, str]): Dictionary containing the suits, e.g. 'club': '♣'
+            special_ranks (Dict[int, str]): Dictionary of special characters that receive a rank or value, e.g. 13: 'K'
+
+        Returns:
+            deck_A (Deck): Deck object that contains the player A's cards
+            deck_B (Deck): Deck object that cosntains the player B's cards
+        '''
+        deck = Deck(num_ranks, suits, special_ranks)
+        deck.shuffleDeck()
+        return deck.splitDeck()
+
+    def printDecks(self) -> None:
+        '''
+        Prints a pretty colored Deck presentation for the Player A and B
+
+        Args:
+            None
+
+        Returns:
+            None
+        '''
+        cprint('Deck_A: {}'.format(self.deck_A), constants.COLOR_A)
+        cprint('Deck_B: {}'.format(self.deck_B), constants.COLOR_B)
+
+    def __getWinner(self) -> Union[str, None]:
+        '''
+        Returns the winner player if there is
+
+        Args:
+            None
+
+        Returns:
+            winner (str): Colored string with the name of the winner
+        '''
         colored_attrs = ['bold']
         size_A = len(self.deck_A)
         size_B = len(self.deck_B)
         if(size_A == 0 and size_B == 0):
-            return colored('Tie', cg.COLOR_TIE, attrs=colored_attrs)
+            return colored('Tie', constants.COLOR_TIE, attrs=colored_attrs)
         elif(size_A <= 0):
-            return colored('Deck_B', cg.COLOR_B, attrs=colored_attrs)
+            return colored('Deck_B', constants.COLOR_B, attrs=colored_attrs)
         elif(size_B <= 0):
-            return colored('Deck_A', cg.COLOR_A, attrs=colored_attrs)
+            return colored('Deck_A', constants.COLOR_A, attrs=colored_attrs)
         else:
             return None
 
-    def getColoredTurnStatusGame(self, card_A, card_B, best_tag):
+    def getColoredTurnStatusGame(self, card_A, card_B, best_tag) -> str:
+        '''
+        Returns the winner player if there is
+
+        Args:
+            card_A (Card): Card object obtained on the current turn for the player A
+            card_B (Card): Card object obtained on the current turn for the player B
+            best_tag (str): Message about the best Card between the two Cards passed as argument
+
+        Returns:
+            status (str): Colored string with the status message
+        '''
         len_A = str(len(self.deck_A)+1)
         len_B = str(len(self.deck_B)+1)
 
         turn_msj = 'Turn: ' + str(self.num_turns)
         card_A_msj = colored('Deck_A({}) - {}'.format(
-            len_A, getPrettyCard(card_A)), cg.COLOR_A)
+            len_A, card_A.getPrettyCard()), constants.COLOR_A)
         card_B_msj = colored('{} - Deck_B({})'.format(
-            getPrettyCard(card_B), len_B), cg.COLOR_B)
+            card_B.getPrettyCard(), len_B), constants.COLOR_B)
 
         return '{} => {} ... {} => {}'.format(
             turn_msj, card_A_msj, card_B_msj, best_tag)
 
-    def play(self):
-        card_A_tag = colored('Card_A', cg.COLOR_A)
-        card_B_tag = colored('Card_B', cg.COLOR_B)
-        tie_tag = colored('TIE', cg.COLOR_TIE)
-        winner_tag = colored('Winner:', cg.COLOR_WINNER, attrs=[
+    def play(self) -> None:
+        '''
+        Start the game and shows the progress in each turn
+
+        Args:
+            None
+
+        Returns:
+            None
+        '''
+        card_A_tag = colored('Card_A', constants.COLOR_A)
+        card_B_tag = colored('Card_B', constants.COLOR_B)
+        tie_tag = colored('TIE', constants.COLOR_TIE)
+        winner_tag = colored('Winner:', constants.COLOR_WINNER, attrs=[
                              'reverse', 'blink', 'bold'])
 
         winner = self.__getWinner()
         while(winner is None):
             self.num_turns += 1
-            card_A = self.deck_A.pop(0)
-            card_B = self.deck_B.pop(0)
+            card_A = self.deck_A.popCard()
+            card_B = self.deck_B.popCard()
             turn_msj = ''
             if (card_A.rank > card_B.rank):
                 turn_msj = self.getColoredTurnStatusGame(
                     card_A, card_B, card_A_tag)
-                self.deck_A = [*self.deck_A, card_B, card_A]
+                self.deck_A.addCards([card_B, card_A])
             elif (card_B.rank > card_A.rank):
-
                 turn_msj = self.getColoredTurnStatusGame(
                     card_A, card_B, card_B_tag)
-                self.deck_B = self.deck_B + [card_A, card_B]
+                self.deck_B.addCards([card_A, card_B])
             else:
                 turn_msj = self.getColoredTurnStatusGame(
                     card_A, card_B, tie_tag)
-                self.cards_discarted.append([card_B, card_A])
+                self.cards_discarted[self.num_turns] = (card_B, card_A)
             print(turn_msj)
             winner = self.__getWinner()
             # self.printDecks()
@@ -85,5 +144,7 @@ class CardGame:
 
 
 # %% MAIN
-game = CardGame(cg.NUM_RANKS, cg.SUITS, cg.SPECIAL_RANKS)
+game = CardGame(constants.NUM_RANKS, constants.SUITS, constants.SPECIAL_RANKS)
 game.play()
+cprint('Turns where there were ties: {}'.format(
+    list(game.cards_discarted.keys())), constants.COLOR_TIE)

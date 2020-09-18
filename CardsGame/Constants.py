@@ -1,11 +1,13 @@
+from typing import Tuple, Union, Dict
 import math
-SPECIAL_RANKS: dict = {
+
+SPECIAL_RANKS: Dict[int, str] = {
     1: 'A',
     11: 'J',
     12: 'Q',
     13: 'K'
 }
-SUITS: dict = {
+SUITS: Dict[str, str] = {
     'club': '♣',
     'diamond': '♦',
     'heart': '♥',
@@ -19,3 +21,5 @@ COLOR_A = 'yellow'
 COLOR_B = 'green'
 COLOR_TIE = 'red'
 COLOR_WINNER = 'blue'
+
+NUM_SPLITS = 2
