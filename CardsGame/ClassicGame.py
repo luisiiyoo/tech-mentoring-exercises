@@ -5,7 +5,7 @@ import constants
 from typing import Tuple, Union, Dict
 
 
-class CardGame:
+class ClassicGame:
     '''
     CardGame class to control the game
 
@@ -103,7 +103,7 @@ class CardGame:
         return '{} => {} ... {} => {}'.format(
             turn_msj, card_A_msj, card_B_msj, best_tag)
 
-    def playClassicGameOnTerminal(self) -> None:
+    def playGameOnTerminal(self) -> None:
         '''
         Starts the game and shows the progress in each turn until the game ends
 
@@ -141,10 +141,3 @@ class CardGame:
             winner = self.__getWinner()
             # self.printDecks()
         print('{} {}'.format(winner_tag, winner))
-
-
-# %% MAIN
-game = CardGame(constants.NUM_RANKS, constants.SUITS, constants.SPECIAL_RANKS)
-game.playClassicGameOnTerminal()
-cprint('Turns where there were ties: {}'.format(
-    list(game.cards_discarted.keys())), constants.COLOR_TIE)
