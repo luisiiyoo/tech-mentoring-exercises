@@ -105,7 +105,7 @@ df_breakfast, df_lunch = transformData(sheets, FILE_NAME)
 print('\n')
 if not os.path.isdir(OUTPUT_PATH):
     try:
-        os.mkdir(OUTPUT_PATH)
+        os.makedirs(OUTPUT_PATH)  # os.mkdir for one directory only
     except OSError:
         print("Creation of the directory %s failed" % OUTPUT_PATH)
     else:
