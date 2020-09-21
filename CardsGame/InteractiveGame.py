@@ -1,6 +1,8 @@
 from termcolor import colored, cprint
-from typing import Dict
+from typing import Dict, List
 from Game import Game
+from Card import Card
+from Deck import Deck
 import constants
 import uuid
 import random
@@ -18,3 +20,11 @@ class InteractiveGame(Game):
 
     def __getRandomNumber(self):
         return random.randint(self.__start_random, self.__stop_random)
+
+    def __popNCards(self):
+        poped_cards_A: List[Card] = []
+        count = 0
+        while(count < self.num_cards_take):
+            poped_cards_A.append(self.deck_A.popCard())
+            poped_cards_B.append(self.deck_B.popCard())
+            count += 1

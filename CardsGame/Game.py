@@ -75,12 +75,12 @@ class Game:
         cprint(f'{self._tag_player_B}:\n  {self.deck_B}',
                constants.COLOR_B)
 
-    def _getWinner(self) -> Union[str, None]:
+    def _getWinner(self, min_num_cards=1) -> Union[str, None]:
         '''
         Returns the winner player if there is
 
         Args:
-            None
+            min_num_cards (int): Minimun number of cards to have
 
         Returns:
             winner (str): Colored string with the name of the winner
@@ -88,11 +88,11 @@ class Game:
         colored_attrs = ['bold']
         size_A = len(self.deck_A)
         size_B = len(self.deck_B)
-        if((self.num_turns >= constants.MAX_NUM_TURNS) or (size_A == 0 and size_B == 0)):
+        if((self.num_turns >= constants.MAX_NUM_TURNS) or (size_A < min_num_cards and size_B < min_num_cards)):
             return colored('Tie', constants.COLOR_TIE, attrs=colored_attrs)
-        elif(size_A <= 0):
+        elif(size_A < min_num_cards):
             return colored(self._tag_player_B, constants.COLOR_B, attrs=colored_attrs)
-        elif(size_B <= 0):
+        elif(size_B < min_num_cards):
             return colored(self._tag_player_A, constants.COLOR_A, attrs=colored_attrs)
         else:
             return None
