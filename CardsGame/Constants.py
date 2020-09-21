@@ -23,3 +23,4 @@ COLOR_TIE = 'red'
 COLOR_WINNER = 'blue'
 
 NUM_SPLITS = 2
+MAX_NUM_TURNS = 500

@@ -70,7 +70,7 @@ class CardGame:
         colored_attrs = ['bold']
         size_A = len(self.deck_A)
         size_B = len(self.deck_B)
-        if(size_A == 0 and size_B == 0):
+        if((self.num_turns >= constants.MAX_NUM_TURNS) or (size_A == 0 and size_B == 0)):
             return colored('Tie', constants.COLOR_TIE, attrs=colored_attrs)
         elif(size_A <= 0):
             return colored('Deck_B', constants.COLOR_B, attrs=colored_attrs)
@@ -103,9 +103,9 @@ class CardGame:
         return '{} => {} ... {} => {}'.format(
             turn_msj, card_A_msj, card_B_msj, best_tag)
 
-    def play(self) -> None:
+    def playClassicGameOnTerminal(self) -> None:
         '''
-        Start the game and shows the progress in each turn
+        Starts the game and shows the progress in each turn until the game ends
 
         Args:
             None
@@ -145,6 +145,6 @@ class CardGame:
 
 # %% MAIN
 game = CardGame(constants.NUM_RANKS, constants.SUITS, constants.SPECIAL_RANKS)
-game.play()
+game.playClassicGameOnTerminal()
 cprint('Turns where there were ties: {}'.format(
     list(game.cards_discarted.keys())), constants.COLOR_TIE)

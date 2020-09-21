@@ -16,16 +16,16 @@ class Deck:
         special_ranks (Dict[int, str]): Dictionary of special characters that receive a rank or value, e.g. 13: 'K'
 
     Attributes:
-        __num_ranks (int): Number of ranks by suit
-        __suits (Dict[str, str]): Dictionary containing the suits, e.g. 'club': '♣'
-        __special_ranks (Dict[int, str]): Dictionary of special characters that receive a rank or value, e.g. 13: 'K'
+        num_ranks (int): Number of ranks by suit
+        suits (Dict[str, str]): Dictionary containing the suits, e.g. 'club': '♣'
+        special_ranks (Dict[int, str]): Dictionary of special characters that receive a rank or value, e.g. 13: 'K'
         __cards(List[Card]): List of Card objects
     '''
 
     def __init__(self, num_ranks: int, suits: Dict[str, str], special_ranks: Dict[int, str], cards: List[Card] = []):
-        self.__num_ranks = num_ranks
-        self.__suits = suits
-        self.__special_ranks = special_ranks
+        self.num_ranks = num_ranks
+        self.suits = suits
+        self.special_ranks = special_ranks
         self.__cards: List[Card] = cards if (
             len(cards) > 0) else self.__createListOfCards()
 
@@ -40,11 +40,14 @@ class Deck:
             cards(List[Card]): List of Card objects
         '''
         cards: List[Card] = []
-        for suit_key in self.__suits:
-            for rank in range(1, self.__num_ranks + 1):
-                card = Card(rank, self.__suits.get(suit_key))
+        for suit_key in self.suits:
+            for rank in range(1, self.num_ranks + 1):
+                card = Card(rank, self.suits.get(suit_key))
                 cards.append(card)
         return cards
+
+    def getCardsList(self):
+        return self.__cards
 
     def __len__(self):
         return len(self.__cards)
@@ -122,8 +125,8 @@ class Deck:
         cards_A = self.__cards[0:split_idx]
         cards_B = self.__cards[split_idx:]
 
-        deck_A = Deck(self.__num_ranks, self.__suits,
-                      self.__special_ranks, cards_A)
-        deck_B = Deck(self.__num_ranks, self.__suits,
-                      self.__special_ranks, cards_B)
+        deck_A = Deck(self.num_ranks, self.suits,
+                      self.special_ranks, cards_A)
+        deck_B = Deck(self.num_ranks, self.suits,
+                      self.special_ranks, cards_B)
         return (deck_A, deck_B)
