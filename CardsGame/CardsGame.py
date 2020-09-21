@@ -6,6 +6,6 @@ import constants
 game = ClassicGame(constants.NUM_RANKS, constants.SUITS,
                    constants.SPECIAL_RANKS, 'Luis', 'Victor')
 game.printDecks()
-game.playGameOnTerminal()
+game.playClasssicGameOnTerminal()
 cprint('Turns where there were ties: {}'.format(
     list(game.cards_discarted.keys())), constants.COLOR_TIE)

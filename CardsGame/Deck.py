@@ -80,6 +80,18 @@ class Deck:
         '''
         self.__cards = self.__cards + new_cards
 
+    def putBackCards(self, new_cards: List[Card]) -> None:
+        '''
+        Adds a list of cards to Decks top
+
+        Args:
+            new_cards(List[Card]): List of cards to add
+
+        Returns:
+            None
+        '''
+        self.__cards = new_cards + self.__cards
+
     def popCard(self) -> Card:
         '''
         Gets the above card from the deck
