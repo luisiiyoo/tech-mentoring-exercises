@@ -23,6 +23,10 @@ class Game:
         _tag_player_B (str): Player B name
         num_turns (int): Counter of turns
         cards_discarted (Dict[int, Tuple[Card, Card]]): Dictionary that contains the discarted cards by turn (if there were turns)
+        self._card_A_tag (str): String colored tag for card A
+        self._card_B_tag (str): String colored tag for card B
+        self._tie_tag (str): String colored tag for tie
+        self._winner_tag(str): String colored tag for the winner
     '''
 
     def __init__(self, num_ranks: int, suits: Dict[str, str], special_ranks: Dict[int, str], tag_player_A: str, tag_player_B: str):
@@ -31,6 +35,13 @@ class Game:
         self._tag_player_A = tag_player_A
         self._tag_player_B = tag_player_B
         self.cards_discarted: Dict[int, Tuple[Card, Card]] = dict()
+        self._card_A_tag = colored(
+            f"{self._tag_player_A}'s Card", constants.COLOR_A)
+        self._card_B_tag = colored(
+            f"{self._tag_player_B}'s Card", constants.COLOR_B)
+        self._tie_tag = colored('TIE', constants.COLOR_TIE)
+        self._winner_tag = colored('Winner:', constants.COLOR_WINNER, attrs=[
+            'reverse', 'blink', 'bold'])
 
     def build(self, num_ranks, suits, special_ranks) -> Tuple[Deck, Deck]:
         '''

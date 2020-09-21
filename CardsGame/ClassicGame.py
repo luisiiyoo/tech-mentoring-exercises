@@ -40,12 +40,6 @@ class ClassicGame(Game):
         Returns:
             None
         '''
-        card_A_tag = colored(f"{self._tag_player_A}'s Card", constants.COLOR_A)
-        card_B_tag = colored(f"{self._tag_player_B}'s Card", constants.COLOR_B)
-        tie_tag = colored('TIE', constants.COLOR_TIE)
-        winner_tag = colored('Winner:', constants.COLOR_WINNER, attrs=[
-                             'reverse', 'blink', 'bold'])
-
         winner = self._getWinner()
         while(winner is None):
             self.num_turns += 1
@@ -54,17 +48,17 @@ class ClassicGame(Game):
             turn_msj = ''
             if (card_A.rank > card_B.rank):
                 turn_msj = self.getColoredTurnStatusGame(
-                    card_A, card_B, card_A_tag)
+                    card_A, card_B, self._card_A_tag)
                 self.deck_A.addCards([card_B, card_A])
             elif (card_B.rank > card_A.rank):
                 turn_msj = self.getColoredTurnStatusGame(
-                    card_A, card_B, card_B_tag)
+                    card_A, card_B, self._card_B_tag)
                 self.deck_B.addCards([card_A, card_B])
             else:
                 turn_msj = self.getColoredTurnStatusGame(
-                    card_A, card_B, tie_tag)
+                    card_A, card_B, self._tie_tag)
                 self.cards_discarted[self.num_turns] = (card_B, card_A)
             print(turn_msj)
             winner = self._getWinner()
             # self.printDecks()
-        print('{} {}'.format(winner_tag, winner))
+        print(f'{self._winner_tag} {winner}')
