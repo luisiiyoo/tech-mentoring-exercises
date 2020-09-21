@@ -13,19 +13,24 @@ class ClassicGame:
         num_ranks (int): Number of ranks by suit
         suits (Dict[str, str]): Dictionary containing the suits, e.g. 'club': '♣'
         special_ranks (Dict[int, str]): Dictionary of special characters that receive a rank or value, e.g. 13: 'K'
+        tag_player_A (str): Player A name
+        tag_player_B (str): Player B name
 
     Attributes:
         deck_A (Deck): Deck object that contains the player A's cards
         deck_B (Deck): Deck object that cosntains the player B's cards
+        _tag_player_A (str): Player A name
+        _tag_player_B (str): Player B name
         num_turns (int): Counter of turns
         cards_discarted (Dict[int, Tuple[Card, Card]]): Dictionary that contains the discarted cards by turn (if there were turns)
     '''
 
-    def __init__(self, num_ranks: int, suits: Dict[str, str], special_ranks: Dict[int, str]):
+    def __init__(self, num_ranks: int, suits: Dict[str, str], special_ranks: Dict[int, str], tag_player_A='Deck_A', tag_player_B='Deck_B'):
         self.deck_A, self.deck_B = self.build(num_ranks, suits, special_ranks)
         self.num_turns = 0
+        self._tag_player_A = tag_player_A
+        self._tag_player_B = tag_player_B
         self.cards_discarted: Dict[int, Tuple[Card, Card]] = dict()
-        self.printDecks()
 
     def build(self, num_ranks, suits, special_ranks) -> Tuple[Deck, Deck]:
         '''
@@ -54,8 +59,10 @@ class ClassicGame:
         Returns:
             None
         '''
-        cprint('Deck_A: {}'.format(self.deck_A), constants.COLOR_A)
-        cprint('Deck_B: {}'.format(self.deck_B), constants.COLOR_B)
+        cprint('{}: {}'.format(self._tag_player_A,
+                               self.deck_A), constants.COLOR_A)
+        cprint('{}: {}'.format(self._tag_player_B,
+                               self.deck_B), constants.COLOR_B)
 
     def __getWinner(self) -> Union[str, None]:
         '''
@@ -73,9 +80,9 @@ class ClassicGame:
         if((self.num_turns >= constants.MAX_NUM_TURNS) or (size_A == 0 and size_B == 0)):
             return colored('Tie', constants.COLOR_TIE, attrs=colored_attrs)
         elif(size_A <= 0):
-            return colored('Deck_B', constants.COLOR_B, attrs=colored_attrs)
+            return colored(self._tag_player_B, constants.COLOR_B, attrs=colored_attrs)
         elif(size_B <= 0):
-            return colored('Deck_A', constants.COLOR_A, attrs=colored_attrs)
+            return colored(self._tag_player_A, constants.COLOR_A, attrs=colored_attrs)
         else:
             return None
 
@@ -91,14 +98,14 @@ class ClassicGame:
         Returns:
             status (str): Colored string with the status message
         '''
-        len_A = str(len(self.deck_A)+1)
-        len_B = str(len(self.deck_B)+1)
+        len_A = f'{len(self.deck_A)+1:2}'
+        len_B = f'{len(self.deck_B)+1:2}'
 
-        turn_msj = 'Turn: ' + str(self.num_turns)
-        card_A_msj = colored('Deck_A({}) - {}'.format(
-            len_A, card_A.getPrettyCard()), constants.COLOR_A)
-        card_B_msj = colored('{} - Deck_B({})'.format(
-            card_B.getPrettyCard(), len_B), constants.COLOR_B)
+        turn_msj = f'Turn: {self.num_turns:>3}'
+        card_A_msj = colored('{}({}) - {}'.format(self._tag_player_A,
+                                                  len_A, card_A.getPrettyCard()), constants.COLOR_A)
+        card_B_msj = colored('{} - {}({})'.format(card_B.getPrettyCard(),
+                                                  self._tag_player_B, len_B), constants.COLOR_B)
 
         return '{} => {} ... {} => {}'.format(
             turn_msj, card_A_msj, card_B_msj, best_tag)
@@ -113,8 +120,8 @@ class ClassicGame:
         Returns:
             None
         '''
-        card_A_tag = colored('Card_A', constants.COLOR_A)
-        card_B_tag = colored('Card_B', constants.COLOR_B)
+        card_A_tag = colored(f"{self._tag_player_A}'s Card", constants.COLOR_A)
+        card_B_tag = colored(f"{self._tag_player_B}'s Card", constants.COLOR_B)
         tie_tag = colored('TIE', constants.COLOR_TIE)
         winner_tag = colored('Winner:', constants.COLOR_WINNER, attrs=[
                              'reverse', 'blink', 'bold'])
