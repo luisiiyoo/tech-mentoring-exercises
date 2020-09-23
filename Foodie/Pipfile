@@ -6,6 +6,7 @@ verify_ssl = true
 [dev-packages]
 pylint = "*"
 autopep8 = "*"
+ipykernel = "*"
 
 [packages]
 pandas = "==1.1.2"
@@ -24,6 +25,8 @@ six = "==1.15.0"
 toml = "==0.10.1"
 wrapt = "==1.12.1"
 typing = "*"
+nltk = "*"
+autocorrect = "*"
 
 [requires]
 python_version = "3.8"

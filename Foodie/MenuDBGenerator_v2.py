@@ -87,7 +87,8 @@ class MenuDBGenerator:
                 dish = df.loc[row_idx, day_column].strip().lower()
 
                 #
-                dish = dish.replace('*', '').replace(' or ', ';')
+                dish = dish.replace('*', '').replace('+',
+                                                     'and')  # .replace(' or ',';')
 
                 record['ServiceDay'] = dish not in NO_SERVICE_TAGS
                 record[diet] = dish if (record['ServiceDay']) else None
