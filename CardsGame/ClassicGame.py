@@ -14,21 +14,16 @@ class ClassicGame(Game):
         num_ranks (int): Number of ranks by suit
         suits (Dict[str, str]): Dictionary containing the suits, e.g. 'club': '♣'
         special_ranks (Dict[int, str]): Dictionary of special characters that receive a rank or value, e.g. 13: 'K'
-        tag_player_A (str): Player A name
-        tag_player_B (str): Player B name
+        tag_p1 (str): Player 1 name
+        tag_p2 (str): Player 2 name
 
     Attributes:
-        deck_A (Deck): Deck object that contains the player A's cards
-        deck_B (Deck): Deck object that cosntains the player B's cards
-        _tag_player_A (str): Player A name
-        _tag_player_B (str): Player B name
-        num_turns (int): Counter of turns
-        cards_discarted (Dict[int, Tuple[Card, Card]]): Dictionary that contains the discarted cards by turn (if there were turns)
+        (inherited from Card)
     '''
 
     def __init__(self, num_ranks: int, suits: Dict[str, str],
-                 special_ranks: Dict[int, str], tag_player_A='Player_A', tag_player_B='Player_B'):
-        super().__init__(num_ranks, suits, special_ranks, tag_player_A, tag_player_B)
+                 special_ranks: Dict[int, str], tag_p1='p1', tag_p2='p2'):
+        super().__init__(num_ranks, suits, special_ranks, tag_p1, tag_p2)
 
     def playClasssicGameOnTerminal(self) -> None:
         '''
@@ -41,23 +36,23 @@ class ClassicGame(Game):
             None
         '''
         winner = self._getWinner()
-        while(winner is None):
+        while not winner:
             self.num_turns += 1
-            card_A = self.deck_A.popCard()
-            card_B = self.deck_B.popCard()
+            card_p1 = self.deck_p1.popCard()
+            card_p2 = self.deck_p2.popCard()
             turn_msj = ''
-            if (card_A.rank > card_B.rank):
+            if (card_p1.rank > card_p2.rank):
                 turn_msj = self.getColoredTurnStatusGame(
-                    card_A, card_B, self._card_A_tag)
-                self.deck_A.addCards([card_B, card_A])
-            elif (card_B.rank > card_A.rank):
+                    card_p1, card_p2, self._card_p1_tag)
+                self.deck_p1.addCards([card_p2, card_p1])
+            elif (card_p2.rank > card_p1.rank):
                 turn_msj = self.getColoredTurnStatusGame(
-                    card_A, card_B, self._card_B_tag)
-                self.deck_B.addCards([card_A, card_B])
+                    card_p1, card_p2, self._card_p2_tag)
+                self.deck_p2.addCards([card_p1, card_p2])
             else:
                 turn_msj = self.getColoredTurnStatusGame(
-                    card_A, card_B, self._tie_tag)
-                self.cards_discarted[self.num_turns] = (card_B, card_A)
+                    card_p1, card_p2, self._tie_tag)
+                self.cards_discarted[self.num_turns] = (card_p2, card_p1)
             print(turn_msj)
             winner = self._getWinner()
             # self.printDecks()

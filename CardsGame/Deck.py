@@ -104,7 +104,7 @@ class Deck:
         '''
         return self.__cards.pop(0)
 
-    def shuffleDeck(self) -> None:
+    def shuffle(self) -> None:
         '''
         Shuffles the deck randomly
 
@@ -114,13 +114,13 @@ class Deck:
         Returns:
             None
         '''
-        num_cards = len(self.__cards)
+        num_cards = len(self)
         idx_ranperm = list(numpy.random.permutation(num_cards))
         shuffled_cards = [self.__cards[idx] for idx in idx_ranperm]
         # print(list(map(lambda card: str(card.rank)+card.suit, shuffled_cards)))
         self.__cards = shuffled_cards
 
-    def splitDeck(self) -> Tuple[Deck, Deck]:
+    def split(self) -> Tuple[Deck, Deck]:
         '''
         Splits the Deck object into two Decks
 

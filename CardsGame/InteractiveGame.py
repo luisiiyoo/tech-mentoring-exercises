@@ -18,18 +18,18 @@ class InteractiveGame(Game):
         self.__start_random = 0
         self.__stop_random = constants.NUM_RANKS * (self.num_cards_use)
         self.target_number = self.__getRandomNumber()
-        self.options_cards_A: List[Card] = []
-        self.options_cards_B: List[Card] = []
+        self.options_cards_p1: List[Card] = []
+        self.options_cards_p2: List[Card] = []
 
     def __popNCards(self) -> Tuple[List[Card], List[Card]]:
-        poped_cards_A: List[Card] = []
-        poped_cards_B: List[Card] = []
+        poped_cards_p1: List[Card] = []
+        poped_cards_p2: List[Card] = []
         count = 0
         while(count < self.num_cards_take):
-            poped_cards_A.append(self.deck_A.popCard())
-            poped_cards_B.append(self.deck_B.popCard())
+            poped_cards_p1.append(self.deck_p1.popCard())
+            poped_cards_p2.append(self.deck_p2.popCard())
             count += 1
-        return (poped_cards_A, poped_cards_B)
+        return (poped_cards_p1, poped_cards_p2)
 
     def __getRandomNumber(self) -> int:
         return random.randint(self.__start_random, self.__stop_random)
@@ -44,10 +44,10 @@ class InteractiveGame(Game):
     def play(self):
         winner = self._getWinner()
         if(winner is None):
-            if(len(self.options_cards_A) != 0 and len(self.options_cards_B) != 0):
+            if(len(self.options_cards_p1) != 0 and len(self.options_cards_p2) != 0):
                 print("Waiting for your Cards")
             else:
                 print("Getting cards")
-                self.options_cards_A, self.options_cards_B = self.__popNCards()
+                self.options_cards_p1, self.options_cards_p2 = self.__popNCards()
 
             print("Game ID: ", self.id_game)
