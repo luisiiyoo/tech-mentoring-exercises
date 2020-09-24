@@ -27,6 +27,9 @@ wrapt = "==1.12.1"
 typing = "*"
 nltk = "*"
 autocorrect = "*"
+pyenchant = "*"
+termcolor = "*"
+sklearn = "*"
 
 [requires]
 python_version = "3.8"

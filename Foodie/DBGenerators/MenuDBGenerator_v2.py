@@ -4,7 +4,7 @@ from typing import Dict, List
 
 FILES_EXTENSION = '.tsv'
 PATH_DATA = './data/Dec2019-Mar2020/MENU/'
-OUTPUT_PATH = './data_output/MENU/'
+OUTPUT_PATH = '../data_output/MENU/'
 
 NUM_DAYS_SERVICE = 5
 NO_SERVICE_TAGS = ['labor day', 'no service', 'holiday']

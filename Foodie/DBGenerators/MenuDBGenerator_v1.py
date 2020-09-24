@@ -5,7 +5,7 @@ from typing import List
 
 PATH_DATA = './data/'
 FILE_NAME = PATH_DATA+'Copy of April Menu 2019.xlsx'
-OUTPUT_PATH = './data_output/'
+OUTPUT_PATH = '../data_output/'
 OUTPUT_BREAKFAST_FILE = OUTPUT_PATH + 'foodie_breakfast.csv'
 OUTPUT_LUNCH_FILE = OUTPUT_PATH + 'foodie_lunch.csv'
 

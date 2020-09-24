@@ -5,6 +5,7 @@ from autocorrect import Speller
 import pandas
 import re
 import nltk
+import enchant
 nltk.download('punkt')
 nltk.download('stopwords')
 
@@ -27,10 +28,10 @@ regular_menu = [re.sub('pc', 'piece', doc) for doc in regular_menu]
 # Remove no alphabetic characters
 regular_menu = [re.sub('[^A-Za-z]', ' ', doc) for doc in regular_menu]
 
-example = regular_menu[0]
+example = regular_menu[-1]
 tokenized_example = word_tokenize(example)
 
-print(f'Original text: "{regular_menu[0]}"', "\n")
+print(f'Original text: "{example}"', "\n")
 print('Tokenized text:', tokenized_example,  '\n')
 
 
@@ -40,9 +41,15 @@ tokenized_example = [word for word in tokenized_example if (
 print('Clean text:', tokenized_example, '\n')
 
 # %% Stemming (Finding the base word)
-stemmer = PorterStemmer()
-spell = Speller(lang='en')
-tokenized_example = [spell(stemmer.stem(word)) for word in tokenized_example]
+stemmer_en = PorterStemmer()
+spell_en = Speller(lang='en')
+dict_en = enchant.Dict("en_US")
+
+language_token = [True if(dict_en.check(word)) else True if (
+) else False for word in tokenized_example]
+
+tokenized_example = [spell_en(stemmer_en.stem(word))
+                     for word in tokenized_example]
 print('Stemmed text:', tokenized_example, '\n')
 
 # %% Generate Final word

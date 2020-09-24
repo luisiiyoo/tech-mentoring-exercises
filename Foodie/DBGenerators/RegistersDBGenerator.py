@@ -4,7 +4,7 @@ from typing import Dict, List
 
 FILES_EXTENSION = '.xlsx'
 PATH_DATA = './data/Dec2019-Mar2020/REGISTERS/'
-OUTPUT_PATH = './data_output/REGISTERS/'
+OUTPUT_PATH = '../data_output/REGISTERS/'
 
 EXTRA_TAG = ' + Extras'
 
