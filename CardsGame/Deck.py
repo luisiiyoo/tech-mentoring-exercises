@@ -46,9 +46,6 @@ class Deck:
                 cards.append(card)
         return cards
 
-    def getCardsList(self):
-        return self.__cards
-
     def __len__(self):
         return len(self.__cards)
 
@@ -80,7 +77,7 @@ class Deck:
         '''
         self.__cards = self.__cards + new_cards
 
-    def putBackCards(self, new_cards: List[Card]) -> None:
+    def returnCards(self, new_cards: List[Card]) -> None:
         '''
         Adds a list of cards to Decks top
 
@@ -92,7 +89,7 @@ class Deck:
         '''
         self.__cards = new_cards + self.__cards
 
-    def popCard(self) -> Card:
+    def drawCard(self) -> Card:
         '''
         Gets the above card from the deck
 

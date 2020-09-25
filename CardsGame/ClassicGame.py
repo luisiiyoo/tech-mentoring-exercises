@@ -3,7 +3,7 @@ from Card import Card
 from Deck import Deck
 from Game import Game
 import constants
-from typing import Tuple, Union, Dict
+from typing import Tuple, Dict
 
 
 class ClassicGame(Game):
@@ -18,12 +18,47 @@ class ClassicGame(Game):
         tag_p2 (str): Player 2 name
 
     Attributes:
-        (inherited from Card)
+        (inherited from Game)
+        __card_p1_tag (str): String colored tag for player 1's card 
+        __card_p2_tag (str): String colored tag for player 2's card
+        __tie_tag (str): String colored tag for tie
+        __winner_tag(str): String colored tag for the winner
     '''
 
     def __init__(self, num_ranks: int, suits: Dict[str, str],
                  special_ranks: Dict[int, str], tag_p1='p1', tag_p2='p2'):
         super().__init__(num_ranks, suits, special_ranks, tag_p1, tag_p2)
+        self.__card_p1_tag = colored(
+            f"{self.getTagPlayer1()}'s Card", constants.COLOR_P1)
+        self.__card_p2_tag = colored(
+            f"{self.getTagPlayer2()}'s Card", constants.COLOR_P2)
+        self.__tie_tag = colored('TIE', constants.COLOR_TIE)
+        self.__winner_tag = colored('Winner:', constants.COLOR_WINNER, attrs=[
+            'reverse', 'blink', 'bold'])
+
+    def getColoredTurnStatusGame(self, card_p1, card_p2, best_tag) -> str:
+        '''
+        Returns the winner player if there is
+
+        Args:
+            card_p1 (Card): Card object obtained on the current turn for the player 1
+            card_p2 (Card): Card object obtained on the current turn for the player 2
+            best_tag (str): Message about the best Card between the two Cards passed as argument
+
+        Returns:
+            status (str): Colored string with the status message
+        '''
+        len_A = f'{len(self.deck_p1)+1:2}'
+        len_B = f'{len(self.deck_p2)+1:2}'
+
+        turn_msj = f'Turn: {self.getNumTurns():>3}'
+        card_p1_msj = colored('{}({}) - {}'.format(self.getTagPlayer1(),
+                                                   len_A, card_p1.getPrettyCard()), constants.COLOR_P1)
+        card_p2_msj = colored('{} - {}({})'.format(card_p2.getPrettyCard(),
+                                                   self.getTagPlayer2(), len_B), constants.COLOR_P2)
+
+        return '{} => {} ... {} => {}'.format(
+            turn_msj, card_p1_msj, card_p2_msj, best_tag)
 
     def playClasssicGameOnTerminal(self) -> None:
         '''
@@ -35,25 +70,27 @@ class ClassicGame(Game):
         Returns:
             None
         '''
-        winner = self._getWinner()
+        winner = self.getWinner(constants.MIN_NUM_CARDS_CLASSIC_GAME)
         while not winner:
-            self.num_turns += 1
-            card_p1 = self.deck_p1.popCard()
-            card_p2 = self.deck_p2.popCard()
+            self.incrementNumTurn()
+            card_p1 = self.deck_p1.drawCard()
+            card_p2 = self.deck_p2.drawCard()
             turn_msj = ''
-            if (card_p1.rank > card_p2.rank):
+            rank_card_p1 = card_p1.getRank()
+            rank_card_p2 = card_p2.getRank()
+            if (rank_card_p1 > rank_card_p2):
                 turn_msj = self.getColoredTurnStatusGame(
-                    card_p1, card_p2, self._card_p1_tag)
+                    card_p1, card_p2, self.__card_p1_tag)
                 self.deck_p1.addCards([card_p2, card_p1])
-            elif (card_p2.rank > card_p1.rank):
+            elif (rank_card_p2 > rank_card_p1):
                 turn_msj = self.getColoredTurnStatusGame(
-                    card_p1, card_p2, self._card_p2_tag)
+                    card_p1, card_p2, self.__card_p2_tag)
                 self.deck_p2.addCards([card_p1, card_p2])
             else:
                 turn_msj = self.getColoredTurnStatusGame(
-                    card_p1, card_p2, self._tie_tag)
-                self.cards_discarted[self.num_turns] = (card_p2, card_p1)
+                    card_p1, card_p2, self.__tie_tag)
+                self.cards_discarted[self.getNumTurns()] = (card_p2, card_p1)
             print(turn_msj)
-            winner = self._getWinner()
+            winner = self.getWinner(constants.MIN_NUM_CARDS_CLASSIC_GAME)
             # self.printDecks()
-        print(f'{self._winner_tag} {winner}')
+        print(f'{self.__winner_tag} {winner}')
