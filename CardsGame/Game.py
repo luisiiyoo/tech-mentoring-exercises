@@ -34,12 +34,39 @@ class Game:
         self.__tag_p2 = tag_p2
 
     def getTagPlayer1(self) -> str:
+        '''
+        Gets the name of the player 1
+
+        Args:
+            None
+
+        Returns:
+            tag_name (str): Name for the player 1
+        '''
         return self.__tag_p1
 
     def getTagPlayer2(self) -> str:
+        '''
+        Gets the name of the player 2
+
+        Args:
+            None
+
+        Returns:
+            tag_name (str): Name for the player 2
+        '''
         return self.__tag_p2
 
     def getNumTurns(self) -> int:
+        '''
+        Gets current turn
+
+        Args:
+            None
+
+        Returns:
+            turn (int): Current turn
+        '''
         return self.__num_turns
 
     def incrementNumTurn(self) -> None:

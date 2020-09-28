@@ -102,7 +102,7 @@ def playTurn(id_game: str):
         card_indxs: List[int] = request.json[CARD_INDEXES]
         pretty_cards_p1 = game.getPrettyHandPlayer1()
         pretty_cards_p2 = game.getPrettyHandPlayer2()
-        turn_winner, indx_cards_player2 = game.play(card_indxs)
+        turn_winner, indx_cards_player2 = game.playTurn(card_indxs)
         response = {
             'idGame': id_game,
             'player1': game.getTagPlayer1(),
