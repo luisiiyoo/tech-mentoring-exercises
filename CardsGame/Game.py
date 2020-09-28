@@ -26,7 +26,7 @@ class Game:
     '''
 
     def __init__(self, num_ranks: int, suits: Dict[str, str], special_ranks: Dict[int, str], tag_p1: str, tag_p2: str):
-        self.deck_p1, self.deck_p2 = self.build(
+        self.deck_p1, self.deck_p2 = self.__build(
             num_ranks, suits, special_ranks)
         self.cards_discarted: Dict[int, Tuple[Card, Card]] = dict()
         self.__num_turns = 0
@@ -54,7 +54,7 @@ class Game:
         '''
         self.__num_turns += 1
 
-    def build(self, num_ranks, suits, special_ranks) -> Tuple[Deck, Deck]:
+    def __build(self, num_ranks, suits, special_ranks) -> Tuple[Deck, Deck]:
         '''
         Generates the shuffled decks for the player A and B
 
