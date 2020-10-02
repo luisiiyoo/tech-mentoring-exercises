@@ -187,7 +187,7 @@ class BagOfWords:
         '''
         return re.sub('pc', 'piece', word)
 
-    def __stemmRawTextList(self, text_list: List[str], feed_stemm_dict: bool = False) -> List[str]:
+    def stemmRawTextList(self, text_list: List[str], feed_stemm_dict: bool = False) -> List[str]:
         '''
         Transforms a list of raw text into a list of clean steammed text for vectorize 
 
@@ -233,7 +233,7 @@ class BagOfWords:
         for col_name in self.col_names_features:
             filtered_data = df.loc[df[filter_col_name], col_name]
             diet_texts = filtered_data.astype(str).values.tolist()
-            self.__clean_text_data += self.__stemmRawTextList(
+            self.__clean_text_data += self.stemmRawTextList(
                 diet_texts, feed_stemm_dict=True)
         # Get Bag of Words
         self.__vectorizer = CountVectorizer(max_features=self.max_features)
@@ -246,25 +246,27 @@ class BagOfWords:
             self.__features_stemm_words_dict[feature] = self.__stemm_words_dict[feature]
         self.printResults()
 
-    def vectorizeRawData(self, raw_texts: List[str]) -> List[List[int]]:
+    def vectorizeRawData(self, raw_texts: List[str], print_result: bool = False) -> List[List[int]]:
         '''
         Vectorizes a list of raw text
 
         Args:
             raw_texts (List[str]): List of raw text
+            print_result (bool): Flag to print the results
 
         Returns:
             vectors (List[List[int]]): Vectors for each input list row
         '''
-        cprint(f"\nBoW Features:\n{self.__bow_features}", 'blue')
-        clean_texts = self.__stemmRawTextList(raw_texts)
+        clean_texts = self.stemmRawTextList(raw_texts)
         vectors = self.__vectorizer.transform(clean_texts).toarray()
-        for idx, texts in enumerate(zip(raw_texts, clean_texts)):
-            raw_text, clean_text = texts
-            vector = vectors[idx]
-            cprint(f'Raw Text: "{raw_text}"', 'magenta')
-            cprint(f'Clean Text: "{clean_text}"', 'cyan')
-            print(f'{vector}\n')
+        if print_result:
+            cprint(f"\nBoW Features:\n{self.__bow_features}", 'blue')
+            for idx, texts in enumerate(zip(raw_texts, clean_texts)):
+                raw_text, clean_text = texts
+                vector = vectors[idx]
+                cprint(f'Raw Text: "{raw_text}"', 'magenta')
+                cprint(f'Clean Text: "{clean_text}"', 'cyan')
+                print(f'{vector}\n')
         return vectors
 
     def printResults(self) -> None:

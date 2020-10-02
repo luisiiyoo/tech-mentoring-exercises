@@ -79,8 +79,10 @@ class RegistersDBGenerator:
                     df['Extra'] = df['Diet'].fillna(
                         '').str.contains(EXTRA_TAG, regex=False)
                     df['Diet'] = df['Diet'].map(lambda diet: str(
-                        diet).replace(EXTRA_TAG, '').strip(), na_action=None)
+                        diet).replace(EXTRA_TAG, ''), na_action=None)
 
+                df['Diet'] = df['Diet'].map(lambda diet: str(
+                    diet).strip().split()[0], na_action=None)
                 # Save a copy
                 frames.append(df)
 
