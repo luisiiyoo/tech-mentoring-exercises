@@ -1,8 +1,8 @@
+from typing import Tuple, Union, Dict
 from termcolor import colored, cprint
 from Card import Card
 from Deck import Deck
-import constants
-from typing import Tuple, Union, Dict
+from ..util import constants
 
 
 class Game:

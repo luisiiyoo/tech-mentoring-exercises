@@ -1,8 +1,8 @@
 from flask import Flask, jsonify, make_response, request, abort
 from datetime import datetime
 from typing import Dict, List
-from InteractiveGame import InteractiveGame
-import constants
+from Game.InteractiveGame import InteractiveGame
+from util.constants import CARDS_TO_USE, NUM_RANKS, SUITS, SPECIAL_RANKS
 import traceback
 
 app = Flask(__name__)
@@ -48,7 +48,7 @@ def getGame(id_game: str):
         'strDeckPlayer1': str(game.deck_p1),
         'strdeckPlayer2': str(game.deck_p2),
         'numTurn': game.getNumTurns(),
-        'winner': game.getWinner(constants.CARDS_TO_USE),
+        'winner': game.getWinner(CARDS_TO_USE),
     }
     return (jsonify(response), 200)
 
@@ -59,8 +59,8 @@ def createGame():
     if not request.json or not has_player_name:
         return (jsonify({'error': f"No '{PLAYER_NAME}' field was provided"}), 400)
     player = request.json[PLAYER_NAME]
-    game = InteractiveGame(constants.NUM_RANKS, constants.SUITS,
-                           constants.SPECIAL_RANKS, player)
+    game = InteractiveGame(NUM_RANKS, SUITS,
+                           SPECIAL_RANKS, player)
     id_game = game.getID()
     response = {
         'idGame': id_game
@@ -113,7 +113,7 @@ def playTurn(id_game: str):
             'handPlayer2': [{indx: card} for indx, card in enumerate(pretty_cards_p2)],
             'numTurn': game.getNumTurns(),
             'turnWinner': turn_winner,
-            'winner': game.getWinner(constants.CARDS_TO_USE),
+            'winner': game.getWinner(CARDS_TO_USE),
             'target': game.getTargetRank(),
             'indxsPlayer1': card_indxs,
             'indxsPlayer2': indx_cards_player2,

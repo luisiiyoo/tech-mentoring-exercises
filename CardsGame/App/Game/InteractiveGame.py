@@ -1,12 +1,12 @@
 from termcolor import colored, cprint
 from typing import Dict, List, Tuple, Union
 from datetime import datetime
-from Game import Game
+from .game import Game
 from Card import Card, getPrettyHandCard
 from Deck import Deck
-import Util
 from termcolor import colored, cprint
-import constants
+from ..util import constants
+from ..util.helpers import getRandomNumInRange,getRandomString ,getClosestIndexCards
 
 
 class InteractiveGame(Game):
@@ -31,7 +31,7 @@ class InteractiveGame(Game):
     def __init__(self, num_ranks: int, suits: Dict[str, str],
                  special_ranks: Dict[int, str], player_name: str):
         super().__init__(num_ranks, suits, special_ranks, player_name, 'PC')
-        self.__id_game = Util.getRandomString()
+        self.__id_game = getRandomString()
         self.__target_rank = None
         self.__hand_p1: List[Card] = []
         self.__hand_p2: List[Card] = []
@@ -173,7 +173,7 @@ class InteractiveGame(Game):
                 f"You cann't take a hand because the game is over. Winner: {winner}")
 
         if not self.__hand_p1 or not self.__hand_p2:
-            new_rank = Util.getRandomNumInRange(
+            new_rank = getRandomNumInRange(
                 constants.START_TARGET_RANGE, constants.STOP_TARGET_RANGE)
             self.setTargetRank(new_rank)
             self.__hand_p1, self.__hand_p2 = self.__drawCards()
@@ -276,7 +276,7 @@ class InteractiveGame(Game):
         self.__validateIndexesCardOptions(indx_cards_p1)
 
         self.incrementNumTurn()
-        indx_cards_p2 = Util.getClosestIndexCards(
+        indx_cards_p2 = getClosestIndexCards(
             self.__hand_p2, self.getTargetRank(), constants.CARDS_TO_USE)
 
         return (self.getTurnWinner(indx_cards_p1, indx_cards_p2), indx_cards_p2)

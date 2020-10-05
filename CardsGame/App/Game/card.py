@@ -1,5 +1,5 @@
 from __future__ import annotations
-import constants
+from ..util.constants import SPECIAL_RANKS
 
 
 def getPrettyHandCard(card: Card) -> str:
@@ -51,6 +51,6 @@ class Card:
         Returns:
             pretty_card(str): String with the card value and suit 
         '''
-        rank = constants.SPECIAL_RANKS.get(self.__rank) if (
-            self.__rank in constants.SPECIAL_RANKS) else str(self.__rank)
+        rank = SPECIAL_RANKS.get(self.__rank) if (
+            self.__rank in SPECIAL_RANKS) else str(self.__rank)
         return f'{rank:>2s}{self.__suit}'

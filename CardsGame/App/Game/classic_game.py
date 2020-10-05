@@ -1,8 +1,8 @@
 from termcolor import colored, cprint
-from Card import Card
-from Deck import Deck
-from Game import Game
-import constants
+from card import Card
+from deck import Deck
+from .game import Game
+from ..util import constants
 from typing import Tuple, Dict
 
 

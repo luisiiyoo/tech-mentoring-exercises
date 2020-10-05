@@ -1,9 +1,9 @@
+import random
+import uuid
 from typing import Dict, List, Tuple, Union
 from numpy.random import permutation
 from numpy import sort, argsort
-from Card import Card
-import uuid
-import random
+from Game.Card import Card
 
 
 def getRandomString(len_str: int = 12) -> str:

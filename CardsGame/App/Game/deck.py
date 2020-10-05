@@ -2,8 +2,8 @@ from __future__ import annotations
 import math
 import numpy
 from typing import Dict, List, Tuple
-from Card import Card
-import constants
+from card import Card
+from ..util import constants
 
 
 class Deck:
