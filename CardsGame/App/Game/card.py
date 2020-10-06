@@ -1,9 +1,9 @@
 from __future__ import annotations
-from ..util.constants import SPECIAL_RANKS
+from ..util import SPECIAL_RANKS
 
 
 def getPrettyHandCard(card: Card) -> str:
-    '''
+    """
       Returns the Card string representation
 
       Args:
@@ -11,12 +11,12 @@ def getPrettyHandCard(card: Card) -> str:
 
       Returns:
           card_str (str): the Card string representation
-    '''
+    """
     return card.getPrettyCard()
 
 
 class Card:
-    '''
+    """
     Card class representing the rank and suit
 
     Args:
@@ -26,7 +26,7 @@ class Card:
     Attributes:
         rank (int): Value that recieves the card 
         suit (str): Special character of the card, e.g. '♣'
-    '''
+    """
 
     def __init__(self, rank: int, suit: str):
         self.__rank = rank
@@ -42,7 +42,7 @@ class Card:
         return self.getPrettyCard()
 
     def getPrettyCard(self) -> str:
-        '''
+        """
         Converts the Card object to a string, e.g. 'K♣'
 
         Args:
@@ -50,7 +50,7 @@ class Card:
 
         Returns:
             pretty_card(str): String with the card value and suit 
-        '''
+        """
         rank = SPECIAL_RANKS.get(self.__rank) if (
             self.__rank in SPECIAL_RANKS) else str(self.__rank)
         return f'{rank:>2s}{self.__suit}'

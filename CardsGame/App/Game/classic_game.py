@@ -1,13 +1,11 @@
-from termcolor import colored, cprint
-from card import Card
-from deck import Deck
+from termcolor import colored
 from .game import Game
 from ..util import constants
-from typing import Tuple, Dict
+from typing import Dict
 
 
 class ClassicGame(Game):
-    '''
+    """
     CardGame class to control the game
 
     Args:
@@ -23,7 +21,7 @@ class ClassicGame(Game):
         __card_p2_tag (str): String colored tag for player 2's card
         __tie_tag (str): String colored tag for tie
         __winner_tag(str): String colored tag for the winner
-    '''
+    """
 
     def __init__(self, num_ranks: int, suits: Dict[str, str],
                  special_ranks: Dict[int, str], tag_p1='p1', tag_p2='p2'):
@@ -37,7 +35,7 @@ class ClassicGame(Game):
             'reverse', 'blink', 'bold'])
 
     def getColoredTurnStatusGame(self, card_p1, card_p2, best_tag) -> str:
-        '''
+        """
         Returns the winner player if there is
 
         Args:
@@ -47,7 +45,7 @@ class ClassicGame(Game):
 
         Returns:
             status (str): Colored string with the status message
-        '''
+        """
         len_A = f'{len(self.deck_p1)+1:2}'
         len_B = f'{len(self.deck_p2)+1:2}'
 
@@ -61,7 +59,7 @@ class ClassicGame(Game):
             turn_msj, card_p1_msj, card_p2_msj, best_tag)
 
     def playClasssicGameOnTerminal(self) -> None:
-        '''
+        """
         Starts the game and shows the progress in each turn until the game ends
 
         Args:
@@ -69,12 +67,12 @@ class ClassicGame(Game):
 
         Returns:
             None
-        '''
+        """
         winner = self.getWinner(constants.MIN_NUM_CARDS_CLASSIC_GAME)
         while not winner:
             self.incrementNumTurn()
-            card_p1 = self.deck_p1.drawCard()
-            card_p2 = self.deck_p2.drawCard()
+            card_p1 = self.deck_p1.draw()
+            card_p2 = self.deck_p2.draw()
             turn_msj = ''
             rank_card_p1 = card_p1.getRank()
             rank_card_p2 = card_p2.getRank()

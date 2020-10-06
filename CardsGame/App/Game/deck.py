@@ -2,12 +2,12 @@ from __future__ import annotations
 import math
 import numpy
 from typing import Dict, List, Tuple
-from card import Card
+from .card import Card
 from ..util import constants
 
 
 class Deck:
-    '''
+    """
     Deck class that contains the collection of cards and methods like shuffle, pop a card, etc.
 
     Args:
@@ -20,7 +20,7 @@ class Deck:
         suits (Dict[str, str]): Dictionary containing the suits, e.g. 'club': '♣'
         special_ranks (Dict[int, str]): Dictionary of special characters that receive a rank or value, e.g. 13: 'K'
         __cards(List[Card]): List of Card objects
-    '''
+    """
 
     def __init__(self, num_ranks: int, suits: Dict[str, str], special_ranks: Dict[int, str], cards: List[Card] = []):
         self.num_ranks = num_ranks
@@ -30,7 +30,7 @@ class Deck:
             len(cards) > 0) else self.__createListOfCards()
 
     def __createListOfCards(self):
-        '''
+        """
         Creates the collection of cards based on the suits and number of ranks providen at the Deck object creation
 
         Args:
@@ -38,7 +38,7 @@ class Deck:
 
         Returns:
             cards(List[Card]): List of Card objects
-        '''
+        """
         cards: List[Card] = []
         for suit_key in self.suits:
             for rank in range(1, self.num_ranks + 1):
@@ -54,7 +54,7 @@ class Deck:
         return ','.join(pretty)
 
     def getPrettyDeck(self) -> List[str]:
-        '''
+        """
         Maps the cards list to an array of pretty Cards (string Cards representation)
 
         Args:
@@ -62,11 +62,11 @@ class Deck:
 
         Returns:
             cards(List[Card]): List of Card objects
-        '''
+        """
         return [card.getPrettyCard() for card in self.__cards]
 
     def addCards(self, new_cards: List[Card]) -> None:
-        '''
+        """
         Adds a list of cards to Decks bottom
 
         Args:
@@ -74,11 +74,11 @@ class Deck:
 
         Returns:
             None
-        '''
+        """
         self.__cards = self.__cards + new_cards
 
     def returnCards(self, new_cards: List[Card]) -> None:
-        '''
+        """
         Adds a list of cards to Decks top
 
         Args:
@@ -86,11 +86,11 @@ class Deck:
 
         Returns:
             None
-        '''
+        """
         self.__cards = new_cards + self.__cards
 
-    def drawCard(self) -> Card:
-        '''
+    def draw(self) -> Card:
+        """
         Gets the above card from the deck
 
         Args:
@@ -98,11 +98,11 @@ class Deck:
 
         Returns:
             card(Card): Card obtained from the deck's top
-        '''
+        """
         return self.__cards.pop(0)
 
     def shuffle(self) -> None:
-        '''
+        """
         Shuffles the deck randomly
 
         Args:
@@ -110,7 +110,7 @@ class Deck:
 
         Returns:
             None
-        '''
+        """
         num_cards = len(self)
         idx_ranperm = list(numpy.random.permutation(num_cards))
         shuffled_cards = [self.__cards[idx] for idx in idx_ranperm]
@@ -118,7 +118,7 @@ class Deck:
         self.__cards = shuffled_cards
 
     def split(self) -> Tuple[Deck, Deck]:
-        '''
+        """
         Splits the Deck object into two Decks
 
         Args:
@@ -127,7 +127,7 @@ class Deck:
         Returns:
             deck_A(Deck): Deck object for the player A
             deck_A(Deck): Deck object for the player A
-        '''
+        """
         num_cards = len(self.__cards)
         split_idx = math.floor(num_cards / constants.NUM_SPLITS)
 

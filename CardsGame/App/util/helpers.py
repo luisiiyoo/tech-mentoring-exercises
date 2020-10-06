@@ -1,13 +1,13 @@
 import random
 import uuid
-from typing import Dict, List, Tuple, Union
+from typing import List, Tuple
 from numpy.random import permutation
 from numpy import sort, argsort
-from Game.Card import Card
+from App.Game.card import Card
 
 
 def getRandomString(len_str: int = 12) -> str:
-    '''
+    """
     Returns a random string
 
     Args:
@@ -15,13 +15,13 @@ def getRandomString(len_str: int = 12) -> str:
 
     Returns:
         random_str (str): Random string
-    '''
+    """
     random_str = str(uuid.uuid4()).replace('-', '')
     return random_str[-len_str:]
 
 
 def getRandomNumInRange(start, stop) -> int:
-    '''
+    """
     Returns a random integer between a range
 
     Args:
@@ -30,12 +30,12 @@ def getRandomNumInRange(start, stop) -> int:
 
     Returns:
         random_int (int): Random integer
-    '''
+    """
     return random.randint(start, stop)
 
 
 def getRandomIndexes(size_perm: int, num_indxs: int) -> List[int]:
-    '''
+    """
     Returns a list of n-random indexes
 
     Args:
@@ -44,12 +44,12 @@ def getRandomIndexes(size_perm: int, num_indxs: int) -> List[int]:
 
     Returns:
         list_indexes (int): List of n-random indexes
-      '''
+      """
     return list(permutation(size_perm))[0:num_indxs]
 
 
 def getIndexClosestNumber(sorted_nums: List[int], original_indxs: List[int], target: int) -> Tuple[int, int]:
-    '''
+    """
     Returns the index of the clostest number according to a target
 
     Args:
@@ -59,7 +59,7 @@ def getIndexClosestNumber(sorted_nums: List[int], original_indxs: List[int], tar
 
     Returns:
         indexes (Tuple[int,int]) -> Tuple of the sorted index and the original index that is equal or close value to the target
-    '''
+    """
     first_indx = 0
     last_indx = len(sorted_nums) - 1
 
@@ -84,7 +84,7 @@ def getIndexClosestNumber(sorted_nums: List[int], original_indxs: List[int], tar
 
 
 def getClosestIndexCards(hand: List[Card], target_rank: int, num_cards_to_use: int) -> List[int]:
-    '''
+    """
     Returns the indexes of the values that approximate to a target value
 
     Args:
@@ -94,7 +94,7 @@ def getClosestIndexCards(hand: List[Card], target_rank: int, num_cards_to_use: i
 
     Returns:
         indexes (List[int]) -> List of indexes
-    '''
+    """
     ranks = [card.getRank() for card in hand]
     indx_to_use: List[int] = []
 

@@ -1,9 +1,9 @@
+import traceback
 from flask import Flask, jsonify, make_response, request, abort
 from datetime import datetime
 from typing import Dict, List
-from Game.InteractiveGame import InteractiveGame
-from util.constants import CARDS_TO_USE, NUM_RANKS, SUITS, SPECIAL_RANKS
-import traceback
+from App.Game.interactive_game import InteractiveGame
+from App.util.constants import CARDS_TO_USE, NUM_RANKS, SUITS, SPECIAL_RANKS
 
 app = Flask(__name__)
 game_collection: Dict[str, InteractiveGame] = dict()
@@ -32,7 +32,7 @@ def not_found(error):
 @app.route('/game', methods=['GET'])
 def getGames():
     game_ids = [id_game for id_game in game_collection.keys()]
-    return (jsonify(game_ids), 200)
+    return jsonify(game_ids), 200
 
 
 @app.route('/game/<string:id_game>', methods=['GET'])
@@ -55,9 +55,10 @@ def getGame(id_game: str):
 
 @app.route('/game', methods=['POST'])
 def createGame():
-    has_player_name: bool = PLAYER_NAME in request.json
-    if not request.json or not has_player_name:
+    player = request.json.get(PLAYER_NAME)
+    if not player:
         return (jsonify({'error': f"No '{PLAYER_NAME}' field was provided"}), 400)
+
     player = request.json[PLAYER_NAME]
     game = InteractiveGame(NUM_RANKS, SUITS,
                            SPECIAL_RANKS, player)
