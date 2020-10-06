@@ -1,8 +1,8 @@
 from __future__ import annotations
-from ..util import SPECIAL_RANKS
+from ..util.constants import SPECIAL_RANKS
 
 
-def getPrettyHandCard(card: Card) -> str:
+def get_pretty_hand_card(card: Card) -> str:
     """
       Returns the Card string representation
 
@@ -12,7 +12,7 @@ def getPrettyHandCard(card: Card) -> str:
       Returns:
           card_str (str): the Card string representation
     """
-    return card.getPrettyCard()
+    return card.get_pretty_card()
 
 
 class Card:
@@ -32,16 +32,16 @@ class Card:
         self.__rank = rank
         self.__suit = suit
 
-    def getRank(self) -> int:
+    def get_rank(self) -> int:
         return self.__rank
 
-    def getSuit(self) -> str:
+    def get_suit(self) -> str:
         return self.__suit
 
     def __str__(self) -> str:
-        return self.getPrettyCard()
+        return self.get_pretty_card()
 
-    def getPrettyCard(self) -> str:
+    def get_pretty_card(self) -> str:
         """
         Converts the Card object to a string, e.g. 'K♣'
 

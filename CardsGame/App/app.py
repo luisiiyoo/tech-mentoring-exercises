@@ -2,7 +2,7 @@ import traceback
 from flask import Flask, jsonify, make_response, request, abort
 from datetime import datetime
 from typing import Dict, List
-from App.Game.interactive_game import InteractiveGame
+from App.Game import InteractiveGame
 from App.util.constants import CARDS_TO_USE, NUM_RANKS, SUITS, SPECIAL_RANKS
 
 app = Flask(__name__)
@@ -12,7 +12,7 @@ PLAYER_NAME = 'playerName'
 CARD_INDEXES = 'cardIndexes'
 
 
-def getGamebyId(id_game: str) -> InteractiveGame:
+def get_game_by_id(id_game: str) -> InteractiveGame:
     game = game_collection.get(id_game)
     if not game:
         abort(404)
@@ -30,96 +30,96 @@ def not_found(error):
 
 
 @app.route('/game', methods=['GET'])
-def getGames():
+def get_games():
     game_ids = [id_game for id_game in game_collection.keys()]
     return jsonify(game_ids), 200
 
 
 @app.route('/game/<string:id_game>', methods=['GET'])
-def getGame(id_game: str):
-    game = getGamebyId(id_game)
+def get_game(id_game: str):
+    game = get_game_by_id(id_game)
     response = {
         'idGame': id_game,
-        'player1': game.getTagPlayer1(),
-        'player2': game.getTagPlayer2(),
+        'player1': game.get_tag_player1(),
+        'player2': game.get_tag_player2(),
         'createdAt': datetime.fromtimestamp(game.createdAt),
         'lenDeckPlayer1': len(game.deck_p1),
         'lenDeckPlayer2': len(game.deck_p2),
         'strDeckPlayer1': str(game.deck_p1),
         'strdeckPlayer2': str(game.deck_p2),
-        'numTurn': game.getNumTurns(),
-        'winner': game.getWinner(CARDS_TO_USE),
+        'numTurn': game.get_num_turns(),
+        'winner': game.get_winner(CARDS_TO_USE),
     }
-    return (jsonify(response), 200)
+    return jsonify(response), 200
 
 
 @app.route('/game', methods=['POST'])
-def createGame():
+def create_game():
     player = request.json.get(PLAYER_NAME)
     if not player:
-        return (jsonify({'error': f"No '{PLAYER_NAME}' field was provided"}), 400)
+        return jsonify({'error': f"No '{PLAYER_NAME}' field was provided"}), 400
 
     player = request.json[PLAYER_NAME]
     game = InteractiveGame(NUM_RANKS, SUITS,
                            SPECIAL_RANKS, player)
-    id_game = game.getID()
+    id_game = game.get_id()
     response = {
         'idGame': id_game
     }
     game_collection[id_game] = game
-    return (jsonify(response), 201)
+    return jsonify(response), 201
 
 
 @app.route('/game/<string:id_game>/hand', methods=['GET'])
-def takePlayerHand(id_game: str):
+def take_player_hand(id_game: str):
     try:
-        game = getGamebyId(id_game)
-        game.takeHand()
-        pretty_hand = game.getPrettyHandPlayer1()
+        game = get_game_by_id(id_game)
+        game.take_hand()
+        pretty_hand = game.get_pretty_hand_player1()
         hand = [{indx: card} for indx, card in enumerate(pretty_hand)]
         response = {
             'idGame': id_game,
-            'player1': game.getTagPlayer1(),
+            'player1': game.get_tag_player1(),
             'lenDeck': len(game.deck_p1),
             'hand': hand,
-            'numTurn': game.getNumTurns(),
-            'target': game.getTargetRank()
+            'numTurn': game.get_num_turns(),
+            'target': game.get_target_rank()
         }
-        return (jsonify(response), 200)
+        return jsonify(response), 200
     except Exception as e:
         return make_response(jsonify({'error': str(e)}), 400)
 
 
 @app.route('/game/<string:id_game>/hand', methods=['PUT'])
-def playTurn(id_game: str):
+def play_turn(id_game: str):
     try:
-        game = getGamebyId(id_game)
+        game = get_game_by_id(id_game)
         has_card_indxs: bool = CARD_INDEXES in request.json
         if not request.json or not has_card_indxs:
-            return (jsonify({'error': f"No '{CARD_INDEXES}' field was provided"}), 400)
+            return jsonify({'error': f"No '{CARD_INDEXES}' field was provided"}), 400
         if type(request.json[CARD_INDEXES]) is not list:
-            return (jsonify({'error': f"'{CARD_INDEXES}' must be a list of indexes"}), 400)
+            return jsonify({'error': f"'{CARD_INDEXES}' must be a list of indexes"}), 400
 
         card_indxs: List[int] = request.json[CARD_INDEXES]
-        pretty_cards_p1 = game.getPrettyHandPlayer1()
-        pretty_cards_p2 = game.getPrettyHandPlayer2()
-        turn_winner, indx_cards_player2 = game.playTurn(card_indxs)
+        pretty_cards_p1 = game.get_pretty_hand_player1()
+        pretty_cards_p2 = game.get_pretty_hand_player2()
+        turn_winner, indx_cards_player2 = game.play_turn(card_indxs)
         response = {
             'idGame': id_game,
-            'player1': game.getTagPlayer1(),
-            'player2': game.getTagPlayer2(),
+            'player1': game.get_tag_player1(),
+            'player2': game.get_tag_player2(),
             'lenDeckPlayer1': len(game.deck_p1),
             'lenDeckPlayer2': len(game.deck_p2),
             'handPlayer1': [{indx: card} for indx, card in enumerate(pretty_cards_p1)],
             'handPlayer2': [{indx: card} for indx, card in enumerate(pretty_cards_p2)],
-            'numTurn': game.getNumTurns(),
+            'numTurn': game.get_num_turns(),
             'turnWinner': turn_winner,
-            'winner': game.getWinner(CARDS_TO_USE),
-            'target': game.getTargetRank(),
+            'winner': game.get_winner(CARDS_TO_USE),
+            'target': game.get_target_rank(),
             'indxsPlayer1': card_indxs,
             'indxsPlayer2': indx_cards_player2,
         }
-        return (jsonify(response), 200)
+        return jsonify(response), 200
     except Exception as e:
         traceback.print_exc()
         return make_response(jsonify({'error': str(e)}), 400)

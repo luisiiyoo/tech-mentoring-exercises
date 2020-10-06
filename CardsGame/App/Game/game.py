@@ -33,7 +33,7 @@ class Game:
         self.__tag_p1 = tag_p1
         self.__tag_p2 = tag_p2
 
-    def getTagPlayer1(self) -> str:
+    def get_tag_player1(self) -> str:
         """
         Gets the name of the player 1
 
@@ -45,7 +45,7 @@ class Game:
         """
         return self.__tag_p1
 
-    def getTagPlayer2(self) -> str:
+    def get_tag_player2(self) -> str:
         """
         Gets the name of the player 2
 
@@ -57,7 +57,7 @@ class Game:
         """
         return self.__tag_p2
 
-    def getNumTurns(self) -> int:
+    def get_num_turns(self) -> int:
         """
         Gets current turn
 
@@ -69,7 +69,7 @@ class Game:
         """
         return self.__num_turns
 
-    def incrementNumTurn(self) -> None:
+    def increment_num_turn(self) -> None:
         """
         Increments the turn_number variable by 1
 
@@ -98,7 +98,7 @@ class Game:
         deck.shuffle()
         return deck.split()
 
-    def printDecks(self) -> None:
+    def print_decks(self) -> None:
         """
         Prints a pretty colored Deck presentation for the Player A and B
 
@@ -108,12 +108,12 @@ class Game:
         Returns:
             None
         """
-        cprint(f'{self.getTagPlayer1()}:\n  {self.deck_p1}',
+        cprint(f'{self.get_tag_player1()}:\n  {self.deck_p1}',
                constants.COLOR_P1)
-        cprint(f'{self.getTagPlayer2()}:\n  {self.deck_p2}',
+        cprint(f'{self.get_tag_player2()}:\n  {self.deck_p2}',
                constants.COLOR_P2)
 
-    def getWinner(self, min_num_cards) -> Union[str, None]:
+    def get_winner(self, min_num_cards) -> Union[str, None]:
         """
         Returns the winner player if there is
 
@@ -126,11 +126,11 @@ class Game:
         colored_attrs = ['bold']
         size_p1 = len(self.deck_p1)
         size_p2 = len(self.deck_p2)
-        if((self.getNumTurns() >= constants.MAX_NUM_TURNS) or (size_p1 < min_num_cards and size_p2 < min_num_cards)):
+        if (self.get_num_turns() >= constants.MAX_NUM_TURNS) or (size_p1 < min_num_cards and size_p2 < min_num_cards):
             return colored('Tie', constants.COLOR_TIE, attrs=colored_attrs)
-        elif(size_p1 < min_num_cards):
-            return colored(self.getTagPlayer2(), constants.COLOR_P2, attrs=colored_attrs)
-        elif(size_p2 < min_num_cards):
-            return colored(self.getTagPlayer1(), constants.COLOR_P1, attrs=colored_attrs)
+        elif size_p1 < min_num_cards:
+            return colored(self.get_tag_player2(), constants.COLOR_P2, attrs=colored_attrs)
+        elif size_p2 < min_num_cards:
+            return colored(self.get_tag_player1(), constants.COLOR_P1, attrs=colored_attrs)
         else:
             return None

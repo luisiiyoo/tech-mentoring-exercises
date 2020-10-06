@@ -6,7 +6,7 @@ from numpy import sort, argsort
 from App.Game.card import Card
 
 
-def getRandomString(len_str: int = 12) -> str:
+def get_random_string(len_str: int = 12) -> str:
     """
     Returns a random string
 
@@ -20,7 +20,7 @@ def getRandomString(len_str: int = 12) -> str:
     return random_str[-len_str:]
 
 
-def getRandomNumInRange(start, stop) -> int:
+def get_random_num_in_range(start, stop) -> int:
     """
     Returns a random integer between a range
 
@@ -34,7 +34,7 @@ def getRandomNumInRange(start, stop) -> int:
     return random.randint(start, stop)
 
 
-def getRandomIndexes(size_perm: int, num_indxs: int) -> List[int]:
+def get_random_indexes(size_perm: int, num_indxs: int) -> List[int]:
     """
     Returns a list of n-random indexes
 
@@ -48,7 +48,7 @@ def getRandomIndexes(size_perm: int, num_indxs: int) -> List[int]:
     return list(permutation(size_perm))[0:num_indxs]
 
 
-def getIndexClosestNumber(sorted_nums: List[int], original_indxs: List[int], target: int) -> Tuple[int, int]:
+def get_index_closest_number(sorted_nums: List[int], original_indxs: List[int], target: int) -> Tuple[int, int]:
     """
     Returns the index of the clostest number according to a target
 
@@ -65,37 +65,37 @@ def getIndexClosestNumber(sorted_nums: List[int], original_indxs: List[int], tar
 
     if target <= sorted_nums[first_indx]:
         original_indx = original_indxs[first_indx]
-        return (first_indx, original_indx)
+        return first_indx, original_indx
     elif target >= sorted_nums[last_indx]:
         original_indx = original_indxs[last_indx]
-        return (last_indx, original_indx)
+        return last_indx, original_indx
     else:
         best_indx = -1
         best_original_indx = -1
-        best_diffence = 999999
+        best_difference = 999999
         for indx, ele in enumerate(zip(sorted_nums, original_indxs), 0):
             num, original_indx = ele
-            diffence = abs(num - target)
-            if(diffence < best_diffence):
-                best_diffence = diffence
+            difference = abs(num - target)
+            if difference < best_difference:
+                best_difference = difference
                 best_indx = indx
                 best_original_indx = original_indx
-        return (best_indx, best_original_indx)
+        return best_indx, best_original_indx
 
 
-def getClosestIndexCards(hand: List[Card], target_rank: int, num_cards_to_use: int) -> List[int]:
+def get_closest_index_cards(hand: List[Card], target_rank: int, num_cards_to_use: int) -> List[int]:
     """
     Returns the indexes of the values that approximate to a target value
 
     Args:
         hand (List[Card]): List of candidate Cards to be used
         target_rank (int): Target to approximate with the Card ranks
-        target (int): Target number
+        num_cards_to_use (int): Cards allowed to use
 
     Returns:
         indexes (List[int]) -> List of indexes
     """
-    ranks = [card.getRank() for card in hand]
+    ranks = [card.get_rank() for card in hand]
     indx_to_use: List[int] = []
 
     sorted_ranks = sort(ranks).tolist()
@@ -104,7 +104,7 @@ def getClosestIndexCards(hand: List[Card], target_rank: int, num_cards_to_use: i
     print(f'Hand ranks: {ranks}')
     print(f'Target: {target_rank}')
     for i in range(0, num_cards_to_use):
-        indx,  true_indx = getIndexClosestNumber(
+        indx,  true_indx = get_index_closest_number(
             sorted_ranks, original_indxs, target_rank)
         # Remove indx
         sorted_ranks = sorted_ranks[:indx] + sorted_ranks[indx+1:]

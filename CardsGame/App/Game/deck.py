@@ -27,9 +27,9 @@ class Deck:
         self.suits = suits
         self.special_ranks = special_ranks
         self.__cards: List[Card] = cards if (
-            len(cards) > 0) else self.__createListOfCards()
+            len(cards) > 0) else self.__create_cards_list()
 
-    def __createListOfCards(self):
+    def __create_cards_list(self):
         """
         Creates the collection of cards based on the suits and number of ranks providen at the Deck object creation
 
@@ -50,10 +50,10 @@ class Deck:
         return len(self.__cards)
 
     def __str__(self) -> str:
-        pretty = self.getPrettyDeck()
+        pretty = self.get_pretty_deck()
         return ','.join(pretty)
 
-    def getPrettyDeck(self) -> List[str]:
+    def get_pretty_deck(self) -> List[str]:
         """
         Maps the cards list to an array of pretty Cards (string Cards representation)
 
@@ -63,9 +63,9 @@ class Deck:
         Returns:
             cards(List[Card]): List of Card objects
         """
-        return [card.getPrettyCard() for card in self.__cards]
+        return [card.get_pretty_card() for card in self.__cards]
 
-    def addCards(self, new_cards: List[Card]) -> None:
+    def add_cards(self, new_cards: List[Card]) -> None:
         """
         Adds a list of cards to Decks bottom
 
@@ -77,7 +77,7 @@ class Deck:
         """
         self.__cards = self.__cards + new_cards
 
-    def returnCards(self, new_cards: List[Card]) -> None:
+    def return_cards(self, new_cards: List[Card]) -> None:
         """
         Adds a list of cards to Decks top
 
@@ -138,4 +138,4 @@ class Deck:
                       self.special_ranks, cards_A)
         deck_B = Deck(self.num_ranks, self.suits,
                       self.special_ranks, cards_B)
-        return (deck_A, deck_B)
+        return deck_A, deck_B

@@ -27,14 +27,14 @@ class ClassicGame(Game):
                  special_ranks: Dict[int, str], tag_p1='p1', tag_p2='p2'):
         super().__init__(num_ranks, suits, special_ranks, tag_p1, tag_p2)
         self.__card_p1_tag = colored(
-            f"{self.getTagPlayer1()}'s Card", constants.COLOR_P1)
+            f"{self.get_tag_player1()}'s Card", constants.COLOR_P1)
         self.__card_p2_tag = colored(
-            f"{self.getTagPlayer2()}'s Card", constants.COLOR_P2)
+            f"{self.get_tag_player2()}'s Card", constants.COLOR_P2)
         self.__tie_tag = colored('TIE', constants.COLOR_TIE)
         self.__winner_tag = colored('Winner:', constants.COLOR_WINNER, attrs=[
             'reverse', 'blink', 'bold'])
 
-    def getColoredTurnStatusGame(self, card_p1, card_p2, best_tag) -> str:
+    def get_colored_turn_status_game(self, card_p1, card_p2, best_tag) -> str:
         """
         Returns the winner player if there is
 
@@ -49,16 +49,16 @@ class ClassicGame(Game):
         len_A = f'{len(self.deck_p1)+1:2}'
         len_B = f'{len(self.deck_p2)+1:2}'
 
-        turn_msj = f'Turn: {self.getNumTurns():>3}'
-        card_p1_msj = colored('{}({}) - {}'.format(self.getTagPlayer1(),
-                                                   len_A, card_p1.getPrettyCard()), constants.COLOR_P1)
-        card_p2_msj = colored('{} - {}({})'.format(card_p2.getPrettyCard(),
-                                                   self.getTagPlayer2(), len_B), constants.COLOR_P2)
+        turn_msj = f'Turn: {self.get_num_turns():>3}'
+        card_p1_msj = colored('{}({}) - {}'.format(self.get_tag_player1(),
+                                                   len_A, card_p1.get_pretty_card()), constants.COLOR_P1)
+        card_p2_msj = colored('{} - {}({})'.format(card_p2.get_pretty_card(),
+                                                   self.get_tag_player2(), len_B), constants.COLOR_P2)
 
         return '{} => {} ... {} => {}'.format(
             turn_msj, card_p1_msj, card_p2_msj, best_tag)
 
-    def playClasssicGameOnTerminal(self) -> None:
+    def play_classic_game_on_terminal(self) -> None:
         """
         Starts the game and shows the progress in each turn until the game ends
 
@@ -68,27 +68,27 @@ class ClassicGame(Game):
         Returns:
             None
         """
-        winner = self.getWinner(constants.MIN_NUM_CARDS_CLASSIC_GAME)
+        winner = self.get_winner(constants.MIN_NUM_CARDS_CLASSIC_GAME)
         while not winner:
-            self.incrementNumTurn()
+            self.increment_num_turn()
             card_p1 = self.deck_p1.draw()
             card_p2 = self.deck_p2.draw()
             turn_msj = ''
-            rank_card_p1 = card_p1.getRank()
-            rank_card_p2 = card_p2.getRank()
-            if (rank_card_p1 > rank_card_p2):
-                turn_msj = self.getColoredTurnStatusGame(
+            rank_card_p1 = card_p1.get_rank()
+            rank_card_p2 = card_p2.get_rank()
+            if rank_card_p1 > rank_card_p2:
+                turn_msj = self.get_colored_turn_status_game(
                     card_p1, card_p2, self.__card_p1_tag)
-                self.deck_p1.addCards([card_p2, card_p1])
-            elif (rank_card_p2 > rank_card_p1):
-                turn_msj = self.getColoredTurnStatusGame(
+                self.deck_p1.add_cards([card_p2, card_p1])
+            elif rank_card_p2 > rank_card_p1:
+                turn_msj = self.get_colored_turn_status_game(
                     card_p1, card_p2, self.__card_p2_tag)
-                self.deck_p2.addCards([card_p1, card_p2])
+                self.deck_p2.add_cards([card_p1, card_p2])
             else:
-                turn_msj = self.getColoredTurnStatusGame(
+                turn_msj = self.get_colored_turn_status_game(
                     card_p1, card_p2, self.__tie_tag)
-                self.cards_discarted[self.getNumTurns()] = (card_p2, card_p1)
+                self.cards_discarted[self.get_num_turns()] = (card_p2, card_p1)
             print(turn_msj)
-            winner = self.getWinner(constants.MIN_NUM_CARDS_CLASSIC_GAME)
+            winner = self.get_winner(constants.MIN_NUM_CARDS_CLASSIC_GAME)
             # self.printDecks()
         print(f'{self.__winner_tag} {winner}')
