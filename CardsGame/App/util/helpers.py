@@ -4,6 +4,8 @@ from typing import List, Tuple
 from numpy.random import permutation
 from numpy import sort, argsort
 from App.Game.card import Card
+from termcolor import cprint
+from .constants import COLOR_P2, COLOR_TIE
 
 
 def get_random_string(len_str: int = 12) -> str:
@@ -101,8 +103,8 @@ def get_closest_index_cards(hand: List[Card], target_rank: int, num_cards_to_use
     sorted_ranks = sort(ranks).tolist()
     original_indxs = argsort(ranks).tolist()
 
-    print(f'Hand ranks: {ranks}')
-    print(f'Target: {target_rank}')
+    cprint(f'Target: {target_rank}', COLOR_TIE)
+    cprint(f'Hand ranks: {ranks}', COLOR_P2)
     for i in range(0, num_cards_to_use):
         indx,  true_indx = get_index_closest_number(
             sorted_ranks, original_indxs, target_rank)
@@ -112,8 +114,7 @@ def get_closest_index_cards(hand: List[Card], target_rank: int, num_cards_to_use
         # Change target
         target_rank = target_rank - ranks[true_indx]
 
-        print(
-            f"Card {i+1} : Using rank '{ranks[true_indx]}' (indx: {true_indx})")
+        cprint(f"Card {i+1} : Using rank '{ranks[true_indx]}' (indx: {true_indx})", COLOR_P2)
         indx_to_use.append(true_indx)
-    print(f"Indexes to use: {indx_to_use}")
+    cprint(f"Indexes to use: {indx_to_use}", COLOR_P2)
     return indx_to_use

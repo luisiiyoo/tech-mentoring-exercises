@@ -3,7 +3,6 @@ import math
 import numpy
 from typing import Dict, List, Tuple
 from .card import Card
-from ..util import constants
 
 
 class Deck:
@@ -27,9 +26,9 @@ class Deck:
         self.suits = suits
         self.special_ranks = special_ranks
         self.__cards: List[Card] = cards if (
-            len(cards) > 0) else self.__create_cards_list()
+            len(cards) > 0) else self.__build()
 
-    def __create_cards_list(self):
+    def __build(self):
         """
         Creates the collection of cards based on the suits and number of ranks providen at the Deck object creation
 
@@ -101,7 +100,7 @@ class Deck:
         """
         return self.__cards.pop(0)
 
-    def shuffle(self) -> None:
+    def random_shuffle(self) -> None:
         """
         Shuffles the deck randomly
 
@@ -117,25 +116,30 @@ class Deck:
         # print(list(map(lambda card: str(card.rank)+card.suit, shuffled_cards)))
         self.__cards = shuffled_cards
 
-    def split(self) -> Tuple[Deck, Deck]:
+    def smart_split(self, num_splits) -> List[Deck]:
         """
         Splits the Deck object into two Decks
 
         Args:
-            None
+            num_splits (int): number of splits to divide the deck
+
+        Raises:
+            Exception: If num_splits is lower than the deck length or num_splits not divisible with the deck length
 
         Returns:
-            deck_A(Deck): Deck object for the player A
-            deck_A(Deck): Deck object for the player A
+            decks_list(Deck): Deck list for the n players (num_splits)
         """
-        num_cards = len(self.__cards)
-        split_idx = math.floor(num_cards / constants.NUM_SPLITS)
+        deck_list: List[Deck] = []
+        num_cards = len(self)
+        if num_splits > num_cards:
+            raise Exception(f"Invalid number of splits. It's not possible split {num_splits} times in a deck of {num_cards} cards")
+        if not (num_cards % num_splits == 0):
+            raise Exception(f'The result of {num_cards}/{num_splits} is not an exact division')
+        split_idx = math.floor(num_cards / num_splits)
 
-        cards_A = self.__cards[0:split_idx]
-        cards_B = self.__cards[split_idx:]
-
-        deck_A = Deck(self.num_ranks, self.suits,
-                      self.special_ranks, cards_A)
-        deck_B = Deck(self.num_ranks, self.suits,
-                      self.special_ranks, cards_B)
-        return deck_A, deck_B
+        for i, start_idx in enumerate(range(0, num_cards, split_idx)):
+            end_idx = split_idx * (i + 1)
+            list_cards = self.__cards[start_idx:end_idx]
+            deck = Deck(self.num_ranks, self.suits, self.special_ranks, list_cards)
+            deck_list.append(deck)
+        return deck_list

@@ -7,4 +7,4 @@ game = ClassicGame(NUM_RANKS, SUITS, SPECIAL_RANKS, 'Luis', 'Victor')
 game.print_decks()
 game.play_classic_game_on_terminal()
 cprint('Turns where there were ties: {}'.format(
-    list(game.cards_discarted.keys())), COLOR_TIE)
+    list(game.cards_discarded.keys())), COLOR_TIE)

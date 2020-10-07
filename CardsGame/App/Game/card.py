@@ -2,19 +2,6 @@ from __future__ import annotations
 from ..util.constants import SPECIAL_RANKS
 
 
-def get_pretty_hand_card(card: Card) -> str:
-    """
-      Returns the Card string representation
-
-      Args:
-          card (Card): Card object
-
-      Returns:
-          card_str (str): the Card string representation
-    """
-    return card.get_pretty_card()
-
-
 class Card:
     """
     Card class representing the rank and suit

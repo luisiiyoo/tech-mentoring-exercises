@@ -27,9 +27,9 @@ class ClassicGame(Game):
                  special_ranks: Dict[int, str], tag_p1='p1', tag_p2='p2'):
         super().__init__(num_ranks, suits, special_ranks, tag_p1, tag_p2)
         self.__card_p1_tag = colored(
-            f"{self.get_tag_player1()}'s Card", constants.COLOR_P1)
+            f"{self.get_tag_player(1)}'s Card", constants.COLOR_P1)
         self.__card_p2_tag = colored(
-            f"{self.get_tag_player2()}'s Card", constants.COLOR_P2)
+            f"{self.get_tag_player(2)}'s Card", constants.COLOR_P2)
         self.__tie_tag = colored('TIE', constants.COLOR_TIE)
         self.__winner_tag = colored('Winner:', constants.COLOR_WINNER, attrs=[
             'reverse', 'blink', 'bold'])
@@ -50,10 +50,10 @@ class ClassicGame(Game):
         len_B = f'{len(self.deck_p2)+1:2}'
 
         turn_msj = f'Turn: {self.get_num_turns():>3}'
-        card_p1_msj = colored('{}({}) - {}'.format(self.get_tag_player1(),
+        card_p1_msj = colored('{}({}) - {}'.format(self.get_tag_player(1),
                                                    len_A, card_p1.get_pretty_card()), constants.COLOR_P1)
         card_p2_msj = colored('{} - {}({})'.format(card_p2.get_pretty_card(),
-                                                   self.get_tag_player2(), len_B), constants.COLOR_P2)
+                                                   self.get_tag_player(2), len_B), constants.COLOR_P2)
 
         return '{} => {} ... {} => {}'.format(
             turn_msj, card_p1_msj, card_p2_msj, best_tag)
@@ -87,7 +87,7 @@ class ClassicGame(Game):
             else:
                 turn_msj = self.get_colored_turn_status_game(
                     card_p1, card_p2, self.__tie_tag)
-                self.cards_discarted[self.get_num_turns()] = (card_p2, card_p1)
+                self.cards_discarded[self.get_num_turns()] = (card_p2, card_p1)
             print(turn_msj)
             winner = self.get_winner(constants.MIN_NUM_CARDS_CLASSIC_GAME)
             # self.printDecks()

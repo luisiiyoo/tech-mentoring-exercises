@@ -1,8 +1,8 @@
 from typing import Dict, List, Tuple, Union
 from datetime import datetime
 from .game import Game
-from .card import Card, get_pretty_hand_card
-from termcolor import cprint
+from .card import Card
+from termcolor import cprint, colored
 from ..util import constants
 from ..util.helpers import get_random_num_in_range, get_random_string, get_closest_index_cards
 
@@ -71,53 +71,43 @@ class InteractiveGame(Game):
         """
         self.__target_rank = new_rank
 
-    def deck_len_player1(self) -> int:
+    def deck_len_player(self, player) -> Union[int, None]:
         """
-        Gets the length of the player 1's deck
+        Gets the length of a player's deck
 
         Args:
-            None
+            player (int): Player id
 
         Returns:
-            deck_len (int): Player 1's deck's length
+            deck_len (int): Player deck's length if exist else None
         """
-        return len(self.deck_p1)
+        if player == 1:
+            return len(self.deck_p1)
+        elif player == 2:
+            return len(self.deck_p2)
+        return None
 
-    def deck_len_player2(self) -> int:
+    def get_hand_player(self, player, pretty=True) -> Union[List[Union[str, Card]], None]:
         """
-        Gets the length of the player 2's deck
+        Gets the players' hand as a list of strings
 
         Args:
-            None
+            player (int): Player id
+            pretty (bool): If it is True returns a list of cards as strings else returns a list of Card objects
 
         Returns:
-            deck_len (int): Player 2's deck's length
+            hand (List[str]): Players' hand as a list of strings or list of cards based on 'pretty' flag
         """
-        return len(self.deck_p2)
-
-    def get_pretty_hand_player1(self) -> List[str]:
-        """
-        Gets the players 1's hand as a list of strings
-
-        Args:
-            None
-
-        Returns:
-            prettr_hand (List[str]): Players 1's hand as a list of strings
-        """
-        return list(map(get_pretty_hand_card, self.__hand_p1))
-
-    def get_pretty_hand_player2(self) -> List[str]:
-        """
-        Gets the players 2's hand as a list of strings
-
-        Args:
-            None
-
-        Returns:
-            prettr_hand (List[str]): Players 2's hand as a list of strings
-        """
-        return list(map(get_pretty_hand_card, self.__hand_p2))
+        hand = None
+        if player == 1:
+            hand = self.__hand_p1
+        elif player == 2:
+            hand = self.__hand_p2
+        else:
+            return hand
+        if pretty:
+            return list(map(str, hand))
+        return hand
 
     def __determine_cards_to_draw(self, len_deck) -> int:
         """
@@ -131,7 +121,7 @@ class InteractiveGame(Game):
         """
         return constants.CARDS_BY_HAND if len_deck >= constants.CARDS_BY_HAND else constants.CARDS_TO_USE
 
-    def __draw_cards(self) -> Tuple[List[Card], List[Card]]:
+    def __draw(self) -> Tuple[List[Card], List[Card]]:
         """
         Gets the hands for the player 1 and 2
 
@@ -139,18 +129,16 @@ class InteractiveGame(Game):
             None
 
         Returns:
-            drawed_cards_p1 (List[Card]): List of drawed cards for the player 1
-            drawed_cards_p2 (List[Card]): List of drawed cards for the player 2
+            drawn_cards_p1 (List[Card]): List of drawn cards for the player 1
+            drawn_cards_p2 (List[Card]): List of drawn cards for the player 2
         """
         cards_to_draw_p1 = self.__determine_cards_to_draw(len(self.deck_p1))
-        drawed_cards_p1: List[Card] = [self.deck_p1.draw()
-                                       for i in range(0, cards_to_draw_p1)]
+        drawn_cards_p1: List[Card] = [self.deck_p1.draw() for i in range(0, cards_to_draw_p1)]
 
         cards_to_draw_p2 = self.__determine_cards_to_draw(len(self.deck_p2))
-        drawed_cards_p2: List[Card] = [self.deck_p2.draw()
-                                       for i in range(0, cards_to_draw_p2)]
+        drawn_cards_p2: List[Card] = [self.deck_p2.draw() for i in range(0, cards_to_draw_p2)]
 
-        return (drawed_cards_p1, drawed_cards_p2)
+        return drawn_cards_p1, drawn_cards_p2
 
     def take_hand(self) -> List[Card]:
         """
@@ -174,7 +162,7 @@ class InteractiveGame(Game):
             new_rank = get_random_num_in_range(
                 constants.START_TARGET_RANGE, constants.STOP_TARGET_RANGE)
             self.set_target_rank(new_rank)
-            self.__hand_p1, self.__hand_p2 = self.__draw_cards()
+            self.__hand_p1, self.__hand_p2 = self.__draw()
 
         return self.__hand_p1
 
@@ -204,11 +192,12 @@ class InteractiveGame(Game):
 
         # Check if the indexes are in the correct range
         for indx in indx_cards:
-            if(indx not in constants.INDX_CARD_OPTIONS):
+            if indx not in constants.INDX_CARD_OPTIONS:
                 indx_cards = [f"{indx}:{card}" for indx, card in enumerate(
-                    self.get_pretty_hand_player1())]
+                    self.get_hand_player(1))]
                 raise Exception(
-                    f"{indx} is not a valid index. You can only select {constants.CARDS_TO_USE} of the following indices:{constants.INDX_CARD_OPTIONS} -> Your hand is: {indx_cards}")
+                    f"{indx} is not a valid index. You can only select {constants.CARDS_TO_USE} of the following "
+                    f"indices:{constants.INDX_CARD_OPTIONS} -> Your hand is: {indx_cards}")
         return True
 
     def get_turn_winner(self, indx_cards_p1: List[int], indx_cards_p2: List[int]) -> Union[str, None]:
@@ -234,16 +223,21 @@ class InteractiveGame(Game):
         difference_p2 = abs(self.get_target_rank() - sum_p2)
 
         if difference_p1 < difference_p2:
-            turn_winner = self.get_tag_player1()
+            turn_winner = self.get_tag_player(1)
             self.deck_p1.add_cards(self.__hand_p2)
         elif difference_p2 < difference_p1:
-            turn_winner = self.get_tag_player2()
+            turn_winner = self.get_tag_player(2)
             self.deck_p2.add_cards(self.__hand_p1)
-        cprint(
-            f"INDEX: {indx_cards_p1} ({difference_p1}) ->{self.get_target_rank()}<- ({difference_p2}) {indx_cards_p2}", 'yellow')
-        cprint(
-            f"RANKS: {selected_cards_p1} = ({sum_p1}) ->{self.get_target_rank()}<- ({sum_p2}) {selected_cards_p2}", 'blue')
-        cprint(f"{turn_winner}", 'red')
+
+        aux_diff_p1 = colored(f'{indx_cards_p1} (dif:{difference_p1})', constants.COLOR_P1)
+        aux_diff_p2 = colored(f'(dif:{difference_p2}) {indx_cards_p2}', constants.COLOR_P2)
+        aux_sum_p1 = colored(f'{selected_cards_p1} (sum:{sum_p1})', constants.COLOR_P1)
+        aux_sum_p2 = colored(f'(sum:{sum_p2}) {selected_cards_p2}', constants.COLOR_P2)
+
+        print(f"INDEX: {aux_diff_p1} ->{self.get_target_rank()}<- {aux_diff_p2}")
+        print(f"RANKS: {aux_sum_p1} ->{self.get_target_rank()}<- {aux_sum_p2}")
+        cprint(f"{turn_winner}", constants.COLOR_WINNER)
+
         self.__hand_p1 = []
         self.__hand_p2 = []
         return turn_winner

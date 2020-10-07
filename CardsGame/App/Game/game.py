@@ -1,4 +1,4 @@
-from typing import Tuple, Union, Dict
+from typing import Tuple, List, Union, Dict
 from termcolor import colored, cprint
 from .card import Card
 from .deck import Deck
@@ -19,43 +19,35 @@ class Game:
     Attributes:
         deck_p1 (Deck): Deck object that contains the player 1's cards
         deck_p2 (Deck): Deck object that cosntains the player 2's cards
-        cards_discarted (Dict[int, Tuple[Card, Card]]): Dictionary that contains the discarted cards by turn (if there were turns)
+        cards_discarded (Dict[int, Tuple[Card, Card]]): Dictionary that contains the discarted cards by turn (if there were turns)
         __tag_p1 (str): Player 1 name
         __tag_p2 (str): Player 2 name
         __num_turns (int): Counter of turns
     """
 
     def __init__(self, num_ranks: int, suits: Dict[str, str], special_ranks: Dict[int, str], tag_p1: str, tag_p2: str):
-        self.deck_p1, self.deck_p2 = self.__build(
-            num_ranks, suits, special_ranks)
-        self.cards_discarted: Dict[int, Tuple[Card, Card]] = dict()
+        self.deck_p1, self.deck_p2, *_ = self.__build(
+            num_ranks, suits, special_ranks, constants.NUM_SPLITS)
+        self.cards_discarded: Dict[int, Tuple[Card, Card]] = dict()
         self.__num_turns = 0
         self.__tag_p1 = tag_p1
         self.__tag_p2 = tag_p2
 
-    def get_tag_player1(self) -> str:
+    def get_tag_player(self, player) -> Union[str, None]:
         """
-        Gets the name of the player 1
+        Gets the name of a player
 
         Args:
-            None
+            player (int): Player id
 
         Returns:
-            tag_name (str): Name for the player 1
+            tag_name (str): If exist returns the player's name else returns None
         """
-        return self.__tag_p1
-
-    def get_tag_player2(self) -> str:
-        """
-        Gets the name of the player 2
-
-        Args:
-            None
-
-        Returns:
-            tag_name (str): Name for the player 2
-        """
-        return self.__tag_p2
+        if player == 1:
+            return self.__tag_p1
+        elif player == 2:
+            return self.__tag_p2
+        return None
 
     def get_num_turns(self) -> int:
         """
@@ -81,7 +73,7 @@ class Game:
         """
         self.__num_turns += 1
 
-    def __build(self, num_ranks, suits, special_ranks) -> Tuple[Deck, Deck]:
+    def __build(self, num_ranks, suits, special_ranks,num_splits) -> List[Deck]:
         """
         Generates the shuffled decks for the player A and B
 
@@ -89,14 +81,14 @@ class Game:
             num_ranks (int): Number of ranks by suit
             suits (Dict[str, str]): Dictionary containing the suits, e.g. 'club': '♣'
             special_ranks (Dict[int, str]): Dictionary of special characters that receive a rank or value, e.g. 13: 'K'
+            num_splits (int): number of splits to divide the deck
 
         Returns:
-            deck_p1 (Deck): Deck object that contains the player 1's cards
-            deck_p2 (Deck): Deck object that cosntains the player 2's cards
+            decks_list(Deck): Deck list for the n players (num_splits)
         """
         deck = Deck(num_ranks, suits, special_ranks)
-        deck.shuffle()
-        return deck.split()
+        deck.random_shuffle()
+        return deck.smart_split(num_splits)
 
     def print_decks(self) -> None:
         """
@@ -108,9 +100,9 @@ class Game:
         Returns:
             None
         """
-        cprint(f'{self.get_tag_player1()}:\n  {self.deck_p1}',
+        cprint(f'{self.get_tag_player(1)}:\n  {self.deck_p1}',
                constants.COLOR_P1)
-        cprint(f'{self.get_tag_player2()}:\n  {self.deck_p2}',
+        cprint(f'{self.get_tag_player(2)}:\n  {self.deck_p2}',
                constants.COLOR_P2)
 
     def get_winner(self, min_num_cards) -> Union[str, None]:
@@ -129,8 +121,8 @@ class Game:
         if (self.get_num_turns() >= constants.MAX_NUM_TURNS) or (size_p1 < min_num_cards and size_p2 < min_num_cards):
             return colored('Tie', constants.COLOR_TIE, attrs=colored_attrs)
         elif size_p1 < min_num_cards:
-            return colored(self.get_tag_player2(), constants.COLOR_P2, attrs=colored_attrs)
+            return colored(self.get_tag_player(2), constants.COLOR_P2, attrs=colored_attrs)
         elif size_p2 < min_num_cards:
-            return colored(self.get_tag_player1(), constants.COLOR_P1, attrs=colored_attrs)
+            return colored(self.get_tag_player(1), constants.COLOR_P1, attrs=colored_attrs)
         else:
             return None

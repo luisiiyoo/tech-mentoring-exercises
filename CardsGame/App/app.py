@@ -40,8 +40,8 @@ def get_game(id_game: str):
     game = get_game_by_id(id_game)
     response = {
         'idGame': id_game,
-        'player1': game.get_tag_player1(),
-        'player2': game.get_tag_player2(),
+        'player1': game.get_tag_player(1),
+        'player2': game.get_tag_player(2),
         'createdAt': datetime.fromtimestamp(game.createdAt),
         'lenDeckPlayer1': len(game.deck_p1),
         'lenDeckPlayer2': len(game.deck_p2),
@@ -75,11 +75,11 @@ def take_player_hand(id_game: str):
     try:
         game = get_game_by_id(id_game)
         game.take_hand()
-        pretty_hand = game.get_pretty_hand_player1()
+        pretty_hand = game.get_hand_player(1)
         hand = [{indx: card} for indx, card in enumerate(pretty_hand)]
         response = {
             'idGame': id_game,
-            'player1': game.get_tag_player1(),
+            'player1': game.get_tag_player(1),
             'lenDeck': len(game.deck_p1),
             'hand': hand,
             'numTurn': game.get_num_turns(),
@@ -100,24 +100,28 @@ def play_turn(id_game: str):
         if type(request.json[CARD_INDEXES]) is not list:
             return jsonify({'error': f"'{CARD_INDEXES}' must be a list of indexes"}), 400
 
-        card_indxs: List[int] = request.json[CARD_INDEXES]
-        pretty_cards_p1 = game.get_pretty_hand_player1()
-        pretty_cards_p2 = game.get_pretty_hand_player2()
-        turn_winner, indx_cards_player2 = game.play_turn(card_indxs)
+        idxs_hand_p1: List[int] = request.json[CARD_INDEXES]
+        hand_p1 = game.get_hand_player(1, False)
+        hand_p2 = game.get_hand_player(2, False)
+        turn_winner, idxs_hand_p2 = game.play_turn(idxs_hand_p1)
+        target_approx_p1 = sum([card.get_rank() for idx, card in enumerate(hand_p1) if idx in idxs_hand_p1])
+        target_approx_p2 = sum([card.get_rank() for idx, card in enumerate(hand_p2) if idx in idxs_hand_p2])
         response = {
             'idGame': id_game,
-            'player1': game.get_tag_player1(),
-            'player2': game.get_tag_player2(),
+            'player1': game.get_tag_player(1),
+            'player2': game.get_tag_player(2),
+            'indexesPlayer1': idxs_hand_p1,
+            'indexesPlayer2': idxs_hand_p2,
             'lenDeckPlayer1': len(game.deck_p1),
             'lenDeckPlayer2': len(game.deck_p2),
-            'handPlayer1': [{indx: card} for indx, card in enumerate(pretty_cards_p1)],
-            'handPlayer2': [{indx: card} for indx, card in enumerate(pretty_cards_p2)],
+            'handPlayer1': [{idx: str(card)} for idx, card in enumerate(hand_p1)],
+            'handPlayer2': [{idx: str(card)} for idx, card in enumerate(hand_p2)],
             'numTurn': game.get_num_turns(),
             'turnWinner': turn_winner,
             'winner': game.get_winner(CARDS_TO_USE),
             'target': game.get_target_rank(),
-            'indxsPlayer1': card_indxs,
-            'indxsPlayer2': indx_cards_player2,
+            'targetApproxPlayer1': target_approx_p1,
+            'targetApproxPlayer2': target_approx_p2,
         }
         return jsonify(response), 200
     except Exception as e:
