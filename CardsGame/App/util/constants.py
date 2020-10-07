@@ -1,5 +1,5 @@
-from typing import Tuple, Union, Dict
 import math
+from typing import Dict
 
 SPECIAL_RANKS: Dict[int, str] = {
     1: 'A',
