@@ -38,12 +38,13 @@ class AbstractRegression:
         _is_build (bool): Flag that indicates if the model was built
         _max_cardinality (int): Maximum cardinality to apply OneHotEncoder
         _print_color (str): Color used to print in console
+        _print_comparison (bool): Flag to compare and print the first 5 elements (True values vs predictions) from the validation data
     """
 
     def __init__(self, x_train: DataFrame, x_valid: DataFrame, y_train: DataFrame,
                  y_valid: DataFrame, max_cardinality: int,
                  regression_model: Any, extra_pipeline_process: Tuple[str, Any] = None, 
-                 print_color:str = 'white'):
+                 print_color:str = 'white', print_comparison: bool = False):
         preprocessor, num_cols, cat_cols_one_hot_encoder, cat_cols_label_encoder = \
             Preprocessing.get_preprocessor_transformer(
                 x_train, max_cardinality)
@@ -53,6 +54,7 @@ class AbstractRegression:
         if extra_pipeline_process:
             pipeline_steps.insert(1, extra_pipeline_process)
         
+        self._print_comparison = print_comparison
         self._print_color = print_color
         self._max_cardinality = max_cardinality
         self._is_build = False
@@ -84,7 +86,7 @@ class AbstractRegression:
         cprint(f'True value: {true_val}', self._print_color)
         cprint(f'Prediction: {prediction}', self._print_color)
 
-    def build_and_evaluate(self, print_comparison: bool = True) -> float:
+    def build_and_evaluate(self) -> float:
         """
         Builds and evaluates the model
 
@@ -98,7 +100,7 @@ class AbstractRegression:
         self._is_build = True
         y_predict = self._pipeline.predict(self._X_valid)
 
-        if print_comparison:
+        if self._print_comparison:
             self.show_sort_comparison_train_vs_valid(y_predict)
         score_valid = r2_score(self._y_valid, y_predict)
 
@@ -150,16 +152,19 @@ class MultipleLinearRegression(AbstractRegression):
        y_valid (pandas.DataFrame): Validation dependent variable
        max_cardinality (int): Maximum cardinality to apply OneHotEncoder
        print_color (str): Color used to print in console
+       print_comparison (bool): Flag to compare and print the first 5 elements (True values vs predictions) from the validation data
 
     Attributes:
         (inherited attributes from `AbstractRegression` class)
     """
 
     def __init__(self, x_train: DataFrame, x_valid: DataFrame, y_train: DataFrame,
-                 y_valid: DataFrame, max_cardinality: int, print_color: str):
+                 y_valid: DataFrame, max_cardinality: int, 
+                 print_color: str, print_comparison: bool):
         model = LinearRegression(
             fit_intercept=True, normalize=False, copy_X=True, n_jobs=None)
-        super().__init__(x_train, x_valid, y_train, y_valid, max_cardinality, model, print_color = print_color)
+        super().__init__(x_train, x_valid, y_train, y_valid, max_cardinality, model, 
+                        print_color = print_color, print_comparison = print_comparison)
 
 
 class PolynomialRegression(AbstractRegression):
@@ -174,6 +179,7 @@ class PolynomialRegression(AbstractRegression):
        max_cardinality (int): Maximum cardinality to apply OneHotEncoder
        degree (int): Polynomial degree to transform the data
        print_color (str): Color used to print in console
+       print_comparison (bool): Flag to compare and print the first 5 elements (True values vs predictions) from the validation data
 
     Attributes:
         (inherited attributes from `AbstractRegression` class)
@@ -181,15 +187,15 @@ class PolynomialRegression(AbstractRegression):
     """
 
     def __init__(self, x_train: DataFrame, x_valid: DataFrame, y_train: DataFrame,
-                 y_valid: DataFrame, max_cardinality: int, degree: int, print_color: str):
+                 y_valid: DataFrame, max_cardinality: int, degree: int, 
+                 print_color: str, print_comparison: bool):
         self._degree = degree
-        poly_transformer_step = (
-            'poly_transformer', PolynomialFeatures(degree=self._degree))
+        poly_transformer_step = ('poly_transformer', PolynomialFeatures(degree=self._degree))
         model = LinearRegression(
             fit_intercept=True, normalize=False, copy_X=True, n_jobs=None)
         super().__init__(x_train, x_valid, y_train, y_valid,
                          max_cardinality, model, poly_transformer_step,
-                         print_color = print_color)
+                         print_color = print_color, print_comparison = print_comparison)
 
 
 class SupportVectorRegression(AbstractRegression):
@@ -204,6 +210,7 @@ class SupportVectorRegression(AbstractRegression):
        max_cardinality (int): Maximum cardinality to apply OneHotEncoder
        kernel (str): Support vector regression vector
        print_color (str): Color used to print in console
+       print_comparison (bool): Flag to compare and print the first 5 elements (True values vs predictions) from the validation data
 
     Attributes:
         (inherited attributes from `AbstractRegression` class)
@@ -211,13 +218,14 @@ class SupportVectorRegression(AbstractRegression):
     """
 
     def __init__(self, x_train: DataFrame, x_valid: DataFrame, y_train: DataFrame,
-                 y_valid: DataFrame, max_cardinality: int, kernel: str, print_color: str):
+                 y_valid: DataFrame, max_cardinality: int, kernel: str, 
+                 print_color: str, print_comparison: bool):
         self._kernel = kernel
         scale_transformer_step = ('scale_transformer', StandardScaler())
-        model = SVR(kernel=kernel, degree=3, epsilon=0.1, gamma='scale')
+        model = SVR(kernel=self._kernel, degree=3, epsilon=0.1, gamma='scale')
         super().__init__(x_train, x_valid, y_train, y_valid,
                          max_cardinality, model, scale_transformer_step,
-                         print_color = print_color)
+                         print_color = print_color, print_comparison = print_comparison)
 
 
 class DecisionTreeRegression(AbstractRegression):
@@ -232,6 +240,7 @@ class DecisionTreeRegression(AbstractRegression):
        max_cardinality (int): Maximum cardinality to apply OneHotEncoder
        random_state (int): Number used for initializing the internal random number generator
        print_color (str): Color used to print in console
+       print_comparison (bool): Flag to compare and print the first 5 elements (True values vs predictions) from the validation data
 
     Attributes:
         (inherited attributes from `AbstractRegression` class)
@@ -239,11 +248,13 @@ class DecisionTreeRegression(AbstractRegression):
     """
 
     def __init__(self, x_train: DataFrame, x_valid: DataFrame, y_train: DataFrame,
-                 y_valid: DataFrame, max_cardinality: int, random_state: int, print_color: str):
+                 y_valid: DataFrame, max_cardinality: int, random_state: int, 
+                 print_color: str, print_comparison: bool):
         self._random_state = random_state
         model = DecisionTreeRegressor(random_state=self._random_state, criterion='mse', splitter='best', max_depth=None,
                                       min_samples_split=2, min_samples_leaf=1)
-        super().__init__(x_train, x_valid, y_train, y_valid, max_cardinality, model, print_color = print_color)
+        super().__init__(x_train, x_valid, y_train, y_valid, max_cardinality, model, 
+                        print_color = print_color, print_comparison = print_comparison)
 
 
 class RandomForestRegression(AbstractRegression):
@@ -259,6 +270,7 @@ class RandomForestRegression(AbstractRegression):
        random_state (int): Number used for initializing the internal random number generator
        num_estimators (int): Number of estimators for Random Forest Regression
        print_color (str): Color used to print in console
+       print_comparison (bool): Flag to compare and print the first 5 elements (True values vs predictions) from the validation data
 
     Attributes:
         (inherited attributes from `AbstractRegression` class)
@@ -268,9 +280,10 @@ class RandomForestRegression(AbstractRegression):
 
     def __init__(self, x_train: DataFrame, x_valid: DataFrame, y_train: DataFrame,
                  y_valid: DataFrame, max_cardinality: int, random_state: int, num_estimators: int,
-                 print_color: str):
+                 print_color: str, print_comparison: bool):
         self._random_state = random_state
         self._num_estimators = num_estimators
         model = RandomForestRegressor(n_estimators=self._num_estimators, random_state=self._random_state, criterion='mse',
                                       max_depth=None)
-        super().__init__(x_train, x_valid, y_train, y_valid, max_cardinality, model, print_color = print_color)
+        super().__init__(x_train, x_valid, y_train, y_valid, max_cardinality, model, 
+                        print_color = print_color, print_comparison = print_comparison)
