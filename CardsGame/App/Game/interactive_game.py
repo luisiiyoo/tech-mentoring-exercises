@@ -1,4 +1,4 @@
-from typing import Dict, List, Tuple, Union
+from typing import Any, Dict, List, Tuple, Union
 from datetime import datetime
 from .game import Game
 from .card import Card
@@ -24,6 +24,7 @@ class InteractiveGame(Game):
         __hand_p1 (List[Card]): Player 1's hand
         __hand_p2 (List[Card]): Player 2's hand
         createdAt (int): Timestamp of the object creation
+        history (Dict): Information for each turn
     """
 
     def __init__(self, num_ranks: int, suits: Dict[str, str],
@@ -34,6 +35,7 @@ class InteractiveGame(Game):
         self.__hand_p1: List[Card] = []
         self.__hand_p2: List[Card] = []
         self.createdAt: int = datetime.timestamp(datetime.now())
+        self.history: Dict[int, Dict[str, Any]] = dict()
 
     def get_id(self) -> str:
         """
@@ -242,12 +244,12 @@ class InteractiveGame(Game):
         self.__hand_p2 = []
         return turn_winner
 
-    def play_turn(self, indx_cards_p1: List[int]) -> Tuple[Union[str, None], List[int]]:
+    def play_turn(self, idx_cards_p1: List[int]) -> Tuple[Union[str, None], List[int]]:
         """
         Plays the turn and gets the turn winner 
 
         Args:
-            indx_cards_p1 (List[int]): List of player 1's indexes to use 
+            idx_cards_p1 (List[int]): List of player 1's indexes to use 
 
         Raises:
             Exception: When the game is over
@@ -255,7 +257,7 @@ class InteractiveGame(Game):
 
         Returns:
             turn_winner (str|None): The name of the turn's winner if there is
-            indx_cards_p2 (List[int]): List of player 2's used indexes
+            idx_cards_p2 (List[int]): List of player 2's used indexes
 
         """
         winner = self.get_winner(constants.CARDS_TO_USE)
@@ -265,10 +267,27 @@ class InteractiveGame(Game):
         if not self.__hand_p1 or not self.__hand_p2:
             raise Exception("You don't have a hand.")
 
-        self.__validate_indexes_card_options(indx_cards_p1)
-
+        self.__validate_indexes_card_options(idx_cards_p1)
         self.increment_num_turn()
-        indx_cards_p2 = get_closest_index_cards(
-            self.__hand_p2, self.get_target_rank(), constants.CARDS_TO_USE)
 
-        return self.get_turn_winner(indx_cards_p1, indx_cards_p2), indx_cards_p2
+        idx_cards_p2 = get_closest_index_cards(self.__hand_p2, self.get_target_rank(), constants.CARDS_TO_USE)
+        select_cards_p1 = [card for idx, card in enumerate(self.__hand_p1) if idx in idx_cards_p1]
+        select_cards_p2 = [card for idx, card in enumerate(self.__hand_p2) if idx in idx_cards_p2]
+        sum_select_cards_p1 = sum([card.get_rank() for card in select_cards_p1])
+        sum_select_cards_p2 = sum([card.get_rank() for card in select_cards_p2])
+
+        turn_winner = self.get_turn_winner(idx_cards_p1, idx_cards_p2)
+        curr_turn = self.get_num_turns()
+        turn_dict = dict()
+        turn_dict['cardsSelectedPlayer1'] = list(map(str, select_cards_p1))
+        turn_dict['cardsSelectedPlayer2'] = list(map(str, select_cards_p2))
+        turn_dict['sumCardsSelectedPlayer1'] = sum_select_cards_p1
+        turn_dict['sumCardsSelectedPlayer2'] = sum_select_cards_p2
+        turn_dict['lenDeckPlayer1'] = len(self.deck_p1)
+        turn_dict['lenDeckPlayer2'] = len(self.deck_p2)
+        turn_dict['target'] = self.get_target_rank()
+        turn_dict['turn'] = curr_turn
+        turn_dict['turnWinner'] = turn_winner
+        self.history[curr_turn] = turn_dict
+
+        return turn_winner, idx_cards_p2

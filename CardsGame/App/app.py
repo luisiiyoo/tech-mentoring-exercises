@@ -47,9 +47,10 @@ def get_game(id_game: str):
         'lenDeckPlayer1': len(game.deck_p1),
         'lenDeckPlayer2': len(game.deck_p2),
         'strDeckPlayer1': str(game.deck_p1),
-        'strdeckPlayer2': str(game.deck_p2),
+        'strDeckPlayer2': str(game.deck_p2),
         'currentTurn': game.get_num_turns(),
         'winner': game.get_winner(CARDS_TO_USE),
+        'history': game.history
     }
     return jsonify(response), 200
 
