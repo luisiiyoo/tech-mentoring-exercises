@@ -1,22 +1,23 @@
 import traceback
 from flask import Flask, jsonify, make_response, request, abort
 from datetime import datetime
-from typing import Dict, List
+from typing import List
 from App.Game import InteractiveGame
 from App.util.constants import CARDS_TO_USE, NUM_RANKS, SUITS, SPECIAL_RANKS
+from App.util import db
 
 app = Flask(__name__)
-game_collection: Dict[str, InteractiveGame] = dict()
 
 PLAYER_NAME = 'playerName'
 CARD_INDEXES = 'cardIndexes'
 
 
 def get_game_by_id(id_game: str) -> InteractiveGame:
-    game = game_collection.get(id_game)
-    if not game:
+    try:
+        game = db.get_game(id_game)
+        return game
+    except:
         abort(404)
-    return game
 
 
 @app.route('/', methods=['GET'])
@@ -31,7 +32,7 @@ def not_found(error):
 
 @app.route('/game', methods=['GET'])
 def get_games():
-    game_ids = [id_game for id_game in game_collection.keys()]
+    game_ids = [id_game for id_game in db.get_list_games()]
     return jsonify(game_ids), 200
 
 
@@ -47,7 +48,7 @@ def get_game(id_game: str):
         'lenDeckPlayer2': len(game.deck_p2),
         'strDeckPlayer1': str(game.deck_p1),
         'strdeckPlayer2': str(game.deck_p2),
-        'numTurn': game.get_num_turns(),
+        'currentTurn': game.get_num_turns(),
         'winner': game.get_winner(CARDS_TO_USE),
     }
     return jsonify(response), 200
@@ -66,7 +67,7 @@ def create_game():
     response = {
         'idGame': id_game
     }
-    game_collection[id_game] = game
+    db.add_game(game)
     return jsonify(response), 201
 
 
@@ -82,7 +83,7 @@ def take_player_hand(id_game: str):
             'player1': game.get_tag_player(1),
             'lenDeck': len(game.deck_p1),
             'hand': hand,
-            'numTurn': game.get_num_turns(),
+            'currentTurn': game.get_num_turns(),
             'target': game.get_target_rank()
         }
         return jsonify(response), 200
@@ -116,7 +117,7 @@ def play_turn(id_game: str):
             'lenDeckPlayer2': len(game.deck_p2),
             'handPlayer1': [{idx: str(card)} for idx, card in enumerate(hand_p1)],
             'handPlayer2': [{idx: str(card)} for idx, card in enumerate(hand_p2)],
-            'numTurn': game.get_num_turns(),
+            'currentTurn': game.get_num_turns(),
             'turnWinner': turn_winner,
             'winner': game.get_winner(CARDS_TO_USE),
             'target': game.get_target_rank(),
