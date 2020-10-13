@@ -12,6 +12,7 @@ numpy = "*"
 termcolor = "*"
 future = "*"
 flask = "*"
+pymongo = "*"
 
 [requires]
 python_version = "3.8"

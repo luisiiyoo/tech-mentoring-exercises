@@ -1,12 +1,12 @@
 import traceback
-from flask import Flask, jsonify, make_response, request, abort
+from flask import Blueprint, jsonify, make_response, request, abort
 from datetime import datetime
 from typing import List
 from App.Game import InteractiveGame
 from App.util.constants import CARDS_TO_USE, NUM_RANKS, SUITS, SPECIAL_RANKS
-from App.util import db
+from App.database import db
 
-app = Flask(__name__)
+game_controllers = Blueprint('game', __name__, url_prefix='')
 
 PLAYER_NAME = 'playerName'
 CARD_INDEXES = 'cardIndexes'
@@ -20,23 +20,23 @@ def get_game_by_id(id_game: str) -> InteractiveGame:
         abort(404)
 
 
-@app.route('/', methods=['GET'])
+@game_controllers.route('/', methods=['GET'])
 def index():
     return "Interactive Game is Running!"
 
 
-@app.errorhandler(404)
+@game_controllers.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
 
 
-@app.route('/game', methods=['GET'])
+@game_controllers.route('/game', methods=['GET'])
 def get_games():
     game_ids = [id_game for id_game in db.get_list_games()]
     return jsonify(game_ids), 200
 
 
-@app.route('/game/<string:id_game>', methods=['GET'])
+@game_controllers.route('/game/<string:id_game>', methods=['GET'])
 def get_game(id_game: str):
     game = get_game_by_id(id_game)
     response = {
@@ -55,7 +55,7 @@ def get_game(id_game: str):
     return jsonify(response), 200
 
 
-@app.route('/game', methods=['POST'])
+@game_controllers.route('/game', methods=['POST'])
 def create_game():
     player = request.json.get(PLAYER_NAME)
     if not player:
@@ -72,7 +72,7 @@ def create_game():
     return jsonify(response), 201
 
 
-@app.route('/game/<string:id_game>/hand', methods=['GET'])
+@game_controllers.route('/game/<string:id_game>/hand', methods=['GET'])
 def take_player_hand(id_game: str):
     try:
         game = get_game_by_id(id_game)
@@ -92,12 +92,12 @@ def take_player_hand(id_game: str):
         return make_response(jsonify({'error': str(e)}), 400)
 
 
-@app.route('/game/<string:id_game>/hand', methods=['PUT'])
+@game_controllers.route('/game/<string:id_game>/hand', methods=['PUT'])
 def play_turn(id_game: str):
     try:
         game = get_game_by_id(id_game)
-        has_card_indxs: bool = CARD_INDEXES in request.json
-        if not request.json or not has_card_indxs:
+        has_card_indexes: bool = CARD_INDEXES in request.json
+        if not request.json or not has_card_indexes:
             return jsonify({'error': f"No '{CARD_INDEXES}' field was provided"}), 400
         if type(request.json[CARD_INDEXES]) is not list:
             return jsonify({'error': f"'{CARD_INDEXES}' must be a list of indexes"}), 400
@@ -129,7 +129,3 @@ def play_turn(id_game: str):
     except Exception as e:
         traceback.print_exc()
         return make_response(jsonify({'error': str(e)}), 400)
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
