@@ -43,14 +43,14 @@ def get_game(id_game: str):
         'idGame': id_game,
         'player1': game.get_tag_player(1),
         'player2': game.get_tag_player(2),
-        'createdAt': datetime.fromtimestamp(game.createdAt),
-        'lenDeckPlayer1': len(game.deck_p1),
-        'lenDeckPlayer2': len(game.deck_p2),
-        'strDeckPlayer1': str(game.deck_p1),
-        'strDeckPlayer2': str(game.deck_p2),
+        'createdAt': datetime.fromtimestamp(game.get_created_date()),
+        'lenDeckPlayer1': game.get_deck_len_player(1),
+        'lenDeckPlayer2': game.get_deck_len_player(2),
+        'strDeckPlayer1': str(game.get_deck_player(1)),
+        'strDeckPlayer2': str(game.get_deck_player(2)),
         'currentTurn': game.get_num_turns(),
         'winner': game.get_winner(CARDS_TO_USE),
-        'history': game.history
+        'history': game.get_history()
     }
     return jsonify(response), 200
 
@@ -78,11 +78,11 @@ def take_player_hand(id_game: str):
         game = get_game_by_id(id_game)
         game.take_hand()
         pretty_hand = game.get_hand_player(1)
-        hand = [{indx: card} for indx, card in enumerate(pretty_hand)]
+        hand = [{idx: card} for idx, card in enumerate(pretty_hand)]
         response = {
             'idGame': id_game,
             'player1': game.get_tag_player(1),
-            'lenDeck': len(game.deck_p1),
+            'lenDeck': game.get_deck_len_player(1),
             'hand': hand,
             'currentTurn': game.get_num_turns(),
             'target': game.get_target_rank()
@@ -102,20 +102,20 @@ def play_turn(id_game: str):
         if type(request.json[CARD_INDEXES]) is not list:
             return jsonify({'error': f"'{CARD_INDEXES}' must be a list of indexes"}), 400
 
-        idxs_hand_p1: List[int] = request.json[CARD_INDEXES]
+        idx_hand_p1: List[int] = request.json[CARD_INDEXES]
         hand_p1 = game.get_hand_player(1, False)
         hand_p2 = game.get_hand_player(2, False)
-        turn_winner, idxs_hand_p2 = game.play_turn(idxs_hand_p1)
-        target_approx_p1 = sum([card.get_rank() for idx, card in enumerate(hand_p1) if idx in idxs_hand_p1])
-        target_approx_p2 = sum([card.get_rank() for idx, card in enumerate(hand_p2) if idx in idxs_hand_p2])
+        turn_winner, idx_hand_p2 = game.play_turn(idx_hand_p1)
+        target_approx_p1 = sum([card.get_rank() for idx, card in enumerate(hand_p1) if idx in idx_hand_p1])
+        target_approx_p2 = sum([card.get_rank() for idx, card in enumerate(hand_p2) if idx in idx_hand_p2])
         response = {
             'idGame': id_game,
             'player1': game.get_tag_player(1),
             'player2': game.get_tag_player(2),
-            'indexesPlayer1': idxs_hand_p1,
-            'indexesPlayer2': idxs_hand_p2,
-            'lenDeckPlayer1': len(game.deck_p1),
-            'lenDeckPlayer2': len(game.deck_p2),
+            'indexesPlayer1': idx_hand_p1,
+            'indexesPlayer2': idx_hand_p2,
+            'lenDeckPlayer1': game.get_deck_len_player(1),
+            'lenDeckPlayer2': game.get_deck_len_player(2),
             'handPlayer1': [{idx: str(card)} for idx, card in enumerate(hand_p1)],
             'handPlayer2': [{idx: str(card)} for idx, card in enumerate(hand_p2)],
             'currentTurn': game.get_num_turns(),

@@ -18,19 +18,19 @@ class Deck:
         num_ranks (int): Number of ranks by suit
         suits (Dict[str, str]): Dictionary containing the suits, e.g. 'club': '♣'
         special_ranks (Dict[int, str]): Dictionary of special characters that receive a rank or value, e.g. 13: 'K'
-        __cards(List[Card]): List of Card objects
+        cards(List[Card]): List of Card objects
     """
 
     def __init__(self, num_ranks: int, suits: Dict[str, str], special_ranks: Dict[int, str], cards: List[Card] = []):
         self.num_ranks = num_ranks
         self.suits = suits
         self.special_ranks = special_ranks
-        self.__cards: List[Card] = cards if (
+        self.cards: List[Card] = cards if (
             len(cards) > 0) else self.__build()
 
     def __build(self):
         """
-        Creates the collection of cards based on the suits and number of ranks providen at the Deck object creation
+        Creates the collection of cards based on the suits and number of ranks provided at the Deck object creation
 
         Args:
             None
@@ -46,7 +46,7 @@ class Deck:
         return cards
 
     def __len__(self):
-        return len(self.__cards)
+        return len(self.cards)
 
     def __str__(self) -> str:
         pretty = self.get_pretty_deck()
@@ -62,7 +62,7 @@ class Deck:
         Returns:
             cards(List[Card]): List of Card objects
         """
-        return [card.get_pretty_card() for card in self.__cards]
+        return [card.get_pretty_card() for card in self.cards]
 
     def add_cards(self, new_cards: List[Card]) -> None:
         """
@@ -74,7 +74,7 @@ class Deck:
         Returns:
             None
         """
-        self.__cards = self.__cards + new_cards
+        self.cards = self.cards + new_cards
 
     def return_cards(self, new_cards: List[Card]) -> None:
         """
@@ -86,7 +86,7 @@ class Deck:
         Returns:
             None
         """
-        self.__cards = new_cards + self.__cards
+        self.cards = new_cards + self.cards
 
     def draw(self) -> Card:
         """
@@ -98,7 +98,7 @@ class Deck:
         Returns:
             card(Card): Card obtained from the deck's top
         """
-        return self.__cards.pop(0)
+        return self.cards.pop(0)
 
     def random_shuffle(self) -> None:
         """
@@ -111,10 +111,10 @@ class Deck:
             None
         """
         num_cards = len(self)
-        idx_ranperm = list(numpy.random.permutation(num_cards))
-        shuffled_cards = [self.__cards[idx] for idx in idx_ranperm]
+        idx_random_perm = list(numpy.random.permutation(num_cards))
+        shuffled_cards = [self.cards[idx] for idx in idx_random_perm]
         # print(list(map(lambda card: str(card.rank)+card.suit, shuffled_cards)))
-        self.__cards = shuffled_cards
+        self.cards = shuffled_cards
 
     def smart_split(self, num_splits) -> List[Deck]:
         """
@@ -139,7 +139,7 @@ class Deck:
 
         for i, start_idx in enumerate(range(0, num_cards, split_idx)):
             end_idx = split_idx * (i + 1)
-            list_cards = self.__cards[start_idx:end_idx]
+            list_cards = self.cards[start_idx:end_idx]
             deck = Deck(self.num_ranks, self.suits, self.special_ranks, list_cards)
             deck_list.append(deck)
         return deck_list

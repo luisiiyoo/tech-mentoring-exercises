@@ -1,1 +1,1 @@
-from .mongo import MONGO_STR_CONNECTION
+from .mongo import MONGO_STR_CONNECTION, MONGO_DB_NAME

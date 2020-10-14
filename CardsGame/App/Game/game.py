@@ -17,21 +17,19 @@ class Game:
         tag_p2 (str): Player 2 name
 
     Attributes:
-        deck_p1 (Deck): Deck object that contains the player 1's cards
-        deck_p2 (Deck): Deck object that cosntains the player 2's cards
-        cards_discarded (Dict[int, Tuple[Card, Card]]): Dictionary that contains the discarted cards by turn (if there were turns)
-        __tag_p1 (str): Player 1 name
-        __tag_p2 (str): Player 2 name
-        __num_turns (int): Counter of turns
+        _deck_p1 (Deck): Deck object that contains the player 1's cards
+        _deck_p2 (Deck): Deck object that contains the player 2's cards
+        _tag_p1 (str): Player 1 name
+        _tag_p2 (str): Player 2 name
+        _num_turns (int): Counter of turns
     """
 
     def __init__(self, num_ranks: int, suits: Dict[str, str], special_ranks: Dict[int, str], tag_p1: str, tag_p2: str):
-        self.deck_p1, self.deck_p2, *_ = self.__build(
+        self._deck_p1, self._deck_p2, *_ = self.__build(
             num_ranks, suits, special_ranks, constants.NUM_SPLITS)
-        self.cards_discarded: Dict[int, Tuple[Card, Card]] = dict()
-        self.__num_turns = 0
-        self.__tag_p1 = tag_p1
-        self.__tag_p2 = tag_p2
+        self._num_turns = 0
+        self._tag_p1 = tag_p1
+        self._tag_p2 = tag_p2
 
     def get_tag_player(self, player) -> Union[str, None]:
         """
@@ -44,9 +42,9 @@ class Game:
             tag_name (str): If exist returns the player's name else returns None
         """
         if player == 1:
-            return self.__tag_p1
+            return self._tag_p1
         elif player == 2:
-            return self.__tag_p2
+            return self._tag_p2
         return None
 
     def get_num_turns(self) -> int:
@@ -59,7 +57,7 @@ class Game:
         Returns:
             turn (int): Current turn
         """
-        return self.__num_turns
+        return self._num_turns
 
     def increment_num_turn(self) -> None:
         """
@@ -71,7 +69,7 @@ class Game:
         Returns:
             None
         """
-        self.__num_turns += 1
+        self._num_turns += 1
 
     def __build(self, num_ranks, suits, special_ranks,num_splits) -> List[Deck]:
         """
@@ -100,9 +98,9 @@ class Game:
         Returns:
             None
         """
-        cprint(f'{self.get_tag_player(1)}:\n  {self.deck_p1}',
+        cprint(f'{self.get_tag_player(1)}:\n  {self._deck_p1}',
                constants.COLOR_P1)
-        cprint(f'{self.get_tag_player(2)}:\n  {self.deck_p2}',
+        cprint(f'{self.get_tag_player(2)}:\n  {self._deck_p2}',
                constants.COLOR_P2)
 
     def get_winner(self, min_num_cards) -> Union[str, None]:
@@ -110,14 +108,14 @@ class Game:
         Returns the winner player if there is
 
         Args:
-            min_num_cards (int): Minimun number of cards to have
+            min_num_cards (int): Minimum number of cards to have
 
         Returns:
             winner (str): Colored string with the name of the winner
         """
         colored_attrs = ['bold']
-        size_p1 = len(self.deck_p1)
-        size_p2 = len(self.deck_p2)
+        size_p1 = len(self._deck_p1)
+        size_p2 = len(self._deck_p2)
         if (self.get_num_turns() >= constants.MAX_NUM_TURNS) or (size_p1 < min_num_cards and size_p2 < min_num_cards):
             return colored('Tie', constants.COLOR_TIE, attrs=colored_attrs)
         elif size_p1 < min_num_cards:

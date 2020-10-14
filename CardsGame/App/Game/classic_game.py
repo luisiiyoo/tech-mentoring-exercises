@@ -46,8 +46,8 @@ class ClassicGame(Game):
         Returns:
             status (str): Colored string with the status message
         """
-        len_A = f'{len(self.deck_p1)+1:2}'
-        len_B = f'{len(self.deck_p2)+1:2}'
+        len_A = f'{len(self._deck_p1) + 1:2}'
+        len_B = f'{len(self._deck_p2) + 1:2}'
 
         turn_msj = f'Turn: {self.get_num_turns():>3}'
         card_p1_msj = colored('{}({}) - {}'.format(self.get_tag_player(1),
@@ -71,23 +71,23 @@ class ClassicGame(Game):
         winner = self.get_winner(constants.MIN_NUM_CARDS_CLASSIC_GAME)
         while not winner:
             self.increment_num_turn()
-            card_p1 = self.deck_p1.draw()
-            card_p2 = self.deck_p2.draw()
+            card_p1 = self._deck_p1.draw()
+            card_p2 = self._deck_p2.draw()
             turn_msj = ''
             rank_card_p1 = card_p1.get_rank()
             rank_card_p2 = card_p2.get_rank()
             if rank_card_p1 > rank_card_p2:
                 turn_msj = self.get_colored_turn_status_game(
                     card_p1, card_p2, self.__card_p1_tag)
-                self.deck_p1.add_cards([card_p2, card_p1])
+                self._deck_p1.add_cards([card_p2, card_p1])
             elif rank_card_p2 > rank_card_p1:
                 turn_msj = self.get_colored_turn_status_game(
                     card_p1, card_p2, self.__card_p2_tag)
-                self.deck_p2.add_cards([card_p1, card_p2])
+                self._deck_p2.add_cards([card_p1, card_p2])
             else:
                 turn_msj = self.get_colored_turn_status_game(
                     card_p1, card_p2, self.__tie_tag)
-                self.cards_discarded[self.get_num_turns()] = (card_p2, card_p1)
+                # self._cards_discarded[self.get_num_turns()] = (card_p2, card_p1)
             print(turn_msj)
             winner = self.get_winner(constants.MIN_NUM_CARDS_CLASSIC_GAME)
             # self.printDecks()

@@ -1,11 +1,25 @@
+import json
 import random
 import uuid
-from typing import List, Tuple
+from typing import Any, Dict, List, Tuple
 from numpy.random import permutation
 from numpy import sort, argsort
 from App.Game.card import Card
 from termcolor import cprint
 from .constants import COLOR_P2, COLOR_TIE
+
+
+def to_dict(obj: Any) -> Dict:
+    """
+    Converts an instance to a dictionary
+
+    Args:
+        obj (Any): Object instance
+
+    Returns:
+        Dict: Instance converted to a dictionary
+    """
+    return json.loads(json.dumps(obj, default=lambda o: o.__dict__))
 
 
 def get_random_string(len_str: int = 12) -> str:
@@ -36,53 +50,53 @@ def get_random_num_in_range(start, stop) -> int:
     return random.randint(start, stop)
 
 
-def get_random_indexes(size_perm: int, num_indxs: int) -> List[int]:
+def get_random_indexes(size_perm: int, num_idx: int) -> List[int]:
     """
     Returns a list of n-random indexes
 
     Args:
         size_perm (int): Last possible index (starting in 0)
-        num_indxs (int): Number of random indexes wanted
+        num_idx (int): Number of random indexes wanted
 
     Returns:
         list_indexes (int): List of n-random indexes
       """
-    return list(permutation(size_perm))[0:num_indxs]
+    return list(permutation(size_perm))[0:num_idx]
 
 
-def get_index_closest_number(sorted_nums: List[int], original_indxs: List[int], target: int) -> Tuple[int, int]:
+def get_index_closest_number(sorted_nums: List[int], original_idx: List[int], target: int) -> Tuple[int, int]:
     """
-    Returns the index of the clostest number according to a target
+    Returns the index of the closest number according to a target
 
     Args:
         sorted_nums (List[int]): Sorted candidates numbers
-        original_indxs (List[int]): Original indexes of the sorted candidates
+        original_idx (List[int]): Original indexes of the sorted candidates
         target (int): Target number
 
     Returns:
         indexes (Tuple[int,int]) -> Tuple of the sorted index and the original index that is equal or close value to the target
     """
-    first_indx = 0
-    last_indx = len(sorted_nums) - 1
+    first_idx = 0
+    last_idx = len(sorted_nums) - 1
 
-    if target <= sorted_nums[first_indx]:
-        original_indx = original_indxs[first_indx]
-        return first_indx, original_indx
-    elif target >= sorted_nums[last_indx]:
-        original_indx = original_indxs[last_indx]
-        return last_indx, original_indx
+    if target <= sorted_nums[first_idx]:
+        original_idx = original_idx[first_idx]
+        return first_idx, original_idx
+    elif target >= sorted_nums[last_idx]:
+        original_idx = original_idx[last_idx]
+        return last_idx, original_idx
     else:
-        best_indx = -1
-        best_original_indx = -1
+        best_idx = -1
+        best_original_idx = -1
         best_difference = 999999
-        for indx, ele in enumerate(zip(sorted_nums, original_indxs), 0):
-            num, original_indx = ele
+        for idx, ele in enumerate(zip(sorted_nums, original_idx), 0):
+            num, original_idx = ele
             difference = abs(num - target)
             if difference < best_difference:
                 best_difference = difference
-                best_indx = indx
-                best_original_indx = original_indx
-        return best_indx, best_original_indx
+                best_idx = idx
+                best_original_idx = original_idx
+        return best_idx, best_original_idx
 
 
 def get_closest_index_cards(hand: List[Card], target_rank: int, num_cards_to_use: int) -> List[int]:
@@ -98,23 +112,23 @@ def get_closest_index_cards(hand: List[Card], target_rank: int, num_cards_to_use
         indexes (List[int]) -> List of indexes
     """
     ranks = [card.get_rank() for card in hand]
-    indx_to_use: List[int] = []
+    idx_to_use: List[int] = []
 
     sorted_ranks = sort(ranks).tolist()
-    original_indxs = argsort(ranks).tolist()
+    original_idx = argsort(ranks).tolist()
 
     cprint(f'Target: {target_rank}', COLOR_TIE)
     cprint(f'Hand ranks: {ranks}', COLOR_P2)
     for i in range(0, num_cards_to_use):
-        indx,  true_indx = get_index_closest_number(
-            sorted_ranks, original_indxs, target_rank)
-        # Remove indx
-        sorted_ranks = sorted_ranks[:indx] + sorted_ranks[indx+1:]
-        original_indxs = original_indxs[:indx] + original_indxs[indx+1:]
+        idx,  true_idx = get_index_closest_number(
+            sorted_ranks, original_idx, target_rank)
+        # Remove idx
+        sorted_ranks = sorted_ranks[:idx] + sorted_ranks[idx+1:]
+        original_idx = original_idx[:idx] + original_idx[idx+1:]
         # Change target
-        target_rank = target_rank - ranks[true_indx]
+        target_rank = target_rank - ranks[true_idx]
 
-        cprint(f"Card {i+1} : Using rank '{ranks[true_indx]}' (indx: {true_indx})", COLOR_P2)
-        indx_to_use.append(true_indx)
-    cprint(f"Indexes to use: {indx_to_use}", COLOR_P2)
-    return indx_to_use
+        cprint(f"Card {i+1} : Using rank '{ranks[true_idx]}' (idx: {true_idx})", COLOR_P2)
+        idx_to_use.append(true_idx)
+    cprint(f"Indexes to use: {idx_to_use}", COLOR_P2)
+    return idx_to_use

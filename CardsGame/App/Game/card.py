@@ -7,23 +7,23 @@ class Card:
     Card class representing the rank and suit
 
     Args:
-        rank (int): Value that recieves the card 
+        rank (int): Value that receives the card
         suit (str): Special character of the card, e.g. '♣'
 
     Attributes:
-        rank (int): Value that recieves the card 
+        rank (int): Value that receives the card
         suit (str): Special character of the card, e.g. '♣'
     """
 
     def __init__(self, rank: int, suit: str):
-        self.__rank = rank
-        self.__suit = suit
+        self.rank = rank
+        self.suit = suit
 
     def get_rank(self) -> int:
-        return self.__rank
+        return self.rank
 
     def get_suit(self) -> str:
-        return self.__suit
+        return self.suit
 
     def __str__(self) -> str:
         return self.get_pretty_card()
@@ -38,6 +38,6 @@ class Card:
         Returns:
             pretty_card(str): String with the card value and suit 
         """
-        rank = SPECIAL_RANKS.get(self.__rank) if (
-            self.__rank in SPECIAL_RANKS) else str(self.__rank)
-        return f'{rank:>2s}{self.__suit}'
+        rank = SPECIAL_RANKS.get(self.rank) if (
+                self.rank in SPECIAL_RANKS) else str(self.rank)
+        return f'{rank:>2s}{self.suit}'
