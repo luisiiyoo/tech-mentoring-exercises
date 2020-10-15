@@ -44,9 +44,15 @@ def get_games_by_status(alive: bool) -> List[str]:
 
 def add_game(game: InteractiveGame) -> None:
     id_game = game.get_id()
-    client = MongoManager.get_client()
-    db = client[MONGO_DB_NAME]
-    collection = db['Game']
-    game_dict = to_dict(game)
-    insertion = collection.insert_one(game_dict)
+    # client = MongoManager.get_client()
+    # db = client[MONGO_DB_NAME]
+    # collection = db['Game']
+    #
+    # insertion = collection.insert_one(to_dict(game))
+    #
+    # document = collection.find_one({'_id': id_game})
+    # game_rebuild = InteractiveGame.build_instance(document)
+    # print(to_dict(game))
+    # print('\n\n')
+    # print(to_dict(game_rebuild))
     games_dict[id_game] = game

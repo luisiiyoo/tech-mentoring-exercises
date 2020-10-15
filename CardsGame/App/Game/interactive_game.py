@@ -1,7 +1,9 @@
+from __future__ import annotations
 from typing import Any, Dict, List, Tuple, Union
 from datetime import datetime
 from .game import Game
 from .card import Card
+from .deck import Deck
 from termcolor import cprint, colored
 from ..util import constants
 from ..util.helpers import get_random_num_in_range, get_random_string, get_closest_index_cards
@@ -15,7 +17,7 @@ class InteractiveGame(Game):
         num_ranks (int): Number of ranks by suit
         suits (Dict[str, str]): Dictionary containing the suits, e.g. 'club': '♣'
         special_ranks (Dict[int, str]): Dictionary of special characters that receive a rank or value, e.g. 13: 'K'
-        player_name (str): Player 1's name
+        name_p1 (str): Player 1's name
 
     Attributes:
         (inherited from Game)
@@ -27,15 +29,46 @@ class InteractiveGame(Game):
         _history (Dict): Information for each turn
     """
 
-    def __init__(self, num_ranks: int, suits: Dict[str, str],
-                 special_ranks: Dict[int, str], player_name: str):
-        super().__init__(num_ranks, suits, special_ranks, player_name, 'PC')
-        self._id = get_random_string()
-        self._current_target = None
-        self._hand_p1: List[Card] = []
-        self._hand_p2: List[Card] = []
-        self._created_date: int = datetime.timestamp(datetime.now())
-        self._history: Dict[int, Dict[str, Any]] = dict()
+    def __init__(self, num_ranks: int, suits: Dict[str, str], special_ranks: Dict[int, str], name_p1: str,
+                 name_p2: str = 'PC', id_game: str = None, created_date: int = None, curr_target: int = None,
+                 hand_p1: List[Card] = [], hand_p2: List[Card] = [], history: Dict = {},
+                 deck_p1: Deck = None, deck_p2: Deck = None, num_turns: int = 0):
+        # Calling parent constructor
+        super().__init__(num_ranks, suits, special_ranks, name_p1, name_p2, deck_p1, deck_p2, num_turns)
+        # Setup class attributes
+        self._id = get_random_string() if not id_game else id_game
+        self._created_date = datetime.timestamp(datetime.now()) if not created_date else created_date
+        self._current_target = curr_target
+        self._hand_p1: List[Card] = hand_p1
+        self._hand_p2: List[Card] = hand_p2
+        self._history: Dict[int, Dict[str, Any]] = history
+
+    @staticmethod
+    def build_instance(instance_dict: Dict[str, Any]) -> InteractiveGame:
+        _id: str = instance_dict['_id']
+        _name_p1: str = instance_dict['_name_p1']
+        _name_p2: str = instance_dict['_name_p2']
+        _num_turns: int = instance_dict['_num_turns']
+        _created_date: int = instance_dict['_created_date']
+        _current_target: int = instance_dict['_current_target']
+        _history: Dict = instance_dict['_history']
+        _deck_p1: Dict = instance_dict['_deck_p1']
+        _deck_p2: Dict = instance_dict['_deck_p2']
+        _hand_p1: List[Card] = [Card(raw_card['rank'], raw_card['suit']) for raw_card in instance_dict['_hand_p1']]
+        _hand_p2: List[Card] = [Card(raw_card['rank'], raw_card['suit']) for raw_card in instance_dict['_hand_p2']]
+
+        num_ranks: int = _deck_p1['num_ranks']
+        suits: Dict = _deck_p1['suits']
+        special_ranks: Dict = _deck_p1['special_ranks']
+        cards_deck_p1: List[Card] = [Card(raw_card['rank'], raw_card['suit']) for raw_card in _deck_p1['cards']]
+        cards_deck_p2: List[Card] = [Card(raw_card['rank'], raw_card['suit']) for raw_card in _deck_p2['cards']]
+        deck_p1 = Deck(num_ranks, suits, special_ranks, cards_deck_p1)
+        deck_p2 = Deck(num_ranks, suits, special_ranks, cards_deck_p2)
+
+        game = InteractiveGame(num_ranks=num_ranks, suits=suits, special_ranks=special_ranks, name_p1=_name_p1, name_p2=_name_p2,
+                               id_game=_id, created_date=_created_date, curr_target=_current_target, hand_p1=_hand_p1,
+                               hand_p2=_hand_p2, history=_history, deck_p1=deck_p1, deck_p2=deck_p2, num_turns=_num_turns)
+        return game
 
     def get_id(self) -> str:
         """
@@ -275,10 +308,10 @@ class InteractiveGame(Game):
         difference_p2 = abs(self.get_target_rank() - sum_p2)
 
         if difference_p1 < difference_p2:
-            turn_winner = self.get_tag_player(1)
+            turn_winner = self.get_name_player(1)
             self._deck_p1.add_cards(self._hand_p2)
         elif difference_p2 < difference_p1:
-            turn_winner = self.get_tag_player(2)
+            turn_winner = self.get_name_player(2)
             self._deck_p2.add_cards(self._hand_p1)
 
         aux_diff_p1 = colored(f'{idx_cards_p1} (dif:{difference_p1})', constants.COLOR_P1)

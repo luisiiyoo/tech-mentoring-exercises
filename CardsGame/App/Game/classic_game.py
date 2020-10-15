@@ -13,7 +13,7 @@ class ClassicGame(Game):
         suits (Dict[str, str]): Dictionary containing the suits, e.g. 'club': '♣'
         special_ranks (Dict[int, str]): Dictionary of special characters that receive a rank or value, e.g. 13: 'K'
         tag_p1 (str): Player 1 name
-        tag_p2 (str): Player 2 name
+        name_p2 (str): Player 2 name
 
     Attributes:
         (inherited from Game)
@@ -24,12 +24,12 @@ class ClassicGame(Game):
     """
 
     def __init__(self, num_ranks: int, suits: Dict[str, str],
-                 special_ranks: Dict[int, str], tag_p1='p1', tag_p2='p2'):
-        super().__init__(num_ranks, suits, special_ranks, tag_p1, tag_p2)
+                 special_ranks: Dict[int, str], tag_p1='p1', name_p2='p2'):
+        super().__init__(num_ranks, suits, special_ranks, tag_p1, name_p2)
         self.__card_p1_tag = colored(
-            f"{self.get_tag_player(1)}'s Card", constants.COLOR_P1)
+            f"{self.get_name_player(1)}'s Card", constants.COLOR_P1)
         self.__card_p2_tag = colored(
-            f"{self.get_tag_player(2)}'s Card", constants.COLOR_P2)
+            f"{self.get_name_player(2)}'s Card", constants.COLOR_P2)
         self.__tie_tag = colored('TIE', constants.COLOR_TIE)
         self.__winner_tag = colored('Winner:', constants.COLOR_WINNER, attrs=[
             'reverse', 'blink', 'bold'])
@@ -50,10 +50,10 @@ class ClassicGame(Game):
         len_B = f'{len(self._deck_p2) + 1:2}'
 
         turn_msj = f'Turn: {self.get_num_turns():>3}'
-        card_p1_msj = colored('{}({}) - {}'.format(self.get_tag_player(1),
+        card_p1_msj = colored('{}({}) - {}'.format(self.get_name_player(1),
                                                    len_A, card_p1.get_pretty_card()), constants.COLOR_P1)
         card_p2_msj = colored('{} - {}({})'.format(card_p2.get_pretty_card(),
-                                                   self.get_tag_player(2), len_B), constants.COLOR_P2)
+                                                   self.get_name_player(2), len_B), constants.COLOR_P2)
 
         return '{} => {} ... {} => {}'.format(
             turn_msj, card_p1_msj, card_p2_msj, best_tag)

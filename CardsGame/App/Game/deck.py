@@ -25,8 +25,7 @@ class Deck:
         self.num_ranks = num_ranks
         self.suits = suits
         self.special_ranks = special_ranks
-        self.cards: List[Card] = cards if (
-            len(cards) > 0) else self.__build()
+        self.cards: List[Card] = cards if len(cards) > 0 else self.__build()
 
     def __build(self):
         """
