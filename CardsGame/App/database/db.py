@@ -7,8 +7,6 @@ from App.Game import InteractiveGame
 from App.util.constants import CARDS_TO_USE
 from App.util.helpers import to_dict
 
-games_dict: Dict[str, InteractiveGame] = dict()
-
 
 class MongoManager:
     __client = None
@@ -20,39 +18,59 @@ class MongoManager:
         return __client
 
     @staticmethod
-    def get_game_collection() -> Database:
-        db_client = MongoManager.get_client()
-        collection = db_client['Game']
-        return collection
+    def get_game_collection(collection_name: str) -> Database:
+        client = MongoManager.get_client()
+        db = client[MONGO_DB_NAME]
+        return db[collection_name]
+
+
+def find_game(id_game: str) -> Dict:
+    collection = MongoManager.get_game_collection('Game')
+    raw_game = collection.find_one({'_id': id_game})
+    if not raw_game:
+        raise Exception(f"Game {id_game} not found")
+    return raw_game
 
 
 def get_game(id_game: str) -> InteractiveGame:
-    game = games_dict.get(id_game)
-    if not game:
-        raise Exception(f"Game {id_game} not found")
-    return game
+    raw_game = find_game(id_game)
+    return InteractiveGame.build_instance(raw_game)
 
 
-def get_list_games() -> List[str]:
-    return list(games_dict.keys())
+def get_list_id_games() -> List[str]:
+    collection = MongoManager.get_game_collection('Game')
+    cursor = collection.find({})
+    return [raw_game['_id'] for raw_game in cursor]
 
 
-def get_games_by_status(alive: bool) -> List[str]:
-    keys = games_dict.keys()
-    return [id_game for id_game in keys if bool(get_game(id_game).get_winner(CARDS_TO_USE)) == alive]
+def get_games_by_status(finished: bool) -> List[str]:
+    collection = MongoManager.get_game_collection('Game')
+    cursor = collection.find({})
+    games = []
+    for raw_game in cursor:
+        game = InteractiveGame.build_instance(raw_game)
+        game_winner = game.get_winner(CARDS_TO_USE)
+        if bool(game_winner) == finished:
+            games.append(game.get_id())
+    return games
 
 
 def add_game(game: InteractiveGame) -> None:
-    id_game = game.get_id()
-    # client = MongoManager.get_client()
-    # db = client[MONGO_DB_NAME]
-    # collection = db['Game']
-    #
-    # insertion = collection.insert_one(to_dict(game))
-    #
-    # document = collection.find_one({'_id': id_game})
-    # game_rebuild = InteractiveGame.build_instance(document)
-    # print(to_dict(game))
-    # print('\n\n')
-    # print(to_dict(game_rebuild))
-    games_dict[id_game] = game
+    collection = MongoManager.get_game_collection('Game')
+    collection.insert_one(to_dict(game))
+
+
+def update_game(game_updates: InteractiveGame) -> None:
+    collection = MongoManager.get_game_collection('Game')
+    query = {'_id': game_updates.get_id()}
+    game_dict = to_dict(game_updates)
+
+    fields_to_update = ['_num_turns', '_deck_p1', '_deck_p2', '_current_target', '_hand_p1', '_hand_p2', '_history']
+    updates = {'$set': {key: game_dict[key] for key in fields_to_update}}
+    collection.update_one(query, updates, upsert=False)
+
+
+def delete_game(id_game: str) -> None:
+    collection = MongoManager.get_game_collection('Game')
+    collection.delete_one({'_id': id_game})
+

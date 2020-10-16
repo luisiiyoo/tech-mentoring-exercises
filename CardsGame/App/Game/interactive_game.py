@@ -227,7 +227,7 @@ class InteractiveGame(Game):
 
         return drawn_cards_p1, drawn_cards_p2
 
-    def take_hand(self) -> List[Card]:
+    def take_hand(self) -> bool:
         """
         Gets the hands for the player 1 and 2 and validates the game status
 
@@ -238,20 +238,22 @@ class InteractiveGame(Game):
             Exception: When the game is over
 
         Returns:
-            hand_p1 (List[Card]): List of drawn cards for the player 1
+            bool: Flag to indicate if takes a new hand or not
         """
+        take_new_hand = False
         winner = self.get_winner(constants.CARDS_TO_USE)
         if winner:
             raise Exception(
                 f"You cann't take a hand because the game is over. Winner: {winner}")
 
         if not self._hand_p1 or not self._hand_p2:
+            take_new_hand = True
             new_rank = get_random_num_in_range(
                 constants.START_TARGET_RANGE, constants.STOP_TARGET_RANGE)
             self.set_target_rank(new_rank)
             self._hand_p1, self._hand_p2 = self.__draw()
 
-        return self._hand_p1
+        return take_new_hand
 
     def __validate_indexes_card_options(self, idx_cards: List[int]) -> bool:
         """
@@ -308,11 +310,15 @@ class InteractiveGame(Game):
         difference_p2 = abs(self.get_target_rank() - sum_p2)
 
         if difference_p1 < difference_p2:
+            # Turn  Winner : Player 1
             turn_winner = self.get_name_player(1)
-            self._deck_p1.add_cards(self._hand_p2)
+            cards_to_add = [self._hand_p2[idx] for idx in idx_cards_p2]
+            self._deck_p1.add_cards(cards_to_add)
         elif difference_p2 < difference_p1:
+            # Turn  Winner : Player 2
             turn_winner = self.get_name_player(2)
-            self._deck_p2.add_cards(self._hand_p1)
+            cards_to_add = [self._hand_p1[idx] for idx in idx_cards_p1]
+            self._deck_p2.add_cards(cards_to_add)
 
         aux_diff_p1 = colored(f'{idx_cards_p1} (dif:{difference_p1})', constants.COLOR_P1)
         aux_diff_p2 = colored(f'(dif:{difference_p2}) {idx_cards_p2}', constants.COLOR_P2)

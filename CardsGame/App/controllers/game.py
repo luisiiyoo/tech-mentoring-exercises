@@ -10,6 +10,7 @@ game_controllers = Blueprint('game', __name__, url_prefix='')
 
 PLAYER_NAME = 'playerName'
 CARD_INDEXES = 'cardIndexes'
+FINISHED = 'finished'
 
 
 def get_game_by_id(id_game: str) -> InteractiveGame:
@@ -22,7 +23,7 @@ def get_game_by_id(id_game: str) -> InteractiveGame:
 
 @game_controllers.route('/', methods=['GET'])
 def index():
-    return "Interactive Game is Running!"
+    return "Interactive Game is running!"
 
 
 @game_controllers.errorhandler(404)
@@ -32,7 +33,13 @@ def not_found(error):
 
 @game_controllers.route('/game', methods=['GET'])
 def get_games():
-    game_ids = [id_game for id_game in db.get_list_games()]
+    finished_status = request.args.get(FINISHED)
+    game_ids = []
+    if finished_status is None:
+        game_ids = db.get_list_id_games()
+    else:
+        is_finished = not (finished_status.lower() in ['false', '0'])
+        game_ids = db.get_games_by_status(is_finished)
     return jsonify(game_ids), 200
 
 
@@ -44,6 +51,8 @@ def get_game(id_game: str):
         'player1': game.get_name_player(1),
         'player2': game.get_name_player(2),
         'createdAt': datetime.fromtimestamp(game.get_created_date()),
+        'handPlayer1': [card for card in game.get_hand_player(1, pretty=True)],
+        'handPlayer2': [card for card in game.get_hand_player(2, pretty=True)],
         'lenDeckPlayer1': game.get_deck_len_player(1),
         'lenDeckPlayer2': game.get_deck_len_player(2),
         'strDeckPlayer1': str(game.get_deck_player(1)),
@@ -58,12 +67,11 @@ def get_game(id_game: str):
 @game_controllers.route('/game', methods=['POST'])
 def create_game():
     player = request.json.get(PLAYER_NAME)
-    if not player:
+    print('Luis', player)
+    if player is None:
         return jsonify({'error': f"No '{PLAYER_NAME}' field was provided"}), 400
 
-    player = request.json[PLAYER_NAME]
-    game = InteractiveGame(NUM_RANKS, SUITS,
-                           SPECIAL_RANKS, player)
+    game = InteractiveGame(NUM_RANKS, SUITS, SPECIAL_RANKS, player)
     id_game = game.get_id()
     response = {
         'idGame': id_game
@@ -76,7 +84,9 @@ def create_game():
 def take_player_hand(id_game: str):
     try:
         game = get_game_by_id(id_game)
-        game.take_hand()
+        update_hand = game.take_hand()
+        if update_hand:
+            db.update_game(game)
         pretty_hand = game.get_hand_player(1)
         hand = [{idx: card} for idx, card in enumerate(pretty_hand)]
         response = {
@@ -106,6 +116,8 @@ def play_turn(id_game: str):
         hand_p1 = game.get_hand_player(1, False)
         hand_p2 = game.get_hand_player(2, False)
         turn_winner, idx_hand_p2 = game.play_turn(idx_hand_p1)
+        db.update_game(game)
+
         target_approx_p1 = sum([card.get_rank() for idx, card in enumerate(hand_p1) if idx in idx_hand_p1])
         target_approx_p2 = sum([card.get_rank() for idx, card in enumerate(hand_p2) if idx in idx_hand_p2])
         response = {
@@ -129,3 +141,9 @@ def play_turn(id_game: str):
     except Exception as e:
         traceback.print_exc()
         return make_response(jsonify({'error': str(e)}), 400)
+
+
+@game_controllers.route('/game/<string:id_game>', methods=['DELETE'])
+def delete_game(id_game: str):
+    db.delete_game(id_game)
+    return make_response(jsonify({'success': True}), 200)

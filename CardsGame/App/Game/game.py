@@ -111,12 +111,13 @@ class Game:
         cprint(f'{self.get_name_player(2)}:\n  {self._deck_p2}',
                constants.COLOR_P2)
 
-    def get_winner(self, min_num_cards) -> Union[str, None]:
+    def get_winner(self, min_num_cards, color: bool = False) -> Union[str, None]:
         """
         Returns the winner player if there is
 
         Args:
             min_num_cards (int): Minimum number of cards to have
+            color (bool): To return the winner colored
 
         Returns:
             winner (str): Colored string with the name of the winner
@@ -124,11 +125,17 @@ class Game:
         colored_attrs = ['bold']
         size_p1 = len(self._deck_p1)
         size_p2 = len(self._deck_p2)
+        winner = None
+        color_winner = None
         if (self.get_num_turns() >= constants.MAX_NUM_TURNS) or (size_p1 < min_num_cards and size_p2 < min_num_cards):
-            return colored('Tie', constants.COLOR_TIE, attrs=colored_attrs)
+            winner = 'Tie'
+            color_winner = constants.COLOR_TIE
         elif size_p1 < min_num_cards:
-            return colored(self.get_name_player(2), constants.COLOR_P2, attrs=colored_attrs)
+            winner = self.get_name_player(2)
+            color_winner = constants.COLOR_P2
         elif size_p2 < min_num_cards:
-            return colored(self.get_name_player(1), constants.COLOR_P1, attrs=colored_attrs)
+            winner = self.get_name_player(1)
+            color_winner = constants.COLOR_P1
         else:
             return None
+        return colored(winner, color_winner, attrs=colored_attrs) if color else winner

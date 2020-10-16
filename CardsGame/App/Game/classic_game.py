@@ -68,7 +68,7 @@ class ClassicGame(Game):
         Returns:
             None
         """
-        winner = self.get_winner(constants.MIN_NUM_CARDS_CLASSIC_GAME)
+        winner = self.get_winner(constants.MIN_NUM_CARDS_CLASSIC_GAME, color=True)
         while not winner:
             self.increment_num_turn()
             card_p1 = self._deck_p1.draw()
@@ -89,6 +89,6 @@ class ClassicGame(Game):
                     card_p1, card_p2, self.__tie_tag)
                 # self._cards_discarded[self.get_num_turns()] = (card_p2, card_p1)
             print(turn_msj)
-            winner = self.get_winner(constants.MIN_NUM_CARDS_CLASSIC_GAME)
+            winner = self.get_winner(constants.MIN_NUM_CARDS_CLASSIC_GAME, color=True)
             # self.printDecks()
         print(f'{self.__winner_tag} {winner}')
