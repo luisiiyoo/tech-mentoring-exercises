@@ -67,7 +67,6 @@ def get_game(id_game: str):
 @game_controllers.route('/game', methods=['POST'])
 def create_game():
     player = request.json.get(PLAYER_NAME)
-    print('Luis', player)
     if player is None:
         return jsonify({'error': f"No '{PLAYER_NAME}' field was provided"}), 400
 
