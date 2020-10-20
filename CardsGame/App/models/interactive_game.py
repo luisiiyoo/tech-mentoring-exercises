@@ -1,12 +1,12 @@
 from __future__ import annotations
 from typing import Any, Dict, List, Tuple, Union
 from datetime import datetime
-from .game import Game
-from .card import Card
-from .deck import Deck
+from App.models.game import Game
+from App.models.card import Card
+from App.models.deck import Deck
 from termcolor import cprint, colored
-from ..util import constants
-from ..util.helpers import get_random_num_in_range, get_random_string, get_closest_index_cards
+from App.util import constants
+from App.util.helpers import get_random_num_in_range, get_random_string, get_closest_index_cards
 
 
 class InteractiveGame(Game):
@@ -20,8 +20,8 @@ class InteractiveGame(Game):
         name_p1 (str): Player 1's name
 
     Attributes:
-        (inherited from Game)
-        _id (str): Random unique Game id
+        (inherited from models)
+        _id (str): Random unique models id
         _current_target (int): target number to get close adding selected cards from the player's hand
         _hand_p1 (List[Card]): Player 1's hand
         _hand_p2 (List[Card]): Player 2's hand
@@ -45,23 +45,27 @@ class InteractiveGame(Game):
 
     @staticmethod
     def build_instance(instance_dict: Dict[str, Any]) -> InteractiveGame:
-        _id: str = instance_dict['_id']
-        _name_p1: str = instance_dict['_name_p1']
-        _name_p2: str = instance_dict['_name_p2']
-        _num_turns: int = instance_dict['_num_turns']
-        _created_date: int = instance_dict['_created_date']
-        _current_target: int = instance_dict['_current_target']
-        _history: Dict = instance_dict['_history']
-        _deck_p1: Dict = instance_dict['_deck_p1']
-        _deck_p2: Dict = instance_dict['_deck_p2']
-        _hand_p1: List[Card] = [Card(raw_card['rank'], raw_card['suit']) for raw_card in instance_dict['_hand_p1']]
-        _hand_p2: List[Card] = [Card(raw_card['rank'], raw_card['suit']) for raw_card in instance_dict['_hand_p2']]
+        _id: str = instance_dict.get('_id')
+        _name_p1: str = instance_dict.get('_name_p1')
+        _name_p2: str = instance_dict.get('_name_p2')
+        _num_turns: int = instance_dict.get('_num_turns')
+        _created_date: int = instance_dict.get('_created_date')
+        _current_target: int = instance_dict.get('_current_target')
+        _history: Dict = instance_dict.get('_history')
+        _deck_p1: Dict = instance_dict.get('_deck_p1')
+        _deck_p2: Dict = instance_dict.get('_deck_p2')
+        _hand_p1: List[Card] = [Card(raw_card.get('rank'), raw_card.get('suit')) for raw_card
+                                in instance_dict.get('_hand_p1')]
+        _hand_p2: List[Card] = [Card(raw_card.get('rank'), raw_card.get('suit')) for raw_card
+                                in instance_dict.get('_hand_p2')]
 
-        num_ranks: int = _deck_p1['num_ranks']
-        suits: Dict = _deck_p1['suits']
-        special_ranks: Dict = _deck_p1['special_ranks']
-        cards_deck_p1: List[Card] = [Card(raw_card['rank'], raw_card['suit']) for raw_card in _deck_p1['cards']]
-        cards_deck_p2: List[Card] = [Card(raw_card['rank'], raw_card['suit']) for raw_card in _deck_p2['cards']]
+        num_ranks: int = _deck_p1.get('num_ranks')
+        suits: Dict = _deck_p1.get('suits')
+        special_ranks: Dict = _deck_p1.get('special_ranks')
+        cards_deck_p1: List[Card] = [Card(raw_card.get('rank'), raw_card.get('suit')) for raw_card
+                                     in _deck_p1.get('cards')]
+        cards_deck_p2: List[Card] = [Card(raw_card.get('rank'), raw_card.get('suit')) for raw_card
+                                     in _deck_p2.get('cards')]
         deck_p1 = Deck(num_ranks, suits, special_ranks, cards_deck_p1)
         deck_p2 = Deck(num_ranks, suits, special_ranks, cards_deck_p2)
 

@@ -1,8 +1,8 @@
 from __future__ import annotations
 from typing import List, Union, Dict
 from termcolor import colored, cprint
-from .deck import Deck
-from ..util import constants
+from App.models.deck import Deck
+from App.util import constants
 
 
 class Game:

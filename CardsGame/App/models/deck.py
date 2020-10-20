@@ -1,8 +1,8 @@
 from __future__ import annotations
 import math
 import numpy
-from typing import Dict, List, Tuple
-from .card import Card
+from typing import Dict, List
+from App.models.card import Card
 
 
 class Deck:

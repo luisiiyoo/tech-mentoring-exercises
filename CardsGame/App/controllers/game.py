@@ -2,7 +2,7 @@ import traceback
 from flask import Blueprint, jsonify, make_response, request, abort
 from datetime import datetime
 from typing import List
-from App.Game import InteractiveGame
+from App.models import InteractiveGame
 from App.util.constants import CARDS_TO_USE, NUM_RANKS, SUITS, SPECIAL_RANKS
 from App.database import db
 
@@ -23,7 +23,7 @@ def get_game_by_id(id_game: str) -> InteractiveGame:
 
 @game_controllers.route('/', methods=['GET'])
 def index():
-    return "Interactive Game is running!"
+    return "Interactive models is running!"
 
 
 @game_controllers.errorhandler(404)

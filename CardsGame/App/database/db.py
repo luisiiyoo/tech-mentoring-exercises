@@ -3,7 +3,7 @@ from typing import Dict, List
 from pymongo import MongoClient
 from pymongo.collection import Collection
 from config import MONGO_STR_CONNECTION, MONGO_DB_NAME
-from App.Game import InteractiveGame
+from App.models import InteractiveGame
 from App.util.constants import CARDS_TO_USE
 from App.util.helpers import to_dict
 
@@ -53,12 +53,12 @@ def find_game(id_game: str) -> Dict:
         Exception: If a game was not found
 
     Returns:
-        Dict: Game instance as a dictionary
+        Dict: models instance as a dictionary
     """
-    collection = MongoManager.get_game_collection('Game')
+    collection = MongoManager.get_game_collection('models')
     raw_game = collection.find_one({'_id': id_game})
     if not raw_game:
-        raise Exception(f"Game {id_game} not found")
+        raise Exception(f"models {id_game} not found")
     return raw_game
 
 
@@ -70,7 +70,7 @@ def get_game(id_game: str) -> InteractiveGame:
         id_game (str): Player id
 
     Returns:
-        InteractiveGame: Game instance
+        InteractiveGame: models instance
     """
     raw_game = find_game(id_game)
     return InteractiveGame.build_instance(raw_game)
@@ -86,7 +86,7 @@ def get_list_id_games() -> List[str]:
     Returns:
         List[str]: List of game ids
     """
-    collection = MongoManager.get_game_collection('Game')
+    collection = MongoManager.get_game_collection('models')
     cursor = collection.find({})
     return [raw_game['_id'] for raw_game in cursor]
 
@@ -101,7 +101,7 @@ def get_games_by_status(finished: bool) -> List[str]:
     Returns:
         List[str]: List of game id's that have the similar status provided
     """
-    collection = MongoManager.get_game_collection('Game')
+    collection = MongoManager.get_game_collection('models')
     cursor = collection.find({})
     games = []
     for raw_game in cursor:
@@ -117,12 +117,12 @@ def add_game(game: InteractiveGame) -> None:
     Creates a new game document and saves it to the database
 
     Args:
-        game (InteractiveGame): Game instance
+        game (InteractiveGame): models instance
 
     Returns:
         None
     """
-    collection = MongoManager.get_game_collection('Game')
+    collection = MongoManager.get_game_collection('models')
     collection.insert_one(to_dict(game))
 
 
@@ -131,12 +131,12 @@ def update_game(game_updates: InteractiveGame) -> None:
     Updates a game database document
 
     Args:
-        game_updates (InteractiveGame): Game instance
+        game_updates (InteractiveGame): models instance
 
     Returns:
         None
     """
-    collection = MongoManager.get_game_collection('Game')
+    collection = MongoManager.get_game_collection('models')
     query = {'_id': game_updates.get_id()}
     game_dict = to_dict(game_updates)
 
@@ -150,11 +150,11 @@ def delete_game(id_game: str) -> None:
     Removes a game from the database
 
     Args:
-        id_game (str): Game id
+        id_game (str): models id
 
     Returns:
         None
     """
-    collection = MongoManager.get_game_collection('Game')
+    collection = MongoManager.get_game_collection('models')
     collection.delete_one({'_id': id_game})
 

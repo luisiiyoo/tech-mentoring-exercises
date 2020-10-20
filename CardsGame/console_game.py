@@ -1,5 +1,5 @@
 from termcolor import cprint
-from App.Game import ClassicGame
+from App.models import ClassicGame
 from App.util.constants import NUM_RANKS, SUITS, SPECIAL_RANKS, COLOR_TIE
 
 # %% MAIN

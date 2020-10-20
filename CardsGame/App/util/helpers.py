@@ -4,7 +4,7 @@ import uuid
 from typing import Any, Dict, List, Tuple
 from numpy.random import permutation
 from numpy import sort, argsort
-from App.Game.card import Card
+from App.models.card import Card
 from termcolor import cprint
 from .constants import COLOR_P2, COLOR_TIE
 

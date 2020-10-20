@@ -1,5 +1,5 @@
 from __future__ import annotations
-from ..util.constants import SPECIAL_RANKS
+from App.util.constants import SPECIAL_RANKS
 
 
 class Card:
