@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import List
 from App.models import InteractiveGame
 from App.util.constants import CARDS_TO_USE, NUM_RANKS, SUITS, SPECIAL_RANKS
-from App.database import db
+from App.database import server
 
 game_controllers = Blueprint('game', __name__, url_prefix='')
 
@@ -15,15 +15,16 @@ FINISHED = 'finished'
 
 def get_game_by_id(id_game: str) -> InteractiveGame:
     try:
-        game = db.get_game(id_game)
+        game = server.get_game(id_game)
         return game
-    except:
+    except Exception:
+        print(traceback.print_exc())
         abort(404)
 
 
 @game_controllers.route('/', methods=['GET'])
 def index():
-    return "Interactive models is running!"
+    return "Interactive Game is running!"
 
 
 @game_controllers.errorhandler(404)
@@ -36,10 +37,10 @@ def get_games():
     finished_status = request.args.get(FINISHED)
     game_ids = []
     if finished_status is None:
-        game_ids = db.get_list_id_games()
+        game_ids = server.get_list_all_id_games()
     else:
         is_finished = not (finished_status.lower() in ['false', '0'])
-        game_ids = db.get_games_by_status(is_finished)
+        game_ids = server.get_id_games_by_status(is_finished)
     return jsonify(game_ids), 200
 
 
@@ -75,7 +76,7 @@ def create_game():
     response = {
         'idGame': id_game
     }
-    db.add_game(game)
+    server.add_game(game)
     return jsonify(response), 201
 
 
@@ -85,7 +86,7 @@ def take_player_hand(id_game: str):
         game = get_game_by_id(id_game)
         update_hand = game.take_hand()
         if update_hand:
-            db.update_game(game)
+            server.update_game(game)
         pretty_hand = game.get_hand_player(1)
         hand = [{idx: card} for idx, card in enumerate(pretty_hand)]
         response = {
@@ -115,7 +116,7 @@ def play_turn(id_game: str):
         hand_p1 = game.get_hand_player(1, False)
         hand_p2 = game.get_hand_player(2, False)
         turn_winner, idx_hand_p2 = game.play_turn(idx_hand_p1)
-        db.update_game(game)
+        server.update_game(game)
 
         target_approx_p1 = sum([card.get_rank() for idx, card in enumerate(hand_p1) if idx in idx_hand_p1])
         target_approx_p2 = sum([card.get_rank() for idx, card in enumerate(hand_p2) if idx in idx_hand_p2])
@@ -144,5 +145,5 @@ def play_turn(id_game: str):
 
 @game_controllers.route('/game/<string:id_game>', methods=['DELETE'])
 def delete_game(id_game: str):
-    db.delete_game(id_game)
+    server.delete_game(id_game)
     return make_response(jsonify({'success': True}), 200)

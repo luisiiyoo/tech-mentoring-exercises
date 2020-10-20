@@ -16,7 +16,7 @@ class ClassicGame(Game):
         name_p2 (str): Player 2 name
 
     Attributes:
-        (inherited from models)
+        (inherited from game)
         __card_p1_tag (str): String colored tag for player 1's card 
         __card_p2_tag (str): String colored tag for player 2's card
         __tie_tag (str): String colored tag for tie

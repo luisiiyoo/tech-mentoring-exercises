@@ -20,8 +20,8 @@ class InteractiveGame(Game):
         name_p1 (str): Player 1's name
 
     Attributes:
-        (inherited from models)
-        _id (str): Random unique models id
+        (inherited from Game)
+        _id (str): Random unique Game id
         _current_target (int): target number to get close adding selected cards from the player's hand
         _hand_p1 (List[Card]): Player 1's hand
         _hand_p2 (List[Card]): Player 2's hand
@@ -42,37 +42,6 @@ class InteractiveGame(Game):
         self._hand_p1: List[Card] = hand_p1
         self._hand_p2: List[Card] = hand_p2
         self._history: Dict[int, Dict[str, Any]] = history
-
-    @staticmethod
-    def build_instance(instance_dict: Dict[str, Any]) -> InteractiveGame:
-        _id: str = instance_dict.get('_id')
-        _name_p1: str = instance_dict.get('_name_p1')
-        _name_p2: str = instance_dict.get('_name_p2')
-        _num_turns: int = instance_dict.get('_num_turns')
-        _created_date: int = instance_dict.get('_created_date')
-        _current_target: int = instance_dict.get('_current_target')
-        _history: Dict = instance_dict.get('_history')
-        _deck_p1: Dict = instance_dict.get('_deck_p1')
-        _deck_p2: Dict = instance_dict.get('_deck_p2')
-        _hand_p1: List[Card] = [Card(raw_card.get('rank'), raw_card.get('suit')) for raw_card
-                                in instance_dict.get('_hand_p1')]
-        _hand_p2: List[Card] = [Card(raw_card.get('rank'), raw_card.get('suit')) for raw_card
-                                in instance_dict.get('_hand_p2')]
-
-        num_ranks: int = _deck_p1.get('num_ranks')
-        suits: Dict = _deck_p1.get('suits')
-        special_ranks: Dict = _deck_p1.get('special_ranks')
-        cards_deck_p1: List[Card] = [Card(raw_card.get('rank'), raw_card.get('suit')) for raw_card
-                                     in _deck_p1.get('cards')]
-        cards_deck_p2: List[Card] = [Card(raw_card.get('rank'), raw_card.get('suit')) for raw_card
-                                     in _deck_p2.get('cards')]
-        deck_p1 = Deck(num_ranks, suits, special_ranks, cards_deck_p1)
-        deck_p2 = Deck(num_ranks, suits, special_ranks, cards_deck_p2)
-
-        game = InteractiveGame(num_ranks=num_ranks, suits=suits, special_ranks=special_ranks, name_p1=_name_p1, name_p2=_name_p2,
-                               id_game=_id, created_date=_created_date, curr_target=_current_target, hand_p1=_hand_p1,
-                               hand_p2=_hand_p2, history=_history, deck_p1=deck_p1, deck_p2=deck_p2, num_turns=_num_turns)
-        return game
 
     def get_id(self) -> str:
         """
