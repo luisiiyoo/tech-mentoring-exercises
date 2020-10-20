@@ -41,7 +41,13 @@ class InteractiveGame(Game):
         self._current_target = curr_target
         self._hand_p1: List[Card] = hand_p1
         self._hand_p2: List[Card] = hand_p2
-        self._history: Dict[int, Dict[str, Any]] = history
+        if not history:
+            initial_turn = dict()
+            initial_turn['DeckPlayer1'] = self.get_deck_player(1)
+            initial_turn['DeckPlayer2'] = self.get_deck_player(2)
+            self._history: Dict[int, Dict[str, Any]] = {0: initial_turn}
+        else:
+            self._history: Dict[int, Dict[str, Any]] = history
 
     def get_id(self) -> str:
         """
