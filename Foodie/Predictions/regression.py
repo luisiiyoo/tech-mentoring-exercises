@@ -8,6 +8,7 @@ from sklearn.preprocessing import PolynomialFeatures
 from sklearn.svm import SVR
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import GradientBoostingRegressor
 from pandas import DataFrame
 from termcolor import cprint
 from typing import List, Tuple, Any
@@ -280,10 +281,45 @@ class RandomForestRegression(AbstractRegression):
 
     def __init__(self, x_train: DataFrame, x_valid: DataFrame, y_train: DataFrame,
                  y_valid: DataFrame, max_cardinality: int, random_state: int, num_estimators: int,
-                 print_color: str, print_comparison: bool):
+                 max_depth: int, print_color: str, print_comparison: bool):
         self._random_state = random_state
         self._num_estimators = num_estimators
+        self._max_depth = max_depth
         model = RandomForestRegressor(n_estimators=self._num_estimators, random_state=self._random_state, criterion='mse',
-                                      max_depth=None)
+                                      max_depth=self._max_depth)
+        super().__init__(x_train, x_valid, y_train, y_valid, max_cardinality, model, 
+                        print_color = print_color, print_comparison = print_comparison)
+
+class GradientBoostedDecisionTrees(AbstractRegression):
+    """
+    Class to build, evaluate and make predictions using `RandomForestRegressor` class
+
+    Args:
+       x_train (pandas.DataFrame): Training independent variables
+       x_valid (pandas.DataFrame): Validation independent variables
+       y_train (pandas.DataFrame): Training dependent variable
+       y_valid (pandas.DataFrame): Validation dependent variable
+       max_cardinality (int): Maximum cardinality to apply OneHotEncoder
+       random_state (int): Number used for initializing the internal random number generator
+       num_estimators (int): Number of estimators for Random Forest Regression
+       max_depth (int): Maximum depth of the individual regression estimators
+       print_color (str): Color used to print in console
+       print_comparison (bool): Flag to compare and print the first 5 elements (True values vs predictions) from the validation data
+
+    Attributes:
+        (inherited attributes from `AbstractRegression` class)
+        _random_state (int): Number used for initializing the internal random number generator
+        _num_estimators (int): Number of estimators for Random Forest Regression
+        _max_depth (int): Maximum depth of the individual regression estimators
+    """
+
+    def __init__(self, x_train: DataFrame, x_valid: DataFrame, y_train: DataFrame,
+                 y_valid: DataFrame, max_cardinality: int, random_state: int, num_estimators: int,
+                 max_depth: int, print_color: str, print_comparison: bool):
+        self._random_state = random_state
+        self._num_estimators = num_estimators
+        self._max_depth = max_depth
+        model = GradientBoostingRegressor(n_estimators=self._num_estimators, max_depth=self._max_depth, 
+                                            random_state=self._random_state, learning_rate=0.1, loss='ls')
         super().__init__(x_train, x_valid, y_train, y_valid, max_cardinality, model, 
                         print_color = print_color, print_comparison = print_comparison)
