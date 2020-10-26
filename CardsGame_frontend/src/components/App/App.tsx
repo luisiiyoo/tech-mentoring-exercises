@@ -1,0 +1,57 @@
+import React, { useState } from 'react';
+import { Provider } from 'react-redux';
+import configureStore from 'src/redux/store';
+import Routes from 'src/routers';
+import connector from 'src/connector';
+import { NavItem } from 'src/model/navItem';
+import Loader from '../Loader';
+import ErrorDisplay from '../ErrorDisplay';
+import './App.css';
+
+const store = configureStore();
+let navigationItems: NavItem[] = [];
+
+const useConstructor = (callBack: () => void) => {
+  const [hasBeenCalled, setHasBeenCalled] = useState(false);
+  if (hasBeenCalled) return;
+  callBack();
+  setHasBeenCalled(true);
+};
+
+const App: React.FC = () => {
+  const [error, setError] = useState({
+    statusCode: -1,
+    messaje: '',
+  });
+  const [isLoading, setIsLoading] = useState(true);
+
+  useConstructor(async () => {
+    try {
+      await connector.checkBackendHealth();      
+    } catch (error_) {
+      setError({
+        statusCode: error_.statusCode,
+        messaje: error_.message,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  });
+
+  const isError = !!error.messaje;
+  const components = isError ? (
+    <ErrorDisplay message={error.messaje} statusCode={error.statusCode} />
+  ) : (
+    <Routes navBarItems={navigationItems} />
+  );
+
+  return (
+    <Provider store={store}>
+      <div className="App" data-testid="App">
+        {isLoading ? <Loader /> : components}
+      </div>
+    </Provider>
+  );
+};
+
+export default App;
