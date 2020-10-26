@@ -14,6 +14,7 @@ future = "*"
 flask = "*"
 pymongo = "*"
 dnspython = "*"
+flask-cors = "*"
 
 [requires]
 python_version = "3.8"

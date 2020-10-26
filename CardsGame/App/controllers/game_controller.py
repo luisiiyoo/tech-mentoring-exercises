@@ -22,6 +22,11 @@ def get_game_by_id(id_game: str) -> InteractiveGame:
         abort(404)
 
 
+@game_controllers.route('/health', methods=['GET'])
+def health():
+    return make_response(jsonify({'status': 'pass'}), 200)
+
+
 @game_controllers.route('/', methods=['GET'])
 def index():
     return "Interactive Game is running!"
