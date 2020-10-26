@@ -12,27 +12,27 @@ export const navBarItemsMock: NavItem[] = [
     iconClass: 'fa fa-fw fa-graduation-cap',
     childs: [
       {
-        journeyID: '1',
+        idChild: '1',
         route: 'basic-back-end',
         title: 'Basic Back-End',
       },
       {
-        journeyID: '2',
+        idChild: '2',
         route: 'avanced-back-end',
         title: 'Avanced Back-End',
       },
       {
-        journeyID: '3',
+        idChild: '3',
         route: 'basic-front-end',
         title: 'Basic Front-End',
       },
       {
-        journeyID: '4',
+        idChild: '4',
         route: 'avanced-front-end',
         title: 'Avanced Front-End',
       },
       {
-        journeyID: '5',
+        idChild: '5',
         route: 'qa',
         title: 'Q&A',
       },

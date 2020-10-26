@@ -3,13 +3,11 @@ import { Provider } from 'react-redux';
 import configureStore from 'src/redux/store';
 import Routes from 'src/routers';
 import connector from 'src/connector';
-import { NavItem } from 'src/model/navItem';
 import Loader from '../Loader';
 import ErrorDisplay from '../ErrorDisplay';
 import './App.css';
 
 const store = configureStore();
-let navigationItems: NavItem[] = [];
 
 const useConstructor = (callBack: () => void) => {
   const [hasBeenCalled, setHasBeenCalled] = useState(false);
@@ -27,7 +25,7 @@ const App: React.FC = () => {
 
   useConstructor(async () => {
     try {
-      await connector.checkBackendHealth();      
+      await connector.checkBackendHealth();
     } catch (error_) {
       setError({
         statusCode: error_.statusCode,
@@ -42,8 +40,8 @@ const App: React.FC = () => {
   const components = isError ? (
     <ErrorDisplay message={error.messaje} statusCode={error.statusCode} />
   ) : (
-    <Routes navBarItems={navigationItems} />
-  );
+      <Routes />
+    );
 
   return (
     <Provider store={store}>

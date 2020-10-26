@@ -1,5 +1,5 @@
 export interface NavItemChild {
-  journeyID: string;
+  idChild: string;
   route: string;
   title: string;
 }

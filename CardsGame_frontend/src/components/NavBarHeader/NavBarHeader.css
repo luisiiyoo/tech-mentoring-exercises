@@ -1,6 +1,6 @@
 .NavBarHeader {
   background-color: inherit;
-  color: white;
+  color: var(--font-color-app);
   white-space: nowrap;
 }
 

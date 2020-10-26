@@ -1,5 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:900);
-@import url(https://fonts.googleapis.com/css?family=Open + Sans);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
 
 .Error {
   align-items: center;
@@ -14,15 +14,15 @@
 }
 
 .Error-Message {
-  color: white;
+  color: var(--font-color-app);
   text-transform: capitalize;
   margin: 25px 0 20px 0;
 }
 
 .Error-Label span {
   position: relative;
-  background: #e93d44;
-  color: #fff;
+  background:var(--color-app);
+  color: var(--font-color-app);
   font-size: 300%;
   padding: 0 20px;
   border-radius: 5px;
@@ -33,8 +33,8 @@
 }
 
 .Error-Label span:hover {
-  background: #ba222a;
-  color: #fff;
+  background: var(--dark-color-app);
+  color: var(--font-color-app);
   -webkit-animation: jelly 0.5s;
   -moz-animation: jelly 0.5s;
   -ms-animation: jelly 0.5s;

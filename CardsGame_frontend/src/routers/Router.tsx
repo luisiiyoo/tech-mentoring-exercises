@@ -7,6 +7,7 @@ import PageNotFound from '../components/PageNotFound';
 import NavBar from '../components/NavBar';
 import HomePage from '../components/HomePage';
 import frontConfig from 'src/config/server';
+import {navigationItems} from './routes';
 import './Router.css';
 
 const MAX_NAVBAR_MARGIN = 240;
@@ -32,13 +33,15 @@ const MainComponent: React.FC<MainComponentProps> = ({
       <Switch>
         <Route path="/" exact={true} component={() => <HomePage />} />
         <Route path="/home" exact={true} component={() => <HomePage />} />
+        {/* <Route path="/home" exact={true} component={() => <HomePage />} /> */}
+        
         <Route component={() => <PageNotFound />} />
       </Switch>
     </div>
   );
 };
 
-const Routes: React.FC<RouterProps> = ({ navBarItems }) => {
+const Routes: React.FC<RouterProps> = ({ navBarItems = navigationItems }) => {
   const { main } = useSelector((state) => state);
   const { expand: isExpandedNavBar } = main;
 
@@ -46,7 +49,7 @@ const Routes: React.FC<RouterProps> = ({ navBarItems }) => {
     <BrowserRouter>
       <Route
         render={({ history }) => (
-          <NavBar history={history} navBarItems={navBarItems} navBarTitle={frontConfig.serverName}/>
+          <NavBar history={history} navBarItems={navBarItems} navBarTitle={frontConfig.serverName} />
         )}
       />
       <div className="Container">

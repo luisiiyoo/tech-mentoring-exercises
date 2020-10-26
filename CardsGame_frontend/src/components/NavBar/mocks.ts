@@ -12,7 +12,7 @@ export const navItemMock: NavItem[] = [
     iconClass: 'fa fa-fw fa-beer',
     childs: [
       {
-        journeyID: '1',
+        idChild: '1',
         route: 'sub-page',
         title: 'SubPage',
       },

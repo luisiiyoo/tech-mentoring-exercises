@@ -1,7 +1,7 @@
 import { NavItem } from 'src/model/navItem';
 
 export interface RouterProps {
-  navBarItems: NavItem[];
+  navBarItems?: NavItem[];
 }
 
 export interface MainComponentProps {
