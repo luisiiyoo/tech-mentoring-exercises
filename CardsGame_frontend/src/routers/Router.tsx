@@ -9,6 +9,9 @@ import HomePage from '../components/HomePage';
 import frontConfig from 'src/config/server';
 import './Router.css';
 
+const MAX_NAVBAR_MARGIN = 240;
+const MIN_NAVBAR_MARGIN = 64;
+
 const MainComponent: React.FC<MainComponentProps> = ({
   isExpandedNavBar,
   navBarItems,
@@ -24,11 +27,11 @@ const MainComponent: React.FC<MainComponentProps> = ({
     <div
       className="MainComponent"
       data-testid="mainComponent"
-      style={{ marginLeft: isExpandedNavBar ? 240 : 64 }}
+      style={{ marginLeft: isExpandedNavBar ? MAX_NAVBAR_MARGIN : MIN_NAVBAR_MARGIN }}
     >
       <Switch>
         <Route path="/" exact={true} component={() => <HomePage />} />
-        <Route path="/home" component={() => <HomePage />} />
+        <Route path="/home" exact={true} component={() => <HomePage />} />
         <Route component={() => <PageNotFound />} />
       </Switch>
     </div>

@@ -60,6 +60,6 @@ describe('JourneyRouter', () => {
       />,
     );
     fireEvent.click(getByTestId('route-mock'));
-    expect(getByTestId('mainComponent').innerHTML).toMatch('404 Not Found');
+    expect(getByTestId('ErrorMessage').innerHTML).toMatch('Page not found');
   });
 });

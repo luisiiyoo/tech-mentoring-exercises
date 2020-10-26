@@ -1,9 +1,11 @@
 import React from 'react';
 import './PageNotFound.css';
+import ErrorDisplay from '../ErrorDisplay';
 
 const PageNotFound: React.FC = () => (
-  <div className="PageNotFound">
-    <h2>404 Not Found</h2>
+  <div className="PageNotFound"
+    data-testid="PageNotFound">
+    <ErrorDisplay message={`Page not found`} statusCode={404} />
   </div>
 );
 

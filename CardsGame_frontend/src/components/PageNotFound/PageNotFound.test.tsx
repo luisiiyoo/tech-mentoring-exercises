@@ -11,7 +11,7 @@ describe('PageNotFound', () => {
   });
 
   it('should render a not found message', () => {
-    const { getByText } = render(<PageNotFound />);
-    expect(getByText('404 Not Found')).toBeInTheDocument();
+    const { getByTestId } = render(<PageNotFound />);
+    expect(getByTestId('PageNotFound')).toHaveTextContent('Error 404 Page not found');
   });
 });

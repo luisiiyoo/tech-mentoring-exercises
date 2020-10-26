@@ -4,10 +4,26 @@ exports[`PageNotFound should take a snapshot 1`] = `
 <DocumentFragment>
   <div
     class="PageNotFound"
+    data-testid="PageNotFound"
   >
-    <h2>
-      404 Not Found
-    </h2>
+    <div
+      class="Error"
+    >
+      <div
+        class="Error-Label"
+        data-testid="ErrorLabel"
+      >
+        <span>
+           Error 404 
+        </span>
+      </div>
+      <div
+        class="Error-Message"
+        data-testid="ErrorMessage"
+      >
+        Page not found
+      </div>
+    </div>
   </div>
 </DocumentFragment>
 `;
