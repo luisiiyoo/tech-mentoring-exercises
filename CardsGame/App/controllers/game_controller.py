@@ -4,6 +4,7 @@ from datetime import datetime
 from typing import List
 from App.models import InteractiveGame
 from App.util.constants import CARDS_TO_USE, NUM_RANKS, SUITS, SPECIAL_RANKS
+from App.util.helpers import str_to_bool
 from App.database import server
 
 game_controllers = Blueprint('game', __name__, url_prefix='')
@@ -11,6 +12,7 @@ game_controllers = Blueprint('game', __name__, url_prefix='')
 PLAYER_NAME = 'playerName'
 CARD_INDEXES = 'cardIndexes'
 FINISHED = 'finished'
+ONLY_ID = 'onlyId'
 
 
 def get_game_by_id(id_game: str) -> InteractiveGame:
@@ -40,12 +42,15 @@ def not_found(error):
 @game_controllers.route('/game', methods=['GET'])
 def get_games():
     finished_status = request.args.get(FINISHED)
+    only_id: str = request.args.get(ONLY_ID)
+    only_id: bool = True if only_id is None else str_to_bool(only_id)
+
     game_ids = []
     if finished_status is None:
-        game_ids = server.get_list_all_id_games()
+        game_ids = server.get_list_all_games(only_id)
     else:
-        is_finished = not (finished_status.lower() in ['false', '0'])
-        game_ids = server.get_id_games_by_status(is_finished)
+        is_finished = str_to_bool(finished_status)
+        game_ids = server.get_games_by_status(is_finished, only_id)
     return jsonify(game_ids), 200
 
 

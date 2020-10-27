@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Union
 from App.util.constants import CARDS_TO_USE
 from App.util.helpers import to_dict
 from App.models import InteractiveGame, Card, Deck
@@ -53,12 +53,13 @@ def add_game(game: InteractiveGame) -> None:
     db.add_one(document, GAME_COLLECTION)
 
 
-def get_id_games_by_status(finished: bool) -> List[str]:
+def get_games_by_status(finished: bool, only_id: bool = True) -> List[Union[str, InteractiveGame]]:
     """
     Gets a game ids list of games that have been finished or not
 
     Args:
         finished (bool): Flag to get all the game ids that have been finished or not
+        only_id (bool): Flag to return only the id of the game
 
     Returns:
         List[str]: List of game id's that have the similar status provided
@@ -69,22 +70,22 @@ def get_id_games_by_status(finished: bool) -> List[str]:
         game = build_interactive_game_instance(raw_game)
         game_winner = game.get_winner(CARDS_TO_USE)
         if bool(game_winner) == finished:
-            games.append(game.get_id())
+            games.append(game.get_id() if only_id else raw_game)
     return games
 
 
-def get_list_all_id_games() -> List[str]:
+def get_list_all_games(only_id: bool = True) -> List[Union[str, InteractiveGame]]:
     """
     Gets a list of all game ids created and stored at the database
 
     Args:
-        None
+        only_id (bool): Flag to return only the id of the game
 
     Returns:
         List[str]: List of game ids
     """
     cursor = db.find_all(GAME_COLLECTION)
-    ids = [raw_game['_id'] for raw_game in cursor]
+    ids = [raw_game['_id'] if only_id else raw_game for raw_game in cursor]
     return ids
 
 
