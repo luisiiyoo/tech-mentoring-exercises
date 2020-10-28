@@ -1,0 +1,163 @@
+@import url(//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css);
+
+
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600);
+
+
+.FilterGridPanel {
+  margin: 20px;
+}
+
+.ControlPanel{
+  display: flex;
+  height: 90%;
+  align-content: center;
+  align-items: center;
+}
+
+.ControlPanel-Search {
+  border: solid 1px #ccc;
+  border-radius: 5px;
+  font-size: 90%;
+  flex-grow: 3;
+}
+
+.ControlPanel-Sort {
+  padding: 8px 30px;
+  border-radius: 6px;
+  border: none;
+  flex-grow: 1;
+  word-break: break-all;
+  color: var(--font-color-app);
+  text-decoration: none;
+  background-color: var(--color-app);
+  height: inherit;
+  font-size: 60%;
+  margin: 0 5px;
+  text-align: center;
+  justify-content: center;
+  align-content: center;
+}
+
+.ListViewStyle {
+  margin: 0;
+  padding: 20px 0 0;
+  display: flex;
+  flex-direction: column;
+  width: inherit;
+  list-style-type: none;
+}
+
+.ListViewStyle .ItemPanel {
+  display: flex;
+  background-color: var(--color-app);
+  padding: 10px;
+  box-shadow: int 0 1px 0 var(--dark-color-app);
+  height: 140px;
+  margin-bottom: 10px;
+}
+
+.ListViewStyle .ItemPanel-Left {
+  flex-grow: 0;
+  text-align: left;
+  align-items: center;
+  justify-content: center;
+}
+
+.ListViewStyle .ItemPanel-Right {
+  text-align: left;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 10;
+  line-height: inherit;
+  height: inherit;
+}
+
+.ListViewStyle .ItemPanel-Image {
+  height: inherit;
+  width: inherit;
+  padding-right: 20px;
+}
+
+.ListViewStyle .ItemPanel-Player {
+  font-size: 85%;
+  margin: 0 0 0;
+  font-weight: 600;
+}
+
+.ListViewStyle .ItemPanel-Date {
+  margin: 0;
+  font-size: 80%;
+}
+.ListViewStyle .ItemPanel-Winner {
+  margin: 0;
+  font-size: 75%;
+  font-style: italic;
+}
+.ListViewStyle .ItemPanel-ID {
+  margin: 0;
+  font-size: 75%;
+  font-style: italic;
+}
+
+/*  */
+
+.GridViewStyle {
+  margin: 0;
+  padding: 20px 0 0;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-gap: 10px;
+  width: inherit;
+  list-style-type: none;
+}
+
+.GridViewStyle .ItemPanel {
+  display: flex;
+  background-color: var(--color-app);
+  padding: 10px;
+  box-shadow: int 0 1px 0 var(--dark-color-app);
+  height: 140px;
+  margin-bottom: 10px;
+}
+
+.GridViewStyle .ItemPanel-Left {
+  text-align: left;
+  align-items: center;
+  justify-content: center;
+}
+
+.GridViewStyle .ItemPanel-Right {
+  text-align: left;
+  align-items: center;
+  justify-content: center;
+  line-height: inherit;
+  height: inherit;
+}
+
+.GridViewStyle .ItemPanel-Image {
+  height: inherit;
+  width: inherit;
+  padding-right: 20px;
+}
+
+.GridViewStyle .ItemPanel-Player {
+  font-size: 70%;
+  margin: 0 0 0;
+  font-weight: 600;
+}
+
+.GridViewStyle .ItemPanel-Date {
+  margin: 0;
+  font-size: 75%;
+}
+.GridViewStyle .ItemPanel-Winner {
+  margin: 0;
+  font-size: 60%;
+  font-style: italic;
+}
+.GridViewStyle .ItemPanel-ID {
+  margin: 0;
+  font-size: 60%;
+  font-style: italic;
+}

@@ -6,8 +6,9 @@ import { RouterProps, MainComponentProps } from './Router.types';
 import PageNotFound from '../components/PageNotFound';
 import NavBar from '../components/NavBar';
 import HomePage from '../components/HomePage';
+import GamesBoard from '../components/GamesBoard'
 import frontConfig from 'src/config/server';
-import {navigationItems} from './routes';
+import {navigationItems, ROUTES} from './routes';
 import './Router.css';
 
 const MAX_NAVBAR_MARGIN = 240;
@@ -32,8 +33,9 @@ const MainComponent: React.FC<MainComponentProps> = ({
     >
       <Switch>
         <Route path="/" exact={true} component={() => <HomePage />} />
-        <Route path="/home" exact={true} component={() => <HomePage />} />
-        {/* <Route path="/home" exact={true} component={() => <HomePage />} /> */}
+        <Route path={`/${ROUTES.HOME}`} exact={true} component={() => <HomePage />} />
+        <Route path={`/${ROUTES.GAMES_FINISHED}`}  component={() => <GamesBoard finished={true}/>} />
+        <Route path={`/${ROUTES.GAMES_IN_PROGRESS}`}  component={() => <GamesBoard finished={false}/>} />
         
         <Route component={() => <PageNotFound />} />
       </Switch>

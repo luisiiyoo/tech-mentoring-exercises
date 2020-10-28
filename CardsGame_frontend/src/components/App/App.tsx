@@ -37,7 +37,7 @@ const App: React.FC = () => {
   });
 
   const isError = !!error.messaje;
-  const components = isError ? (
+  const Component = isError ? (
     <ErrorDisplay message={error.messaje} statusCode={error.statusCode} />
   ) : (
       <Routes />
@@ -46,7 +46,7 @@ const App: React.FC = () => {
   return (
     <Provider store={store}>
       <div className="App" data-testid="App">
-        {isLoading ? <Loader /> : components}
+        {isLoading ? <Loader /> : Component}
       </div>
     </Provider>
   );

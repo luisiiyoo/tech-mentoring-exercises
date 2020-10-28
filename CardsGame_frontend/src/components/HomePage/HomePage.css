@@ -1,7 +1,3 @@
-.HomePage h2 {
-  text-align: center;
-}
-
 .HomePage h3 {
   color: var(--color-app);
   text-shadow: 1px 0px 0px var(--font-color-app);
