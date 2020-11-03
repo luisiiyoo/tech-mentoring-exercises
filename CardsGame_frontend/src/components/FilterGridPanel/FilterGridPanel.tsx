@@ -71,6 +71,7 @@ const FilterGridPanel: React.FC<FilterGridPanelProps> = (props) => {
         <button className="ControlPanel-Sort" onClick={handleOnSortByPlayer}>{`Sort by Player`}</button>
         <button className="ControlPanel-Sort" onClick={handleOnSortByDate}>{`Sort by Date`}</button>
         <button className="ControlPanel-Sort" onClick={handleOnChangeView}>Change View</button>
+        <button className="ControlPanel-Sort" onClick={() => window.location.reload(true)}>Update</button>
       </div>
       <ul className={viewStyle}>
         {

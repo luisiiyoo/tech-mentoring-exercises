@@ -18,7 +18,7 @@ const useConstructor = (callBack: () => void) => {
 const GamesBoard: React.FC<GamesBoardProps> = ({ finished }) => {
   const [error, setError] = useState({
     statusCode: -1,
-    messaje: ''
+    message: ''
   });
   const [isLoading, setIsLoading] = useState(true);
   const [games, setGames] = useState([] as Game[])
@@ -29,20 +29,19 @@ const GamesBoard: React.FC<GamesBoardProps> = ({ finished }) => {
     } catch (error_) {
       setError({
         statusCode: error_.statusCode,
-        messaje: error_.message,
+        message: error_.message,
       });
     } finally {
       setIsLoading(false);
     }
   });
-
-  const isError = !!error.messaje;
+  const isError = !!error.message;
   const numGames = games.length
   const gameStatus = finished ? `finished` : `in progress`;
   const gamesTitle = numGames === 1 ? `Game` : `Games`;
   const title = `${numGames} ${gamesTitle} ${gameStatus}`
   const Component = isError ? (
-    <ErrorDisplay message={error.messaje} statusCode={error.statusCode} />
+    <ErrorDisplay message={error.message} statusCode={error.statusCode} />
   ) : (
       <>
         <h2>{title}</h2>

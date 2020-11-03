@@ -19,7 +19,7 @@ const useConstructor = (callBack: () => void) => {
 const App: React.FC = () => {
   const [error, setError] = useState({
     statusCode: -1,
-    messaje: '',
+    message: '',
   });
   const [isLoading, setIsLoading] = useState(true);
 
@@ -29,16 +29,16 @@ const App: React.FC = () => {
     } catch (error_) {
       setError({
         statusCode: error_.statusCode,
-        messaje: error_.message,
+        message: error_.message,
       });
     } finally {
       setIsLoading(false);
     }
   });
 
-  const isError = !!error.messaje;
+  const isError = !!error.message;
   const Component = isError ? (
-    <ErrorDisplay message={error.messaje} statusCode={error.statusCode} />
+    <ErrorDisplay message={error.message} statusCode={error.statusCode} />
   ) : (
       <Routes />
     );
