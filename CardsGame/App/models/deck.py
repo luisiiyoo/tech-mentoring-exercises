@@ -21,11 +21,11 @@ class Deck:
         cards(List[Card]): List of Card objects
     """
 
-    def __init__(self, num_ranks: int, suits: Dict[str, str], special_ranks: Dict[int, str], cards: List[Card] = []):
+    def __init__(self, num_ranks: int, suits: Dict[str, str], special_ranks: Dict[int, str], cards: List[Card] = None):
         self.num_ranks = num_ranks
         self.suits = suits
         self.special_ranks = special_ranks
-        self.cards: List[Card] = cards if len(cards) > 0 else self.__build()
+        self.cards: List[Card] = cards if cards is not None else self.__build()
 
     def __build(self):
         """

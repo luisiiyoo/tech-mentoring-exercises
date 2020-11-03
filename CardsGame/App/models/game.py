@@ -32,7 +32,8 @@ class Game:
         self._name_p1 = name_p1
         self._name_p2 = name_p2
         self._num_turns = num_turns
-        if not deck_p1 or not deck_p2:
+        if deck_p1 is None or deck_p2 is None:
+            cprint(f'Generating new Decks', 'blue')
             self._deck_p1, self._deck_p2, *_ = self.generate_decks(num_ranks, suits, special_ranks, constants.NUM_SPLITS)
         else:
             self._deck_p1 = deck_p1

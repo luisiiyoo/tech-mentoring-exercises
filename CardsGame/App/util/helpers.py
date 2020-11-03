@@ -130,8 +130,6 @@ def get_closest_index_cards(hand: List[Card], target_rank: int, num_cards_to_use
     sorted_ranks = sort(ranks).tolist()
     original_idx = argsort(ranks).tolist()
 
-    cprint(f'Target: {target_rank}', COLOR_TIE)
-    cprint(f'Hand ranks: {ranks}', COLOR_P2)
     for i in range(0, num_cards_to_use):
         idx, true_idx = get_index_closest_number(
             sorted_ranks, original_idx, target_rank)
@@ -140,8 +138,5 @@ def get_closest_index_cards(hand: List[Card], target_rank: int, num_cards_to_use
         original_idx = original_idx[:idx] + original_idx[idx + 1:]
         # Change target
         target_rank = target_rank - ranks[true_idx]
-
-        cprint(f"Card {i + 1} : Using rank '{ranks[true_idx]}' (idx: {true_idx})", COLOR_P2)
         idx_to_use.append(true_idx)
-    cprint(f"Indexes to use: {idx_to_use}", COLOR_P2)
     return idx_to_use

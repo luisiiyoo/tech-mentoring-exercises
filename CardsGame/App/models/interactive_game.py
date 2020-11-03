@@ -43,8 +43,8 @@ class InteractiveGame(Game):
         self._hand_p2: List[Card] = hand_p2
         if not history:
             initial_turn = dict()
-            initial_turn['DeckPlayer1'] = self.get_deck_player(1)
-            initial_turn['DeckPlayer2'] = self.get_deck_player(2)
+            initial_turn['DeckPlayer1'] = ','.join(map(str, self.get_deck_player(1).cards))
+            initial_turn['DeckPlayer2'] = ','.join(map(str, self.get_deck_player(2).cards))
             self._history: Dict[int, Dict[str, Any]] = {0: initial_turn}
         else:
             self._history: Dict[int, Dict[str, Any]] = history
@@ -203,7 +203,6 @@ class InteractiveGame(Game):
 
         cards_to_draw_p2 = self.__determine_cards_to_draw(self.get_deck_len_player(2))
         drawn_cards_p2: List[Card] = [self._deck_p2.draw() for i in range(0, cards_to_draw_p2)]
-
         return drawn_cards_p1, drawn_cards_p2
 
     def take_hand(self) -> bool:
@@ -231,15 +230,15 @@ class InteractiveGame(Game):
                 constants.START_TARGET_RANGE, constants.STOP_TARGET_RANGE)
             self.set_target_rank(new_rank)
             self._hand_p1, self._hand_p2 = self.__draw()
-
         return take_new_hand
 
-    def __validate_indexes_card_options(self, idx_cards: List[int]) -> bool:
+    def __validate_indexes_card_options(self, idx_cards: List[int], len_deck: int) -> bool:
         """
         Validates the provided indexes for the player 1
 
         Args:
             idx_cards (List[int]): List of indexes to use
+            len_deck (int): Deck length
 
         Raises:
             Exception: When the user provides more than N-defined indexes
@@ -259,13 +258,14 @@ class InteractiveGame(Game):
             raise Exception('You must provide non-repeating indexes')
 
         # Check if the indexes are in the correct range
+        idx_cards_valid_options = constants.IDX_CARD_OPTIONS if len_deck > constants.CARDS_TO_USE \
+            else list(range(0, len_deck))
         for idx in idx_cards:
-            if idx not in constants.IDX_CARD_OPTIONS:
-                idx_cards = [f"{idx}:{card}" for idx, card in enumerate(
-                    self.get_hand_player(1))]
+            if idx not in idx_cards_valid_options:
+                idx_cards = [f"{idx}:{card}" for idx, card in enumerate(self.get_hand_player(1))]
                 raise Exception(
                     f"{idx} is not a valid index. You can only select {constants.CARDS_TO_USE} of the following "
-                    f"indices:{constants.IDX_CARD_OPTIONS} -> Your hand is: {idx_cards}")
+                    f"indices: {list(idx_cards_valid_options)} -> Your hand is: {idx_cards}")
         return True
 
     def get_turn_winner(self, idx_cards_p1: List[int], idx_cards_p2: List[int]) -> Union[str, None]:
@@ -279,6 +279,10 @@ class InteractiveGame(Game):
         Returns:
             turn_winner (str|None): The name of the turn's winner if there is
         """
+        winner = self.get_winner(constants.CARDS_TO_USE)
+        if winner:
+            return winner
+
         selected_cards_p1 = [self._hand_p1[idx].get_rank() for idx in idx_cards_p1]
         selected_cards_p2 = [self._hand_p2[idx].get_rank() for idx in idx_cards_p2]
         sum_p1 = sum(selected_cards_p1)
@@ -303,10 +307,15 @@ class InteractiveGame(Game):
         aux_diff_p2 = colored(f'(dif:{difference_p2}) {idx_cards_p2}', constants.COLOR_P2)
         aux_sum_p1 = colored(f'{selected_cards_p1} (sum:{sum_p1})', constants.COLOR_P1)
         aux_sum_p2 = colored(f'(sum:{sum_p2}) {selected_cards_p2}', constants.COLOR_P2)
+        len_deck_p1 = colored(f'Deck len {self.get_name_player(1)}: {self.get_deck_len_player(1)}', constants.COLOR_P1)
+        len_deck_p2 = colored(f'Deck len {self.get_name_player(2)}: {self.get_deck_len_player(2)}', constants.COLOR_P2)
+        target_colored = colored(f' Target: {self.get_target_rank()}', 'cyan')
 
-        print(f"INDEX: {aux_diff_p1} ->{self.get_target_rank()}<- {aux_diff_p2}")
-        print(f"RANKS: {aux_sum_p1} ->{self.get_target_rank()}<- {aux_sum_p2}")
-        cprint(f"{turn_winner}", constants.COLOR_WINNER)
+        print(f"HAND: {colored(list(map(str,self._hand_p1)), constants.COLOR_P1)}   {colored(list(map(str, self._hand_p2)), constants.COLOR_P2)}")
+        print(f"INDEX: {aux_diff_p1} -> {target_colored} <- {aux_diff_p2}")
+        print(f"RANKS: {aux_sum_p1} -> {target_colored} <- {aux_sum_p2}")
+        cprint(f"{turn_winner}, Turn: {self.get_num_turns()}", constants.COLOR_WINNER)
+        print(f"{len_deck_p1}    {len_deck_p2}")
 
         self._hand_p1 = []
         self._hand_p2 = []
@@ -326,7 +335,6 @@ class InteractiveGame(Game):
         Returns:
             turn_winner (str|None): The name of the turn's winner if there is
             idx_cards_p2 (List[int]): List of player 2's used indexes
-
         """
         winner = self.get_winner(constants.CARDS_TO_USE)
         if winner:
@@ -335,16 +343,35 @@ class InteractiveGame(Game):
         if not self._hand_p1 or not self._hand_p2:
             raise Exception("You don't have a hand.")
 
-        self.__validate_indexes_card_options(idx_cards_p1)
+        self.__validate_indexes_card_options(idx_cards_p1, self.get_deck_len_player(1))
         self.increment_num_turn()
 
         idx_cards_p2 = get_closest_index_cards(self._hand_p2, self.get_target_rank(), constants.CARDS_TO_USE)
+        turn_winner = self.get_turn_winner(idx_cards_p1, idx_cards_p2)
+
+        # check again the winner
+        self.get_winner(constants.CARDS_TO_USE)
+        self.generate_history_turn(idx_cards_p1, idx_cards_p2, turn_winner)
+        return turn_winner, idx_cards_p2
+
+    def generate_history_turn(self, idx_cards_p1: List[int], idx_cards_p2: List[int],
+                              turn_winner: Union[str, None]) -> None:
+        """
+        Gets a dictionary of relevant keys values about the current turn
+
+        Args:
+            idx_cards_p1 (List[int]): List of player 1's indexes to use
+            idx_cards_p2 (List[int]): List of player 2's indexes to use
+            turn_winner (Union[str, None]): Winner for the current turn
+
+        Returns:
+            None
+        """
         select_cards_p1 = [card for idx, card in enumerate(self._hand_p1) if idx in idx_cards_p1]
         select_cards_p2 = [card for idx, card in enumerate(self._hand_p2) if idx in idx_cards_p2]
         sum_select_cards_p1 = sum([card.get_rank() for card in select_cards_p1])
         sum_select_cards_p2 = sum([card.get_rank() for card in select_cards_p2])
 
-        turn_winner = self.get_turn_winner(idx_cards_p1, idx_cards_p2)
         curr_turn = self.get_num_turns()
         turn_dict = dict()
         turn_dict['cardsSelectedPlayer1'] = list(map(str, select_cards_p1))
@@ -355,7 +382,5 @@ class InteractiveGame(Game):
         turn_dict['lenDeckPlayer2'] = self.get_deck_len_player(2)
         turn_dict['target'] = self.get_target_rank()
         turn_dict['turn'] = curr_turn
-        turn_dict['turnWinner'] = turn_winner
+        turn_dict['turnWinner'] = turn_winner if turn_winner else 'Tie'
         self._history[curr_turn] = turn_dict
-
-        return turn_winner, idx_cards_p2
