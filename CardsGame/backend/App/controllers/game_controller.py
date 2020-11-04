@@ -86,13 +86,18 @@ def take_player_hand(id_game: str):
         update_hand = game.take_hand()
         if update_hand:
             server.update_game(game)
-        pretty_hand = game.get_hand_player(1)
-        hand = [{idx: card} for idx, card in enumerate(pretty_hand)]
+        pretty_hand_p1 = game.get_hand_player(1)
+        pretty_hand_p2 = game.get_hand_player(2)
+        hand_p1 = [{idx: card} for idx, card in enumerate(pretty_hand_p1)]
+        hand_p2 = [{idx: card} for idx, card in enumerate(pretty_hand_p2)]
         response = {
             '_id': id_game,
             '_name_p1': game.get_name_player(1),
+            '_name_p2': game.get_name_player(2),
             '_len_deck_p1': game.get_deck_len_player(1),
-            '_hand_p1': hand,
+            '_len_deck_p2': game.get_deck_len_player(2),
+            '_hand_p1': hand_p1,
+            '_hand_p2': hand_p2,
             '_num_turns': game.get_num_turns(),
             '_current_target': game.get_target_rank()
         }
