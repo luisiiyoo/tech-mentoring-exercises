@@ -9,6 +9,10 @@ const HomePage: React.FC = () => (
     <p>
     Instructions will be here.
     </p>
+    <h4>Author</h4>
+    <p>
+    Luis Gonzalez Guzman
+    </p>
   </div>
 );
 

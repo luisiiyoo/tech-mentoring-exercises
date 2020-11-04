@@ -3,8 +3,12 @@ import { NavItem } from '../model/navItem';
 export const ROUTES = {
   HOME: 'home',
   GAMES: 'games',
-  GAMES_FINISHED: 'games/finished',
-  GAMES_IN_PROGRESS: 'games/in-progress'
+  GAMES_FINISHED: 'find_game/finished',
+  GAMES_IN_PROGRESS: 'find_game/in-progress',
+  GAMES_BY_ID: 'find_game/by_id',
+  PLAY: 'play-game',
+  CREATE: 'create-game',
+  DELETE: 'delete-game',
 }
 
 export const navigationItems: NavItem[] = [
@@ -16,7 +20,7 @@ export const navigationItems: NavItem[] = [
   {
     route: ROUTES.GAMES,
     title: 'Games',
-    iconClass: 'fa fa-fw fa-gamepad',
+    iconClass: 'fa fa-fw fa-search',
     childs: [
       {
         idChild: ROUTES.GAMES_IN_PROGRESS,
@@ -28,6 +32,26 @@ export const navigationItems: NavItem[] = [
         route: ROUTES.GAMES_FINISHED,
         title: 'Finished',
       },
+      {
+        idChild: ROUTES.GAMES_BY_ID,
+        route: ROUTES.GAMES_BY_ID,
+        title: 'By ID',
+      },
     ],
-  }
+  },
+  {
+    route: ROUTES.CREATE,
+    title: 'Create Game',
+    iconClass: 'fa fa-fw fa-plus',
+  },
+  {
+    route: ROUTES.PLAY,
+    title: 'Play Game',
+    iconClass: 'fa fa-fw fa-gamepad',
+  },
+  {
+    route: ROUTES.DELETE,
+    title: 'Delete Game',
+    iconClass: 'fa fa-fw fa-trash',
+  },
 ];
