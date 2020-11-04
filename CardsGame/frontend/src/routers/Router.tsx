@@ -7,6 +7,7 @@ import PageNotFound from '../components/PageNotFound';
 import NavBar from '../components/NavBar';
 import HomePage from '../components/HomePage';
 import GamesBoard from '../components/GamesBoard'
+import SearchGame from '../components/SearchGame';
 import frontConfig from 'src/config/server';
 import {navigationItems, ROUTES} from './routes';
 import './Router.css';
@@ -36,6 +37,7 @@ const MainComponent: React.FC<MainComponentProps> = ({
         <Route path={`/${ROUTES.HOME}`} exact={true} component={() => <HomePage />} />
         <Route path={`/${ROUTES.GAMES_FINISHED}`}  component={() => <GamesBoard finished={true}/>} />
         <Route path={`/${ROUTES.GAMES_IN_PROGRESS}`}  component={() => <GamesBoard finished={false}/>} />
+        <Route path={`/${ROUTES.GAMES_BY_ID}`}  component={() => <SearchGame />} />
         
         <Route component={() => <PageNotFound />} />
       </Switch>

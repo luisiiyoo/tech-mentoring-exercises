@@ -3,7 +3,7 @@ import ErrorDisplay from '../ErrorDisplay';
 import Loader from '../Loader';
 import connector from '../../connector';
 import { GamesBoardProps } from './GamesBoard.types';
-import { Game } from 'src/connector/connector.types';
+import { Game } from 'src/model/game';
 import FilterGridPanel from '../FilterGridPanel'
 import { ItemPanel } from '../FilterGridPanel/FilterGridPanel.types';
 import './GamesBoard.css'

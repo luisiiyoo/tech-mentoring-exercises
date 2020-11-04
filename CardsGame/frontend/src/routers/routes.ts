@@ -8,7 +8,6 @@ export const ROUTES = {
   GAMES_BY_ID: 'find_game/by_id',
   PLAY: 'play-game',
   CREATE: 'create-game',
-  DELETE: 'delete-game',
 }
 
 export const navigationItems: NavItem[] = [
@@ -48,10 +47,5 @@ export const navigationItems: NavItem[] = [
     route: ROUTES.PLAY,
     title: 'Play Game',
     iconClass: 'fa fa-fw fa-gamepad',
-  },
-  {
-    route: ROUTES.DELETE,
-    title: 'Delete Game',
-    iconClass: 'fa fa-fw fa-trash',
   },
 ];

@@ -68,10 +68,10 @@ const FilterGridPanel: React.FC<FilterGridPanelProps> = (props) => {
     <div className="FilterGridPanel" data-testid="FilterGridPanel">
       <div className="ControlPanel">
         <input className="ControlPanel-Search" placeholder="Search player" value={textFilter} onChange={handleOnChangeInputSearch} />
-        <button className="ControlPanel-Sort" onClick={handleOnSortByPlayer}>{`Sort by Player`}</button>
-        <button className="ControlPanel-Sort" onClick={handleOnSortByDate}>{`Sort by Date`}</button>
+        <button className="ControlPanel-Sort" onClick={handleOnSortByPlayer}>Sort by Player</button>
+        <button className="ControlPanel-Sort" onClick={handleOnSortByDate}>Sort by Date</button>
         <button className="ControlPanel-Sort" onClick={handleOnChangeView}>Change View</button>
-        <button className="ControlPanel-Sort" onClick={() => window.location.reload(true)}>Update</button>
+        <button className="ControlPanel-Sort" onClick={() => window.location.reload(true)}>Refresh</button>
       </div>
       <ul className={viewStyle}>
         {

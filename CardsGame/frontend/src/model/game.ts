@@ -1,7 +1,3 @@
-export interface HealthResponse {
-  status: string;
-}
-
 export interface SpecialRanks {
   [key: number]: string
 }
