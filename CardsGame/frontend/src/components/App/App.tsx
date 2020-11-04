@@ -5,6 +5,8 @@ import Routes from 'src/routers';
 import connector from 'src/connector';
 import Loader from '../Loader';
 import ErrorDisplay from '../ErrorDisplay';
+import ReactNotification from 'react-notifications-component'
+import 'react-notifications-component/dist/theme.css'
 import './App.css';
 
 const store = configureStore();
@@ -45,6 +47,7 @@ const App: React.FC = () => {
 
   return (
     <Provider store={store}>
+      <ReactNotification />
       <div className="App" data-testid="App">
         {isLoading ? <Loader /> : Component}
       </div>

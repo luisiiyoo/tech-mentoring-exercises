@@ -2,7 +2,7 @@ import axios from 'axios';
 import frontConfig from 'src/config/server';
 
 import {
-  BackendUnavailableError
+  BackendUnavailableError, GameNotFoundError
 } from 'src/utils/error.types';
 import { HealthResponse } from '../model/backendResponse';
 import { Game } from '../model/game';
@@ -41,7 +41,7 @@ export class BackendConnector {
       const games: Game = response.data
       return games;
     } catch {
-      throw new BackendUnavailableError();
+      throw new GameNotFoundError();
     }
   }
 }

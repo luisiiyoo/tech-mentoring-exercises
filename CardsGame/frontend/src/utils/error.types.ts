@@ -7,21 +7,21 @@ class AbstractError extends Error {
 }
 
 export class UnauthorizedUserError extends AbstractError {
-  constructor(message = 'Unable to get data with this user') {
+  constructor(message = 'Unable to get data with this user.') {
     super(message, 401);
     this.name = 'UnauthorizedUserError';
   }
 }
 
 export class GameNotFoundError extends AbstractError {
-  constructor(message = 'Game not found') {
+  constructor(message = 'Game not found.') {
     super(message, 404);
     this.name = 'GameNotFoundError';
   }
 }
 
 export class BackendUnavailableError extends AbstractError {
-  constructor(message = 'Back-End connection failed') {
+  constructor(message = 'Back-End connection failed.') {
     super(message, 503);
     this.name = 'BackendUnavailableError';
   }
