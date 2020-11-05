@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { store } from 'react-notifications-component';
 import { createNotification } from '../../utils/helpers';
 import connector from '../../connector';
-import './SearchGame.css'
+import { Game, defaultGame } from 'src/model/game';
+import './SearchGame.css';
 
 const SearchGame: React.FC = () => {
   const [idGame, setIdGame] = useState('')
+  const [game, setGame] = useState<Game>(defaultGame)
   const [disableIdInput, setDisableIdInput] = useState(false)
   const [disableSearch, setDisableSearch] = useState(true)
   const [disableDelete, setDisableDelete] = useState(true)
@@ -18,7 +20,7 @@ const SearchGame: React.FC = () => {
     setDisableRefresh(disabled)
   }
   const handleOnChangeIdSearch = ({ target }) => {
-    const id = String(target.value).trim()
+    const id = String(target.value).trim();
     const disable = id.length < 1
     setDisableSearch(disable)
     setIdGame(id)
@@ -27,7 +29,7 @@ const SearchGame: React.FC = () => {
     let gameFound = false;
     try {
       disableComponents(true)
-      const game = await connector.getGameById(idGame)
+      setGame(await connector.getGameById(idGame))
       const notification = createNotification("success", `Game found.`, 'Success')
       store.addNotification(notification);
       gameFound = true;
@@ -52,6 +54,7 @@ const SearchGame: React.FC = () => {
         <button onClick={handleOnDelete} disabled={disableDelete}>Delete</button>
         <button onClick={() => window.location.reload(true)} disabled={disableRefresh}>Refresh</button>
       </div>
+      {/* {game._id &&} */} 
     </div>
   )
 }

@@ -41,8 +41,8 @@ export interface History {
 }
 
 export interface HistoryDecks {
-  DeckPlayer1: Deck;
-  DeckPlayer2: Deck;
+  DeckPlayer1: string;
+  DeckPlayer2: string;
 }
 
 export interface HistoryTurns {
@@ -56,3 +56,37 @@ export interface HistoryTurns {
   turn: number;
   turnWinner: string;
 }
+
+export const defaultDeck = {
+  cards: [],
+  num_ranks: 0,
+  special_ranks: { 0: '' },
+  suits: {
+    club: '♣',
+    diamond: '♦',
+    heart: '♥',
+    spade: '♠'
+  }
+}
+
+export const defaultHistory = {
+  0: {
+    DeckPlayer1: "",
+    DeckPlayer2: ""
+  }
+}
+
+export const defaultGame: Game = {
+  _id: '',
+  _winner: '',
+  _name_p1: '',
+  _name_p2: '',
+  _num_turns: 0,
+  _created_date: 0,
+  _current_target: 0,
+  _deck_p1: defaultDeck,
+  _deck_p2: defaultDeck,
+  _hand_p1: [],
+  _hand_p2: [],
+  _history: defaultHistory
+};
