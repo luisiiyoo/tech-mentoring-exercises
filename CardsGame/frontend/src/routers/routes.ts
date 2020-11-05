@@ -5,7 +5,6 @@ export const ROUTES = {
   GAMES: 'games',
   GAMES_FINISHED: 'find_game/finished',
   GAMES_IN_PROGRESS: 'find_game/in-progress',
-  GAMES_BY_ID: 'find_game/by_id',
   PLAY: 'play-game',
   CREATE: 'create-game',
 }
@@ -30,12 +29,7 @@ export const navigationItems: NavItem[] = [
         idChild: ROUTES.GAMES_FINISHED,
         route: ROUTES.GAMES_FINISHED,
         title: 'Finished',
-      },
-      {
-        idChild: ROUTES.GAMES_BY_ID,
-        route: ROUTES.GAMES_BY_ID,
-        title: 'By ID',
-      },
+      },     
     ],
   },
   {

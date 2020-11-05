@@ -1,4 +1,4 @@
-.SearchGame{
+.PlayGame{
   height: 95%;
   width: 100%;
   
@@ -21,7 +21,7 @@
   flex-grow: 3;
 }
 
-.SearchPanel button{
+.SearchPanel button, .ControlGame button{
   padding: 8px 30px;
   border-radius: 6px;
   border: none;
@@ -40,4 +40,28 @@
 
 .SearchPanel button:disabled{
   background: var(--dark-color-app);
+}
+
+.ControlGame{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.ControlGame-Item{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 3;
+}
+.ControlGame-Item span{
+margin-left: 10px;
+margin-right: 10px;
+}
+
+.ControlGame-Button{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
 }
