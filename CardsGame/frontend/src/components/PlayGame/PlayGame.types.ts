@@ -10,8 +10,9 @@ export interface SearchPanelProps {
 }
 
 export interface ControlGameProps {
+  winner: string;
   numTurns: number;
   target: number;
   disablePlayTurn: boolean;
-  handlePlayTurn(): void;
+  handlePlayTurn(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void;
 }

@@ -1,4 +1,4 @@
-class AbstractError extends Error {
+export class AbstractError extends Error {
   statusCode: number;
   constructor(message: string, statusCode: number) {
     super(message);

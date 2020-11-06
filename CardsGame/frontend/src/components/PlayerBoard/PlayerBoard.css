@@ -1,7 +1,6 @@
 .PlayerBoard{
   margin-top: 20px;
   margin-bottom: 20px;
-  height: 35%;
   background-color: #ccc;
   border-color: #ccc;
   display: flex;
@@ -19,6 +18,8 @@ text-shadow: 1px 2px 2px var(--color-app);
 .PlayerBoard-Cards{
   display: flex;
  flex-direction: row; 
+ margin-top: 10;
+ margin-bottom: 20px;
 }
 
 .PC{

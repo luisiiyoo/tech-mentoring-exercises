@@ -65,3 +65,12 @@ margin-right: 10px;
   align-items: center;
   flex-grow: 1;
 }
+
+.GameContainer{
+  overflow-y: hidden; 
+  overflow-x: hidden; 
+}
+.GameDisable{
+  pointer-events: none;
+  opacity: 0.4;
+}
