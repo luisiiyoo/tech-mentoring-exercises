@@ -16,6 +16,10 @@ font-size: 75%;
 text-align: center;
 text-shadow: 1px 2px 2px var(--color-app);
 }
+.PlayerBoard-Cards{
+  display: flex;
+ flex-direction: row; 
+}
 
 .PC{
   color: #000;
@@ -24,4 +28,8 @@ text-shadow: 1px 2px 2px var(--color-app);
 
 .Rotate{
   -webkit-transform: rotate(180deg);
+}
+
+.Tooltip{
+  margin: 0;
 }

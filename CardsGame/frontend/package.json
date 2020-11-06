@@ -19,6 +19,7 @@
     "react-resize-panel": "^0.3.5",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.1",
+    "react-tooltip": "^4.2.10",
     "redux": "^4.0.5",
     "tippy.js": "^5.2.1"
   },

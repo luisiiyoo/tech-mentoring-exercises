@@ -7,6 +7,7 @@ export interface CardProps {
 }
 
 export interface CardFaceDownProps {
+  isSelected: boolean;
   isPCPlayer:boolean;
   showOnlySpace: boolean;
   onTakeHand(): any;

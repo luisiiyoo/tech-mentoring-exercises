@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { PlayerBoardProps } from './PlayerBoard.types';
 import { PokerCard, PokerCardFaceDown } from '../PokerCard';
+import ReactTooltip from 'react-tooltip';
 import './PlayerBoard.css';
 
 const PlayerBoard: React.FC<PlayerBoardProps> = ({ cardsDeck, playerName, cardsHand, cardsSelected = [] }) => {
   const isPCPlayer = playerName === 'PC';
-  const cssRotate = isPCPlayer? 'Rotate': '';
+  const cssRotate = isPCPlayer ? 'Rotate' : '';
   const [idxCardsSelected, setIdxCardsSelected] = useState<number[]>(cardsSelected);
 
   const lenDeck = cardsDeck.length;
@@ -23,19 +24,50 @@ const PlayerBoard: React.FC<PlayerBoardProps> = ({ cardsDeck, playerName, cardsH
   const onTakeHand = isPCPlayer ? () => { } : () => {
     console.log(lenDeck)
   }
-  const sumPlayerApprox: string = isPCPlayer ? '?' : String(idxCardsSelected.map(idx => cardsHand[idx].rank).reduce((a, b) => a + b, 0))
+  const sumPlayerApprox: string = isPCPlayer ? '?' :
+    String(idxCardsSelected
+      .map(idx => cardsHand[idx].rank)
+      .reduce((a, b) => a + b, 0));
+  const tooltipDeckID = `deckLength-${playerName}`;
+  
   return (
     <div className={`PlayerBoard ${cssRotate}`}>
       <div className={`PlayerBoard-Title ${playerName}`}>
         <span>{`${playerName}'s Hand`}</span><br></br>
-        <span>{`Sum: ${sumPlayerApprox}`}</span>
+        <span>{`Target sum: ${sumPlayerApprox}`}</span>
       </div>
       <div className={"PlayerBoard-Cards"}>
-        <PokerCardFaceDown showOnlySpace={showOnlySpace} onTakeHand={onTakeHand} isPCPlayer={isPCPlayer} />
+        <>
+          <div data-tip data-for={tooltipDeckID}>
+            <PokerCardFaceDown
+              showOnlySpace={showOnlySpace}
+              onTakeHand={onTakeHand}
+              isSelected={cardsHand.length === 0}
+              isPCPlayer={isPCPlayer} />
+          </div>
+          <ReactTooltip id={tooltipDeckID} type='dark'>
+            {isPCPlayer? undefined:<p className="Tooltip">{`Take hand`}</p>}
+            <p className="Tooltip">{`${cardsDeck.length} cards`}</p>
+          </ReactTooltip>
+        </>
         {
           cardsHand.map(({ suit, rank }, index) => {
+            const tooltipCardID = `rankIndex${index}-${playerName}`;
             return (
-              <PokerCard key={index} isSelected={idxCardsSelected.includes(index)} suit={suit} rank={rank} indexHand={index} onSelectCard={onSelectCard} />
+              <>
+                <div data-tip data-for={tooltipCardID}>
+                  <PokerCard
+                    key={index}
+                    isSelected={idxCardsSelected.includes(index)}
+                    suit={suit}
+                    rank={rank}
+                    indexHand={index}
+                    onSelectCard={onSelectCard} />
+                </div>
+                <ReactTooltip id={tooltipCardID} type='error'>
+                  <p className="Tooltip">{`${rank}`}</p>
+                </ReactTooltip>
+              </>
             )
           })
         }
