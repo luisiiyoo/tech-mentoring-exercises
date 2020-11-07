@@ -48,7 +48,11 @@ const renderNavItem: RenderNavItem = (item: NavItem, isChild = false) => {
   );
 };
 
-const NavBar: React.FC<NavBarProps> = ({ history, navBarItems , navBarTitle}) => {
+const NavBar: React.FC<NavBarProps> = ({
+  history,
+  navBarItems,
+  navBarTitle,
+}) => {
   const { route, expand } = useSelector((state) => state.main);
   const dispatch = useDispatch();
 

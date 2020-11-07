@@ -24,14 +24,22 @@ describe('NavBar', () => {
 
   it('should take a snapshot', () => {
     const { asFragment } = render(
-      <NavBar history={historyMock} navBarItems={navItemMock} navBarTitle={`MyApp`}/>,
+      <NavBar
+        history={historyMock}
+        navBarItems={navItemMock}
+        navBarTitle={`MyApp`}
+      />,
     );
     expect(asFragment()).toMatchSnapshot();
   });
 
   it('should navIcons update the navigation history', () => {
     const { getByTestId } = render(
-      <NavBar history={historyMock} navBarItems={navItemMock} navBarTitle={`MyApp`}/>,
+      <NavBar
+        history={historyMock}
+        navBarItems={navItemMock}
+        navBarTitle={`MyApp`}
+      />,
     );
     // This test only contemplates two levels of navItems
     navItemMock.forEach(({ childs, route }) => {

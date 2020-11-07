@@ -1,4 +1,4 @@
-:root{
+:root {
   --font-color-app: #fff;
   --background-color: #282c34;
   --color-app: #e93d44;
@@ -6,12 +6,12 @@
   /* --background-color: #1d1e20;
   --color-app: #3d71e0;
   --dark-color-app: #255cd4; */
-  --sidenav-background-app: var(--dark-color-app)
+  --sidenav-background-app: var(--dark-color-app);
 }
 
 .App {
   align-items: center;
-  background-color:var(--background-color);
+  background-color: var(--background-color);
   display: flex;
   flex-direction: column;
   font-size: calc(10px + 2vmin);
@@ -19,7 +19,7 @@
   min-height: 100vh;
 }
 
-h2{
+h2 {
   text-align: center;
   color: var(--font-color-app);
   text-shadow: 1px 2px 2px var(--color-app);

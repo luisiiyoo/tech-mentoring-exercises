@@ -1,5 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:900);
-@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+@import url(https://fonts.googleapis.com/css?family=Open + Sans);
 
 .Error {
   align-items: center;
@@ -21,7 +21,7 @@
 
 .Error-Label span {
   position: relative;
-  background:var(--color-app);
+  background: var(--color-app);
   color: var(--font-color-app);
   font-size: 300%;
   padding: 0 20px;

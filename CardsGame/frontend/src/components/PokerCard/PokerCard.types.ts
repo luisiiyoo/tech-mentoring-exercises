@@ -8,8 +8,8 @@ export interface CardProps {
 
 export interface CardFaceDownProps {
   isSelected: boolean;
-  isPCPlayer:boolean;
+  isPCPlayer: boolean;
   showOnlySpace: boolean;
-  deckLen:number;
+  deckLen: number;
   onTakeHand(): any;
 }

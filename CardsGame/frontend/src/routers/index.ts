@@ -1,2 +1,2 @@
 export { default } from './Router';
-export * from './routes'
+export * from './routes';

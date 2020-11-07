@@ -1,4 +1,3 @@
-
 export interface FilterGridPanelProps {
   items: ItemPanel[];
 }

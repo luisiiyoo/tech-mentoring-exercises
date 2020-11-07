@@ -1,5 +1,5 @@
 export interface SpecialRanks {
-  [key: number]: string
+  [key: number]: string;
 }
 
 export interface Suits {
@@ -12,8 +12,8 @@ export interface Suits {
 export interface Deck {
   cards: Card[];
   num_ranks: number;
-  special_ranks: SpecialRanks
-  suits: Suits
+  special_ranks: SpecialRanks;
+  suits: Suits;
 }
 
 export interface Card {
@@ -65,16 +65,16 @@ export const defaultDeck = {
     club: '♣',
     diamond: '♦',
     heart: '♥',
-    spade: '♠'
-  }
-}
+    spade: '♠',
+  },
+};
 
 export const defaultHistory = {
   0: {
-    DeckPlayer1: "",
-    DeckPlayer2: ""
-  }
-}
+    DeckPlayer1: '',
+    DeckPlayer2: '',
+  },
+};
 
 export const defaultGame: Game = {
   _id: '',
@@ -88,5 +88,5 @@ export const defaultGame: Game = {
   _deck_p2: defaultDeck,
   _hand_p1: [],
   _hand_p2: [],
-  _history: defaultHistory
+  _history: defaultHistory,
 };

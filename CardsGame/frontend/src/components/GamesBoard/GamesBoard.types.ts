@@ -1,3 +1,3 @@
 export interface GamesBoardProps {
-  finished: boolean
+  finished: boolean;
 }

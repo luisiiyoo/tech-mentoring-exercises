@@ -6,7 +6,7 @@ export interface SearchPanelProps {
   disableRefresh: boolean;
   handleOnChangeIdSearch(event: React.ChangeEvent<HTMLInputElement>): void;
   handleOnSearch(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void;
-  handleOnDelete(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void,
+  handleOnDelete(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void;
 }
 
 export interface ControlGameProps {

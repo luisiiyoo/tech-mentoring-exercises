@@ -1,9 +1,9 @@
-.CreateGame{
+.CreateGame {
   height: 95%;
   width: 100%;
 }
 
-.CreateGame-Panel{
+.CreateGame-Panel {
   margin-top: 5%;
   margin-right: 10%;
   margin-left: 10%;
@@ -14,14 +14,14 @@
   flex-direction: row;
 }
 
-.CreateGame-Panel input{
+.CreateGame-Panel input {
   border: solid 1px #ccc;
   border-radius: 5px;
   font-size: 90%;
   flex-grow: 3;
 }
 
-.CreateGame-Panel button{
+.CreateGame-Panel button {
   padding: 8px 30px;
   border-radius: 6px;
   border: none;
@@ -38,11 +38,11 @@
   align-content: center;
 }
 
-.CreateGame-Panel button:disabled{
+.CreateGame-Panel button:disabled {
   background: var(--dark-color-app);
 }
 
-.IDContainer{
+.IDContainer {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -52,14 +52,14 @@
   font-size: 120%;
 }
 
-.TagID{
+.TagID {
   text-align: center;
   color: var(--color-app);
 }
-.ID{
+.ID {
   text-align: center;
   color: var(--font-color-app);
   text-shadow: 1px 2px 2px var(--dark-color-app);
   margin-left: 15px;
-  margin-right: 15px;;
+  margin-right: 15px;
 }

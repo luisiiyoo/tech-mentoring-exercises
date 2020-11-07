@@ -6,7 +6,7 @@ import { RouterProps, MainComponentProps } from './Router.types';
 import PageNotFound from '../components/PageNotFound';
 import NavBar from '../components/NavBar';
 import HomePage from '../components/HomePage';
-import GamesBoard from '../components/GamesBoard'
+import GamesBoard from '../components/GamesBoard';
 import PlayGame from '../components/PlayGame';
 import CreateGame from '../components/CreateGame';
 import frontConfig from 'src/config/server';
@@ -31,13 +31,25 @@ const MainComponent: React.FC<MainComponentProps> = ({
     <div
       className="MainComponent"
       data-testid="mainComponent"
-      style={{ marginLeft: isExpandedNavBar ? MAX_NAVBAR_MARGIN : MIN_NAVBAR_MARGIN }}
+      style={{
+        marginLeft: isExpandedNavBar ? MAX_NAVBAR_MARGIN : MIN_NAVBAR_MARGIN,
+      }}
     >
       <Switch>
         <Route path="/" exact={true} component={() => <HomePage />} />
-        <Route path={`/${ROUTES.HOME}`} exact={true} component={() => <HomePage />} />
-        <Route path={`/${ROUTES.GAMES_FINISHED}`} component={() => <GamesBoard finished={true} />} />
-        <Route path={`/${ROUTES.GAMES_IN_PROGRESS}`} component={() => <GamesBoard finished={false} />} />
+        <Route
+          path={`/${ROUTES.HOME}`}
+          exact={true}
+          component={() => <HomePage />}
+        />
+        <Route
+          path={`/${ROUTES.GAMES_FINISHED}`}
+          component={() => <GamesBoard finished={true} />}
+        />
+        <Route
+          path={`/${ROUTES.GAMES_IN_PROGRESS}`}
+          component={() => <GamesBoard finished={false} />}
+        />
         <Route path={`/${ROUTES.PLAY}`} component={() => <PlayGame />} />
         <Route path={`/${ROUTES.CREATE}`} component={() => <CreateGame />} />
         <Route component={() => <PageNotFound />} />
@@ -54,7 +66,11 @@ const Routes: React.FC<RouterProps> = ({ navBarItems = navigationItems }) => {
     <BrowserRouter>
       <Route
         render={({ history }) => (
-          <NavBar history={history} navBarItems={navBarItems} navBarTitle={frontConfig.serverName} />
+          <NavBar
+            history={history}
+            navBarItems={navBarItems}
+            navBarTitle={frontConfig.serverName}
+          />
         )}
       />
       <div className="Container">

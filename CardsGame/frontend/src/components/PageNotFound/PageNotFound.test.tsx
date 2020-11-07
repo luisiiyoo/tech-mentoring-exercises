@@ -12,6 +12,8 @@ describe('PageNotFound', () => {
 
   it('should render a not found message', () => {
     const { getByTestId } = render(<PageNotFound />);
-    expect(getByTestId('PageNotFound')).toHaveTextContent('Error 404 Page not found');
+    expect(getByTestId('PageNotFound')).toHaveTextContent(
+      'Error 404 Page not found',
+    );
   });
 });

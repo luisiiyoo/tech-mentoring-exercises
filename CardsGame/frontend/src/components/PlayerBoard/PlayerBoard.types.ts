@@ -5,6 +5,6 @@ export interface PlayerBoardProps {
   cardsDeck: Card[];
   playerName: string;
   cardsHand: Card[];
-  idxCardsSelectedPlayer:number[];
+  idxCardsSelectedPlayer: number[];
   setIdxCardsSelectedPlayer(idxs: number[]): void;
 }

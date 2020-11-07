@@ -27,23 +27,17 @@ describe('JourneyRouter', () => {
         iconClass: 'fa fa-fw fa-home',
       },
     ];
-    const { asFragment } = render(
-      <Routes navBarItems={navBarItemsMock} />,
-    );
+    const { asFragment } = render(<Routes navBarItems={navBarItemsMock} />);
     expect(asFragment()).toMatchSnapshot();
   });
 
   it('should render the root page', () => {
-    const { getByTestId } = render(
-      <Routes navBarItems={navBarItemsMock} />,
-    );
+    const { getByTestId } = render(<Routes navBarItems={navBarItemsMock} />);
     expect(getByTestId('mainComponent').innerHTML).toMatch('Cards Game');
   });
 
   it('should render the home page', async () => {
-    const { getByTestId } = render(
-      <Routes navBarItems={navBarItemsMock} />,
-    );
+    const { getByTestId } = render(<Routes navBarItems={navBarItemsMock} />);
     fireEvent.click(getByTestId('home'));
     expect(getByTestId('mainComponent')).toHaveTextContent(`Cards Game`);
   });

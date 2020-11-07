@@ -7,7 +7,7 @@ export const ROUTES = {
   GAMES_IN_PROGRESS: 'find_game/in-progress',
   PLAY: 'play-game',
   CREATE: 'create-game',
-}
+};
 
 export const navigationItems: NavItem[] = [
   {
@@ -29,7 +29,7 @@ export const navigationItems: NavItem[] = [
         idChild: ROUTES.GAMES_FINISHED,
         route: ROUTES.GAMES_FINISHED,
         title: 'Finished',
-      },     
+      },
     ],
   },
   {

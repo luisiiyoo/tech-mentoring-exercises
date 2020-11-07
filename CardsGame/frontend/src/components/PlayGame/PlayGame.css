@@ -1,10 +1,9 @@
-.PlayGame{
+.PlayGame {
   height: 95%;
   width: 100%;
-  
 }
 
-.SearchPanel{
+.SearchPanel {
   margin-right: 10%;
   margin-left: 10%;
   display: flex;
@@ -14,14 +13,15 @@
   flex-direction: row;
 }
 
-.SearchPanel input{
+.SearchPanel input {
   border: solid 1px #ccc;
   border-radius: 5px;
   font-size: 90%;
   flex-grow: 3;
 }
 
-.SearchPanel button, .ControlGame button{
+.SearchPanel button,
+.ControlGame button {
   padding: 8px 30px;
   border-radius: 6px;
   border: none;
@@ -38,39 +38,39 @@
   align-content: center;
 }
 
-.SearchPanel button:disabled{
+.SearchPanel button:disabled {
   background: var(--dark-color-app);
 }
 
-.ControlGame{
+.ControlGame {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
 }
-.ControlGame-Item{
+.ControlGame-Item {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-grow: 3;
 }
-.ControlGame-Item span{
-margin-left: 10px;
-margin-right: 10px;
+.ControlGame-Item span {
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
-.ControlGame-Button{
+.ControlGame-Button {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-grow: 1;
 }
 
-.GameContainer{
-  overflow-y: hidden; 
-  overflow-x: hidden; 
+.GameContainer {
+  overflow-y: hidden;
+  overflow-x: hidden;
 }
-.GameDisable{
+.GameDisable {
   pointer-events: none;
   opacity: 0.4;
 }
