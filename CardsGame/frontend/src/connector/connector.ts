@@ -4,7 +4,7 @@ import frontConfig from 'src/config/server';
 import {
   BackendUnavailableError, GameNotFoundError, AbstractError
 } from 'src/utils/error.types';
-import { HealthResponse, TakeHandResponse, PlayTurnResponse } from '../model/backendResponse';
+import { HealthResponse, TakeHandResponse, PlayTurnResponse, CreateGameResponse, DeleteGameResponse } from '../model/backendResponse';
 import { Game } from '../model/game';
 
 const { backendProtocol, backendHost, backendPort } = frontConfig;
@@ -93,6 +93,43 @@ export class BackendConnector {
       const response = await axios.put(url, body);
       const turnDetails: PlayTurnResponse = response.data
       return turnDetails;
+    } catch (err) {
+      const { message } = err;
+      if (message.includes('ECONNREFUSED'))
+        throw new BackendUnavailableError();
+      if (!!err.response) {
+        const { data: { error }, status } = err.response;
+        throw new AbstractError(error || message, status);
+      }
+      throw err;
+    }
+  }
+
+  async createGame(playerName: string): Promise<string> {
+    try {
+      const url = `${BACKEND_URL}/game`;
+      const body = { playerName }
+      const response = await axios.post(url, body);
+      const { _id: idGame }: CreateGameResponse = response.data
+      return idGame;
+    } catch (err) {
+      const { message } = err;
+      if (message.includes('ECONNREFUSED'))
+        throw new BackendUnavailableError();
+      if (!!err.response) {
+        const { data: { error }, status } = err.response;
+        throw new AbstractError(error || message, status);
+      }
+      throw err;
+    }
+  }
+
+  async deleteGame(idGame: string): Promise<boolean> {
+    try {
+      const url = `${BACKEND_URL}/game/${idGame}`;
+      const response = await axios.delete(url);
+      const { success }: DeleteGameResponse = response.data
+      return success;
     } catch (err) {
       const { message } = err;
       if (message.includes('ECONNREFUSED'))

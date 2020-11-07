@@ -1,6 +1,7 @@
 import React from 'react';
 import { CardProps, CardFaceDownProps } from './PokerCard.types';
 import cardFaceDownImg from '../../img/card_face_down.png';
+import blackCardFaceDownImg from '../../img/back.svg';
 import './PokerCard.css'
 
 const suitCharToString = (suit: String) => {
@@ -29,9 +30,9 @@ export const PokerCard: React.FC<CardProps> = ({ indexHand, suit, rank, onSelect
   )
 }
 
-export const PokerCardFaceDown: React.FC<CardFaceDownProps> = ({ showOnlySpace, onTakeHand, isSelected }) => {
+export const PokerCardFaceDown: React.FC<CardFaceDownProps> = ({ showOnlySpace, onTakeHand, isSelected, deckLen }) => {
   const cssSelected = getSelectedCSSClass(isSelected)
-  const image = cardFaceDownImg;
+  const image = deckLen < 2 ? blackCardFaceDownImg : cardFaceDownImg;
   const Component = showOnlySpace ?
     <div className={`PokerCard FaceDown ${cssSelected}`}></div > :
     <img className={`PokerCard FaceDown`} src={image} alt="Deck" onClick={onTakeHand} />

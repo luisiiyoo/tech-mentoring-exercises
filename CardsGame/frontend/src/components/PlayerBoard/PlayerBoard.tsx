@@ -7,8 +7,8 @@ import './PlayerBoard.css';
 const PlayerBoard: React.FC<PlayerBoardProps> = ({ cardsDeck, playerName, cardsHand, onTakeHand, setIdxCardsSelectedPlayer, idxCardsSelectedPlayer }) => {
   const isPCPlayer = playerName === 'PC';
   const cssRotate = isPCPlayer ? 'Rotate' : '';
-  const lenDeck = cardsDeck.length;
-  const showOnlySpace = lenDeck < 1;
+  const deckLen = cardsDeck.length;
+  const showOnlySpace = deckLen < 1;
 
   const onSelectCard = isPCPlayer ? () => { } : (indexHand: number) => {
     const posFound = idxCardsSelectedPlayer.indexOf(indexHand);
@@ -38,6 +38,7 @@ const PlayerBoard: React.FC<PlayerBoardProps> = ({ cardsDeck, playerName, cardsH
         <>
           <div data-tip data-for={tooltipDeckID}>
             <PokerCardFaceDown
+              deckLen={deckLen}
               showOnlySpace={showOnlySpace}
               onTakeHand={isPCPlayer ? () => { } : onTakeHand}
               isSelected={cardsHand.length === 0}

@@ -13,14 +13,14 @@ const SearchPanel: React.FC<SearchPanelProps> = ({ idGame, handleOnChangeIdSearc
     <div className="SearchPanel">
       <input placeholder="Search game" value={idGame} onChange={handleOnChangeIdSearch} disabled={disableIdInput} />
       <button onClick={handleOnSearch} disabled={disableSearch}>Search</button>
-      <button onClick={handleOnDelete} disabled={disableDelete}>Delete</button>
+      <button onClick={handleOnDelete} disabled={disableDelete || idGame.length === 0}>Delete</button>
       <button onClick={() => window.location.reload(true)} disabled={disableRefresh}>Clean</button>
     </div>
   );
 }
 
 const PlayGame: React.FC = () => {
-  const [idGame, setIdGame] = useState('ec4dbc3b8b40') // HERE
+  const [idGame, setIdGame] = useState('')
   const [game, setGame] = useState<Game>(defaultGame)
   const [disableGame, setDisableGame] = useState(true)
   const [disableIdInput, setDisableIdInput] = useState(false)
@@ -71,8 +71,14 @@ const PlayGame: React.FC = () => {
     await handleSpecificFunction(searchFn);
   };
 
-  const handleOnDelete = (e) => {
-    store.addNotification(createNotification("danger", `Not implemented`, `Error`));
+  const handleOnDelete = async (e) => {
+    const deleteGameFn = async () => {
+      await connector.deleteGame(idGame);
+      setGame(defaultGame)
+      setIdGame('')
+      store.addNotification(createNotification("warning", `Game deleted successfully.`));
+    }
+    await handleSpecificFunction(deleteGameFn);
   };
 
   const handlePlayTurn = async (e) => {
@@ -150,7 +156,7 @@ const ControlGame: React.FC<ControlGameProps> = ({ numTurns, target, disablePlay
         <span className="Value">{`${numTurns}`}</span>
       </div>
       <div className="ControlGame-Button">
-        <button onClick={handlePlayTurn} disabled={disablePlayTurn}>{`${winner ? `Winner: ${winner}`: "Play Turn"}`}</button>
+        <button onClick={handlePlayTurn} disabled={disablePlayTurn}>{`${winner ? `Winner: ${winner}` : "Play Turn"}`}</button>
       </div>
       <div className="ControlGame-Item">
         <span className="Label">{`Target:`}</span>

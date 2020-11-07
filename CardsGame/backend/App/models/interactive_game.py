@@ -232,13 +232,13 @@ class InteractiveGame(Game):
             self._hand_p1, self._hand_p2 = self.__draw()
         return take_new_hand
 
-    def __validate_indexes_card_options(self, idx_cards: List[int], len_deck: int) -> bool:
+    def __validate_indexes_card_options(self, idx_cards: List[int], len_hand: int) -> bool:
         """
         Validates the provided indexes for the player 1
 
         Args:
             idx_cards (List[int]): List of indexes to use
-            len_deck (int): Deck length
+            len_hand (int): Deck length
 
         Raises:
             Exception: When the user provides more than N-defined indexes
@@ -258,8 +258,8 @@ class InteractiveGame(Game):
             raise Exception('You must provide non-repeating indexes')
 
         # Check if the indexes are in the correct range
-        idx_cards_valid_options = constants.IDX_CARD_OPTIONS if len_deck > constants.CARDS_TO_USE \
-            else list(range(0, len_deck))
+        idx_cards_valid_options = constants.IDX_CARD_OPTIONS if len_hand > constants.CARDS_TO_USE \
+            else list(range(0, len_hand))
         for idx in idx_cards:
             if idx not in idx_cards_valid_options:
                 idx_cards = [f"{idx}:{card}" for idx, card in enumerate(self.get_hand_player(1))]
@@ -343,7 +343,7 @@ class InteractiveGame(Game):
         if not self._hand_p1 or not self._hand_p2:
             raise Exception("You don't have a hand.")
 
-        self.__validate_indexes_card_options(idx_cards_p1, self.get_deck_len_player(1))
+        self.__validate_indexes_card_options(idx_cards_p1, len(self.get_hand_player(1)))
         self.increment_num_turn()
 
         idx_cards_p2 = get_closest_index_cards(self._hand_p2, self.get_target_rank(), constants.CARDS_TO_USE)

@@ -35,3 +35,11 @@ export interface PlayTurnResponse {
   _turn_winner: string;
   _winner: string;
 }
+
+export interface CreateGameResponse{
+  _id:string;
+}
+
+export interface DeleteGameResponse{
+  success:boolean;
+}

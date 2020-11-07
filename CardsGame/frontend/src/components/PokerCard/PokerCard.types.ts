@@ -10,5 +10,6 @@ export interface CardFaceDownProps {
   isSelected: boolean;
   isPCPlayer:boolean;
   showOnlySpace: boolean;
+  deckLen:number;
   onTakeHand(): any;
 }
