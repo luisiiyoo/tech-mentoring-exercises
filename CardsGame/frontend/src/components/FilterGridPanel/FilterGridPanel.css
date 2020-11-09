@@ -46,7 +46,7 @@
   list-style-type: none;
 }
 
-.ListViewStyle .ItemPanel {
+.ItemPanel {
   display: flex;
   background-color: var(--color-app);
   padding: 10px;
@@ -55,50 +55,58 @@
   margin-bottom: 10px;
 }
 
-.ListViewStyle .ItemPanel-Left {
+.ItemPanel {
+  display: flex;
+  background-color: var(--color-app);
+  padding: 10px;
+  box-shadow: int 0 1px 0 var(--dark-color-app);
+  height: 140px;
+  margin-bottom: 10px;
+}
+
+.ItemPanel-Left {
   display: flex;
   text-align: left;
   align-items: center;
   justify-content: center;
 }
 
-.ListViewStyle .ItemPanel-Right {
+.ItemPanel-Right {
   text-align: left;
   align-items: center;
   justify-content: center;
-  flex-grow: 10;
   line-height: inherit;
   height: inherit;
 }
 
-.ListViewStyle .ItemPanel-Image {
+.ItemPanel-Image {
   height: 90%;
   width: inherit;
   padding-right: 20px;
 }
 
-.ListViewStyle .ItemPanel-Player {
+.ItemPanel-Player {
   font-size: 85%;
   margin: 0 0 0;
   font-weight: 600;
 }
 
-.ListViewStyle .ItemPanel-Date {
+.ItemPanel-Date {
   margin: 0;
   font-size: 80%;
 }
-.ListViewStyle .ItemPanel-Winner {
-  margin: 0;
-  font-size: 75%;
-  font-style: italic;
-}
-.ListViewStyle .ItemPanel-ID {
+
+.ItemPanel-Winner {
   margin: 0;
   font-size: 75%;
   font-style: italic;
 }
 
-/*  */
+.ItemPanel-ID {
+  margin: 0;
+  font-size: 75%;
+  font-style: italic;
+}
 
 .GridViewStyle {
   margin: 0;
@@ -108,55 +116,4 @@
   grid-gap: 10px;
   width: inherit;
   list-style-type: none;
-}
-
-.GridViewStyle .ItemPanel {
-  display: flex;
-  background-color: var(--color-app);
-  padding: 10px;
-  box-shadow: int 0 1px 0 var(--dark-color-app);
-  height: 140px;
-  margin-bottom: 10px;
-}
-
-.GridViewStyle .ItemPanel-Left { 
-  display: flex;
-  text-align: left;
-  align-items: center;
-  justify-content: center;
-}
-
-.GridViewStyle .ItemPanel-Right {
-  text-align: left;
-  align-items: center;
-  justify-content: center;
-  line-height: inherit;
-  height: inherit;
-}
-
-.GridViewStyle .ItemPanel-Image {
-  height: 90%;
-  width: inherit;
-  padding-right: 20px;
-}
-
-.GridViewStyle .ItemPanel-Player {
-  font-size: 70%;
-  margin: 0 0 0;
-  font-weight: 600;
-}
-
-.GridViewStyle .ItemPanel-Date {
-  margin: 0;
-  font-size: 75%;
-}
-.GridViewStyle .ItemPanel-Winner {
-  margin: 0;
-  font-size: 60%;
-  font-style: italic;
-}
-.GridViewStyle .ItemPanel-ID {
-  margin: 0;
-  font-size: 60%;
-  font-style: italic;
 }
