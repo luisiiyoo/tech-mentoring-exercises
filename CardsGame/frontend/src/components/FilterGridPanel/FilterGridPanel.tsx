@@ -8,7 +8,7 @@ const ItemGridPanel: React.FC<ItemPanel> = (props) => {
   return (
     <li className="ItemPanel">
       <div className="ItemPanel-Left">
-        {image && <img className="ItemPanel-Image" src={image} alt="#" />}
+        {image && <img className="ItemPanel-Image" src={image} alt={`${player}'s avatar`} />}
       </div>
       <div className="ItemPanel-Right">
         <div className="ItemPanel-Player">{`Player: ${player}`}</div>

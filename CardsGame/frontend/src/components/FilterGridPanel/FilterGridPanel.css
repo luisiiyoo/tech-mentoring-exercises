@@ -1,6 +1,6 @@
 @import url(//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css);
 
-@import url(https://fonts.googleapis.com/css?family=Open + Sans:400, 300, 600);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600);
 
 .FilterGridPanel {
   margin: 20px;
@@ -56,7 +56,7 @@
 }
 
 .ListViewStyle .ItemPanel-Left {
-  flex-grow: 0;
+  display: flex;
   text-align: left;
   align-items: center;
   justify-content: center;
@@ -72,7 +72,7 @@
 }
 
 .ListViewStyle .ItemPanel-Image {
-  height: inherit;
+  height: 90%;
   width: inherit;
   padding-right: 20px;
 }
@@ -119,7 +119,8 @@
   margin-bottom: 10px;
 }
 
-.GridViewStyle .ItemPanel-Left {
+.GridViewStyle .ItemPanel-Left { 
+  display: flex;
   text-align: left;
   align-items: center;
   justify-content: center;
@@ -134,7 +135,7 @@
 }
 
 .GridViewStyle .ItemPanel-Image {
-  height: inherit;
+  height: 90%;
   width: inherit;
   padding-right: 20px;
 }
