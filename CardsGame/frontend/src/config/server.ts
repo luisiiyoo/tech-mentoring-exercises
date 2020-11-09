@@ -23,7 +23,7 @@ if (
 const frontConfig: FrontendConfig = {
   serverName: process.env.REACT_APP_SERVER_NAME || 'Front-End app',
   backendProtocol: process.env.REACT_APP_BACKEND_PROTOCOL || 'http',
-  backendHost: process.env.REACT_APP_BACKEND_HOST || 'localhost',
+  backendHost: process.env.REACT_APP_BACKEND_HOST || '0.0.0.0',
   backendPort: Number(process.env.REACT_APP_BACKEND_PORT) || 8080,
 };
 
